@@ -4,6 +4,11 @@ def billing_default_page(request):
     context = {
         "title": "Billing Home Page",
         "page_header": "Billing",
-        "content": "billing_default_page",
         }
+        
+    if request.user.is_authenticated:
+        context["content"] = "billing_default_page"
+    else:
+        context["content"] = "No billing info found - Please log in:"
+        
     return render(request, "billing/billing-home.html", context)
