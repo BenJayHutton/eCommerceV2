@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from .views import billing_default_page
+from .views import BillingDefaultPage
 
 urlpatterns = [
-    url(r'^$', billing_default_page, name='default_home'),
+    url(r'^$', BillingDefaultPage.as_view(), name='default_home'),
 ]

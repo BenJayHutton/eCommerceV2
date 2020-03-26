@@ -20,7 +20,8 @@ from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', home_page, name='home'),
+    url(r'^$', DefaultHomePage.as_view(display_name="home"), name='home'),
+    url(r'^$', DefaultHomePage.as_view(display_name="about"), name='about'),
     url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),

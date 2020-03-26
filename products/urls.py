@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from .views import products_default_page
+from .views import ProductDefaultView
 
 urlpatterns = [
-    url(r'^$', products_default_page, name='default_home'),
+    url(r'^$', ProductDefaultView.as_view(), name='default_home'),
 ]

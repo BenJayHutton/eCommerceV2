@@ -1,9 +1,14 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 
-def products_default_page(request):
-    context = {
-        "title": "Products Home Page",
-        "page_header": "Products",
-        "content": "products_default_page",
-        }
-    return render(request, "products/products-home.html", context)
+
+class ProductDefaultView(TemplateView):
+    template_name = "products/products-home.html"
+    
+    def get(self, request):
+        context = {
+            "title": "Products Home Page",
+            "page_header": "Products",
+            "content": "No products so far",
+            }
+        return render(request, self.template_name, context)
