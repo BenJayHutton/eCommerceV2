@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
+from django.http import Http404
+from .models import Product
 
 
 class ProductDefaultView(TemplateView):
@@ -12,3 +14,19 @@ class ProductDefaultView(TemplateView):
             "content": "No products so far",
             }
         return render(request, self.template_name, context)
+
+class ProductDetailView(DetailView):
+    queryset = Product.objects.all()
+    template_name="products/detail.html"
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        return context
+    
+    def get_object(self, *args, **kwargs):
+        request = self.request
+        pk = self.kwargs.get('id')
+        instance = Product.objects.get_by_id(pk)
+        if instance is None:
+            raise Http404("product doesn't exist")
+        return instance

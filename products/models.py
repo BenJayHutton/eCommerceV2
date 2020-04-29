@@ -6,11 +6,13 @@ from django.template.defaultfilters import slugify
 
 from uuid import uuid4
 
-class ProductQuerySet(models.query.QuerySet):
-    pass
-    
 class ProductManager(models.Manager):
-    pass
+    def get_by_id(self, id):
+        qs = self.get_queryset().filter(id=id)
+        if qs.count() == 1:
+            return qs.first()
+        else:
+            return None
 
 class Product(models.Model):
     title           = models.CharField(max_length=120)
@@ -30,6 +32,9 @@ class Product(models.Model):
     timestamp       = models.DateTimeField(auto_now_add=True)
     
     objects = ProductManager()
+    
+    def __str__(self):
+        return  self.title
     
     
     
