@@ -6,6 +6,21 @@ from django.template.defaultfilters import slugify
 
 from uuid import uuid4
 
+class ProductQuerySet(models.query.QuerySet):
+    def active(self):
+        return self.filter(active=True)
+
+    def featured(self):
+        return self.filter(featured=True, active=True)
+
+    def search(self, query):
+        lookups = (Q(title__icontains=query) |
+                   Q(description__icontains=query)|
+                   Q(price__icontains=query)|
+                   Q(tag__title__icontains=query)
+                   )
+        return self.filter(lookups)
+
 class ProductManager(models.Manager):
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
@@ -13,6 +28,9 @@ class ProductManager(models.Manager):
             return qs.first()
         else:
             return None
+    
+    def search(self, query):
+        return self.get_queryset().active().search(query)
 
 class Product(models.Model):
     title           = models.CharField(max_length=120)
