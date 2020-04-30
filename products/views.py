@@ -6,6 +6,7 @@ from .models import Product
 
 class ProductDefaultView(TemplateView):
     template_name = "products/products-home.html"
+    queryset = Product.objects.all()
     
     def get(self, request):
         context = {
@@ -16,7 +17,7 @@ class ProductDefaultView(TemplateView):
         return render(request, self.template_name, context)
 
 class ProductDetailView(DetailView):
-    queryset = Product.objects.all()
+    
     template_name="products/detail.html"
     
     def get_context_data(self, *args, **kwargs):
