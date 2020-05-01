@@ -12,12 +12,7 @@ class UserManager(BaseUserManager):
     pass
     
 class User(AbstractBaseUser):
-    email = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
+    email           = models.EmailField()
     full_name       = models.CharField(max_length=255, blank=True, null=True)
     is_guest        = models.BooleanField(default=True)
     is_active       = models.BooleanField(default=True)

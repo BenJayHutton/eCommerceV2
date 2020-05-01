@@ -7,6 +7,8 @@ from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from django.utils import timezone
 
+from eCommerce.utils import random_string_generator
+
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
     ('paid', 'Paid'),
@@ -21,7 +23,7 @@ class OrderManager(models.Manager):
     pass
 
 class Order(models.Model):
-    order_id            = models.CharField(max_length=120, blank=True)
+    order_id            = models.CharField(max_length=120, unique=True, blank=True, null=True)
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total      = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
     tax                 = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
@@ -38,6 +40,10 @@ class Order(models.Model):
     def __str__(self):
         return self.order_id
     
+    def generate_order_id(self):
+         return random_string_generator(120)
+    
     objects = OrderManager()
     
-    pass
+    
+
