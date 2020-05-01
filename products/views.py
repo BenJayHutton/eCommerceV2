@@ -9,19 +9,19 @@ class ProductDefaultView(TemplateView):
     queryset = Product.objects.all()
     
     def get(self, request):
+        active_products = Product.objects.all().filter(active=True)
         context = {
             "title": "Products Home Page",
             "page_header": "Products",
-            "content": "No products so far",
+            "products": active_products
             }
         return render(request, self.template_name, context)
 
 class ProductDetailView(DetailView):
-    
     template_name="products/detail.html"
     
     def get_context_data(self, *args, **kwargs):
-        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)        
         return context
     
     def get_object(self, *args, **kwargs):

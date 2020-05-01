@@ -31,6 +31,7 @@ class ProductManager(models.Manager):
     
     def search(self, query):
         return self.get_queryset().active().search(query)
+    
 
 class Product(models.Model):
     title           = models.CharField(max_length=120)
@@ -50,6 +51,9 @@ class Product(models.Model):
     timestamp       = models.DateTimeField(auto_now_add=True)
     
     objects = ProductManager()
+    
+    def get_absolute_url(self):
+        return reverse("products:detail", kwargs={"id": self.id})
     
     def __str__(self):
         return  self.title

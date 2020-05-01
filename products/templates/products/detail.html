@@ -5,10 +5,13 @@
       <h1>{{ object.title }}</h1>
       Added: {{ object.timestamp|timesince }} ago<br/>
       Quantity: {{ object.quantity }}<br/>
-      Description:{{ object.description|linebreaks }}<br/>            
+      Description:{{ object.description|linebreaks }}<br/>
       {% if object.image %}
           <img src='{{ object.image.url }}' class='image-fluid' height="200px"/> <br/>
+      {% else %}
+          <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg' class='image-fluid' height="200px"/> <br/>
       {% endif %}
-    </div>
+    </div>    
   </div>
+  <a href="#" class="btn btn-primary btn-success my-2">Add to Cart</a>
 {% endblock %}
