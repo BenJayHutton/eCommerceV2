@@ -1,21 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
+#from django.views import ListView
 from django.http import Http404
 from .models import Product
 
 
-class ProductDefaultView(TemplateView):
+class ProductDefaultView(ListView):
     template_name = "products/products-home.html"
     queryset = Product.objects.all()
-    
-    def get(self, request):
-        active_products = Product.objects.all().filter(active=True)
-        context = {
-            "title": "Products Home Page",
-            "page_header": "Products",
-            "products": active_products
-            }
-        return render(request, self.template_name, context)
+
 
 class ProductDetailView(DetailView):
     template_name="products/detail.html"
@@ -27,7 +20,7 @@ class ProductDetailView(DetailView):
     def get_object(self, *args, **kwargs):
         request = self.request
         pk = self.kwargs.get('id')
-        instance = Product.objects.get_by_id(pk)
-        if instance is None:
+        product = Product.objects.get_by_id(pk)
+        if product is None:
             raise Http404("product doesn't exist")
-        return instance
+        return product

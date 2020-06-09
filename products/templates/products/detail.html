@@ -13,5 +13,5 @@
       {% endif %}
     </div>    
   </div>
-  <a href="#" class="btn btn-primary btn-success my-2">Add to Cart</a>
+  {% include 'products/snippets/update-cart.html' with product=product %}
 {% endblock %}

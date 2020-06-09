@@ -55,6 +55,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("products:detail", kwargs={"id": self.id})
     
+    def get_by_id(self, id):
+        qs = Product.objects.get(pk=id)
+        return qs
+        
     def __str__(self):
         return  self.title
     
