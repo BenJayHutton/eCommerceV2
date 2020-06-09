@@ -24,6 +24,9 @@ class OrderItem(models.Model):
     product     = models.ForeignKey(Product, default=None, blank=True, on_delete=models.CASCADE)
     quantity    = models.IntegerField(default=0, null=True)
 
+    def __str__(self):
+        return str(self.id)
+
     def new_or_get_order(self):
         return True
         
