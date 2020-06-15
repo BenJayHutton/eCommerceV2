@@ -6,20 +6,20 @@ from django.template.defaultfilters import slugify
 
 from uuid import uuid4
 
-class ProductQuerySet(models.query.QuerySet):
-    def active(self):
-        return self.filter(active=True)
+# class ProductQuerySet(models.query.QuerySet):
+#     def active(self):
+#         return self.filter(active=True)
 
-    def featured(self):
-        return self.filter(featured=True, active=True)
+#     def featured(self):
+#         return self.filter(featured=True, active=True)
 
-    def search(self, query):
-        lookups = (Q(title__icontains=query) |
-                   Q(description__icontains=query)|
-                   Q(price__icontains=query)|
-                   Q(tag__title__icontains=query)
-                   )
-        return self.filter(lookups)
+#     def search(self, query):
+#         lookups = (Q(title__icontains=query) |
+#                    Q(description__icontains=query)|
+#                    Q(price__icontains=query)|
+#                    Q(tag__title__icontains=query)
+#                    )
+#         return self.filter(lookups)
 
 class ProductManager(models.Manager):
     def get_by_id(self, id):
@@ -38,12 +38,7 @@ class Product(models.Model):
     slug            = models.SlugField(blank=True, unique=True)
     description     = models.TextField()
     price           = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
-    image           = models.ForeignKey(
-                		'ItemImage',
-                		null=True,
-                		blank=True,
-                		on_delete=models.SET_NULL
-                	)
+    image           = models.ImageField(upload_to='products/', null=True, blank=True)
     featured        = models.BooleanField(default=False)
     quantity        = models.IntegerField(default=0)
     active          = models.BooleanField(default=True)

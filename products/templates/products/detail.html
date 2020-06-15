@@ -4,7 +4,14 @@
     <div class="col-12 col-md-6">
       <h1>{{ object.title }}</h1>
       Added: {{ object.timestamp|timesince }} ago<br/>
-      Quantity: {{ object.quantity }}<br/>
+      {% if object.quantity > 0 %}
+        Quantity: {{ object.quantity }}<br/>
+      {% else %}
+        <div class="text-danger">
+          <em>Product not available</em>
+        </div>
+      {% endif %}
+      
       Description:{{ object.description|linebreaks }}<br/>
       {% if object.image %}
           <img src='{{ object.image.url }}' class='image-fluid' height="200px"/> <br/>

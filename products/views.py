@@ -7,7 +7,10 @@ from .models import Product
 
 class ProductDefaultView(ListView):
     template_name = "products/products-home.html"
-    queryset = Product.objects.all()
+    #queryset = Product.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        return Product.objects.all()
 
 
 class ProductDetailView(DetailView):
@@ -18,9 +21,10 @@ class ProductDetailView(DetailView):
         return context
     
     def get_object(self, *args, **kwargs):
-        request = self.request
         pk = self.kwargs.get('id')
-        product = Product.objects.get_by_id(pk)
-        if product is None:
+
+        qs = Product.objects.get_by_id(pk)
+        if qs is None:
             raise Http404("product doesn't exist")
-        return product
+        else:
+            return qs
