@@ -6,31 +6,78 @@ from django.template.defaultfilters import slugify
 
 from uuid import uuid4
 
-# class ProductQuerySet(models.query.QuerySet):
-#     def active(self):
-#         return self.filter(active=True)
+class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
+	def active(self):
+		return self.filter(active=True)
 
-#     def featured(self):
-#         return self.filter(featured=True, active=True)
+	def featured(self):
+		return self.filter(featured=True, active=True)
 
-#     def search(self, query):
-#         lookups = (Q(title__icontains=query) |
-#                    Q(description__icontains=query)|
-#                    Q(price__icontains=query)|
-#                    Q(tag__title__icontains=query)
-#                    )
-#         return self.filter(lookups)
+	def search(self, query):
+		lookups = (Q(title__icontains=query) |
+                   Q(description__icontains=query)|
+                   Q(price__icontains=query)|
+                   Q(tag__title__icontains=query)
+                   )
+		return self.filter(lookups)
 
 class ProductManager(models.Manager):
-    def get_by_id(self, id):
-        qs = self.get_queryset().filter(id=id)
-        if qs.count() == 1:
-            return qs.first()
-        else:
-            return None
+	#overriding get_queryset so we can use the queryset above
+	def get_queryset(self):
+		return ProductQuerySet(self.model, using=self._db)
+	
+	def get_by_id(self, id):
+		qs = self.get_queryset().filter(id=id)
+		if qs.count() == 1:
+			return qs.first()
+		else:
+			return None
     
-    def search(self, query):
-        return self.get_queryset().active().search(query)
+	def search(self, query):
+		return self.get_queryset().active().search(query)
+
+	def increase_qty_of_product(self, *args, **kwargs):
+		product = None
+		id = kwargs.get('id')
+		quantity = kwargs.get('quantity')
+		print(product)
+		print(id)
+		print(quantity)
+		if id is not None:
+			# look up product by Id
+			product = self.get_by_id(id)
+			print("product", product)
+			
+		if product is not None and quantity is not None:
+			product.quantity = product.quantity + quantity
+			if product.quantity < 0:
+				product.quantity = 0
+				product.save()
+			else:
+				product.save()
+		print("saved product quantity, new value = ", product.quantity) 
+
+	def decrease_qty_of_product(self, *args, **kwargs):
+		product = None
+		id = kwargs.get('id')
+		quantity = kwargs.get('quantity')
+		print(product)
+		print(id)
+		print(quantity)
+		if id is not None:
+			# look up product by Id
+			product = self.get_by_id(id)
+			print("product", product)
+			
+		if product is not None and quantity is not None:
+			product.quantity = product.quantity - quantity
+			if product.quantity < 0:
+				product.quantity = 0
+				product.save()
+			else:
+				product.save()
+		print("saved product quantity, new value = ", product.quantity) 
+
     
 
 class Product(models.Model):

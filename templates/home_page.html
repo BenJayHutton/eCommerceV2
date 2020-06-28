@@ -8,12 +8,18 @@
     <h1>{{ title }}</h1>
   </div>
   <div class='row'>
-    <div class='col'>      
+    {% if featured %}
+    <div class='col'>
       <p>
         <h1>Featured</h1>
-        {{ featured }}
+        {% for featured_items in featured %}
+        <div class='col'>
+          {% include 'products/snippets/card.html' with product=featured_items %}
+        </div>
+      {% endfor %}
       </p>
     </div>
+    {% endif %}
   </div>
   <div class='row'>
     <div class='col'>
