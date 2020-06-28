@@ -9,9 +9,10 @@ from products.models import Product
 class DefaultHomePage(TemplateView):
     display_name="home"
     featured = Product.objects.all().featured()
+    
 
     def get(self, request):
-        print(self.featured)
+        visitor_name = request.session.get("first_name")
         if self.display_name == "home":
             context = {
                 "title": "Home Page",
@@ -25,4 +26,9 @@ class DefaultHomePage(TemplateView):
                 }
         if request.user.is_authenticated:
             context["premium_content"] = "Premium"
+
+        if visitor_name is not None:
+            context["first_name"] = visitor_name
+        else:
+            context["first_name"] = "New visitor"
         return render(request, "home_page.html", context)

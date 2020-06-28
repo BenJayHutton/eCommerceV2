@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^$', DefaultHomePage.as_view(display_name="about"), name='about'),
     url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
-    url(r'^cart/', include(("carts.urls", "cart"), namespace='cart')),
+    url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
+    url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
 ]
