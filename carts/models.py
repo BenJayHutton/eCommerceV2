@@ -44,6 +44,13 @@ class CartManager(models.Manager):
     def new_or_get(self):
         pass
 
+    def new(self, user=None):
+        user_obj = None
+        if user is not None:
+            if user.is_authenticated:
+                user_obj = user
+        return self.model.objects.create(user=user_obj)
+
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     cartItem    = models.ManyToManyField(CartItem, default=None, blank=True)

@@ -24,9 +24,12 @@ class CartHome(ListView):
         qs = Cart.objects.filter(id=cart_id)
         if qs.count() == 1:
             cart_obj = qs.first()
-            print('cart exists')
+            print('cart exists:', cart_obj.id)
+            if request.user.is_authenticated() and cart_obj.user is None:
+                cart_obj.user = request.user
+                cart_obj.save()
         else:
-            cart_obj = cart_create()
+            cart_obj = Cart.objects.new(user=request.user)
         context = {}        
         return render(request,"carts/list.html", context)
     
