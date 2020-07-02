@@ -16,16 +16,20 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
-from .views import *
+from .views import contact_page, DefaultHomePage, login_page, register_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', DefaultHomePage.as_view(display_name="home"), name='home'),
     url(r'^$', DefaultHomePage.as_view(display_name="about"), name='about'),
+    url(r'^contact/$', contact_page, name='contact'),
     url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
+    url(r'^account/', include(("accounts.urls", "accounts"), namespace='account')),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
+    url(r'^login/$', login_page, name='login'),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
+    url(r'^register/$', register_page, name='register'),
 ]

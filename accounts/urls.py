@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from .views import AccountsDefaultPage
+from .views import Accounts
 
 urlpatterns = [
-    url(r'^$', AccountsDefaultPage.as_view(), name='default_home'),
+    url(r'^$', Accounts.as_view(), name='home'),
 ]
