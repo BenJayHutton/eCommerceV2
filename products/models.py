@@ -26,6 +26,9 @@ class ProductManager(models.Manager):
 	#overriding get_queryset so we can use the queryset above
 	def get_queryset(self):
 		return ProductQuerySet(self.model, using=self._db)
+
+	def active(self):
+		return self.get_queryset().active()
 	
 	def get_by_id(self, id):
 		qs = self.get_queryset().filter(id=id)
@@ -96,7 +99,7 @@ class Product(models.Model):
     objects = ProductManager()
     
     def get_absolute_url(self):
-        return reverse("products:detail", kwargs={"id": self.id})
+        return reverse("products:detail", kwargs={"slug": self.slug})
     
     def get_by_id(self, id):
         qs = Product.objects.get(pk=id)

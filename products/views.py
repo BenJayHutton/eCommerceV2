@@ -6,7 +6,7 @@ from .models import Product
 
 class ProductFeaturedListView(ListView):
     template_name = "products/list.html"
-    queryset = Product.objects.all().featured
+    queryset = Product.objects.all().active().featured
 
 class ProductFeaturedDetailView(DetailView):
     pass
@@ -14,7 +14,7 @@ class ProductFeaturedDetailView(DetailView):
 
 class ProductListView(ListView):
     template_name = "products/list.html"
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().active()
 
 class ProductDetailSlugView(DetailView):
     queryset = Product.objects.all()
@@ -25,11 +25,11 @@ class ProductDetailSlugView(DetailView):
         slug = self.kwargs.get('slug')
 
         try:
-            instance = Product.objects.get(slug=slug)
+            instance = Product.objects.get(slug=slug, active=True)
         except Product.DoesNotExist:
             raise Http404("Not found...")
         except Product.MultipleObjectsReturned:
-            qs = Product.objects.get(slug=slug)
+            qs = Product.objects.get(slug=slug, active=True)
             instance = qs.first()
         except:
             raise Http404("...")
@@ -43,6 +43,7 @@ class ProductDetailView(DetailView):
         return context
     
     def get_object(self, *args, **kwargs):
+        request = self.request
         pk = self.kwargs.get('id')
         qs = Product.objects.get_by_id(pk)
         if qs is None:
