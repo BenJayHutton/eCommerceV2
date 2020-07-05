@@ -7,34 +7,34 @@ from products.models import Product
 User = settings.AUTH_USER_MODEL
 
 class CartItemManager(models.Manager):
-    def create_cart_item(self,*args, **kwargs):
-        '''
-        TODO: 
-        '''
-        product_id = kwargs.get('product_id')
-        product_quantity = int(kwargs.get('product_quantity'))
-        item_price = None
-        total = None
-        cart_item_obj = None
 
-        if product_id is not None and product_quantity > 0:
-            product_obj = Product().get_by_id(product_id)
-            item_price = float(product_obj.price)
-            total = item_price * product_quantity
-            cart_item_obj = self.model.objects.create(product=product_obj, quantity=product_quantity, price_of_item=item_price, total=total)
-
-            print("product: ", product_obj)
-            print("qty: ", product_quantity)
-            print("product price: ", item_price)
-            print("total price: ", total)
-            print("cart_item_obj: ", cart_item_obj.product.title)          
-
-        return cart_item_obj
+    def new_or_get(self, request, *args, **kwargs):
+        cart_item_id = request.session.get("cart_item_id", None)
+        session_id = request.session.session_key
+        product_id = kwargs.get("product_id",None)
+        product_obj = Product.objects.get(id=product_id)
+        
+        qs = self.get_queryset().filter(id=cart_item_id)
+        if qs.count() == 1:
+            cart_item_obj = qs.first()
+            new_item_obj = False
+            if product_obj and cart_item_obj.product is None:
+                cart_item_obj.product = product_obj
+                cart_item_obj.save()
+            print("cart exists", cart_item_obj)
+        else:
+            cart_item_obj = CartItem.objects.create(session_id = session_id, product=product_obj)
+            new_item_obj = True
+            request.session['cart_item_id'] = cart_item_obj.id
+            print("cart created", cart_item_obj)
+        return cart_item_obj, new_item_obj
+            
 
 class CartItem(models.Model):
     product         = models.ForeignKey(Product, default=None, blank=True, on_delete=models.CASCADE)
     quantity        = models.IntegerField(default=0, null=True)
     price_of_item   = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
+    session_id      = models.CharField(max_length=120, default=0, null=True, blank=True)
     total           = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
 
     objects = CartItemManager()

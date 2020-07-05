@@ -8,19 +8,13 @@ from .models import Cart, CartItem
 
 class CartHome(ListView):
     template_name = "carts/list.html"
-    
-    product_obj = None
-    quantity = None
-    price = None
-    cart_item = None
 
-    def cart_create(user=None):
-        cart_obj = Cart.objects.create(user=None)
-        print("new cart created")
-        return cart_obj
+    def get(self, request):        
+        if not request.session.exists(request.session.session_key):
+            request.session.create()        
+        cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id=1)
 
-    def get(self, request):
-        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        # cart_obj, new_obj = Cart.objects.new_or_get(request)
         return render(request,"carts/list.html", {})
     
 
