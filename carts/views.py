@@ -9,12 +9,9 @@ from .models import Cart, CartItem
 class CartHome(ListView):
     template_name = "carts/list.html"
 
-    def get(self, request):        
-        if not request.session.exists(request.session.session_key):
-            request.session.create()        
+    def get(self, request):
+        cart_obj, new_obj = Cart.objects.new_or_get(request)        
         cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id=1)
-
-        # cart_obj, new_obj = Cart.objects.new_or_get(request)
         return render(request,"carts/list.html", {})
     
 
@@ -39,3 +36,11 @@ class CartHome(ListView):
             "total": total,
         }
         return render(request,"carts/list.html", context)
+
+def cart_update(request):
+    product_id = 1
+    cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id=product_id)
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    cart_obj.cart_items.add(cart_item_obj)
+    
+    return redirect("cart:cart")

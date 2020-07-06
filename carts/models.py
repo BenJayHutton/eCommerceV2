@@ -9,10 +9,15 @@ User = settings.AUTH_USER_MODEL
 class CartItemManager(models.Manager):
 
     def new_or_get(self, request, *args, **kwargs):
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
         cart_item_id = request.session.get("cart_item_id", None)
         session_id = request.session.session_key
         product_id = kwargs.get("product_id",None)
-        product_obj = Product.objects.get(id=product_id)
+        try:
+            product_obj = Product.objects.get(id=product_id)
+        except:
+            product_obj = None
         
         qs = self.get_queryset().filter(id=cart_item_id)
         if qs.count() == 1:
@@ -21,12 +26,12 @@ class CartItemManager(models.Manager):
             if product_obj and cart_item_obj.product is None:
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
-            print("cart exists", cart_item_obj)
+            print("cart item exists", cart_item_obj)
         else:
             cart_item_obj = CartItem.objects.create(session_id = session_id, product=product_obj)
             new_item_obj = True
             request.session['cart_item_id'] = cart_item_obj.id
-            print("cart created", cart_item_obj)
+            print("cart item created", cart_item_obj)
         return cart_item_obj, new_item_obj
             
 
@@ -52,10 +57,12 @@ class CartManager(models.Manager):
             if request.user.is_authenticated and cart_obj.user is None:
                 cart_obj.user = request.user
                 cart_obj.save()
+            print("cart exists", cart_obj)
         else:
             cart_obj = Cart.objects.new(user=request.user)
             new_obj = True
             request.session['cart_id'] = cart_obj.id  
+            print("cart created", cart_obj)
         return cart_obj, new_obj
 
     def new(self, user=None):
