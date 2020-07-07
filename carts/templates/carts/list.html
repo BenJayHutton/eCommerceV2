@@ -4,11 +4,17 @@
 
 <h1>Carts</h1>
 <div>
-    Cart Id: {{ cart_obj_id }}<br>
-    Product Title: {{ product_title }}<br>
-    Quantity: {{ product_quantity }}<br>
-    Price per item: {{ item_price }}<br>
-    Total: {{ total }}<br>
+
+    Cart: {{cart}} <br>
+    items currently in cart: {{ cart.cart_items.all }} <br>
+    {% for item in cart.cart_items.all %}
+  <div>
+    Item: {{ item.product }} <br>
+    Quantity: {{ item.quantity }} <br>
+    Price: £{{ item.price_of_item }} <br>
+    Total: {{ item.total }} <br>
+  </div>
+  {% endfor %}
 </div>
 
 {% endblock %}

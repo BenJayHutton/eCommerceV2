@@ -2,21 +2,24 @@
 {% block content %}
 <div class="row">
   <div class="col-12 col-md-6">
-    <h1>{{ object.title }}</h1>
-    Added: {{ object.timestamp|timesince }} ago<br/>
-    {% if object.quantity > 0 %}
-      Quantity: {{ object.quantity }}<br/>
+    <h1>{{ product_obj.title }}</h1>
+    Added: {{ product_obj.timestamp|timesince }} ago<br/>
+    {% if product_obj.quantity > 0 %}
+      Quantity: {{ product_obj.quantity }}<br/>
     {% else %}
       <div class="text-danger">
         <em>Product not available</em>
       </div>
     {% endif %}
+    Product in cart item Id: {{ cart_item_obj.product.id }} <br>
   </div>
   <div class="col-12 col-md-6">
-    Cart: {{cart}} <br>
-    {{ cart.cart_items.all }}
-    {{ cart_item_obj.product.id }}
-
+    {% for item in cart.cart_items.all %}
+    <div>
+      Item: {{ item.product.id }} <br>
+    </div>
+    {% endfor %}
+  
     {% if object == cart_item_obj.product %}
       In cart
     {% else %}

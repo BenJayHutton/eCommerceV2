@@ -13,31 +13,39 @@ class CartItemManager(models.Manager):
             request.session.create()
         cart_item_id = request.session.get("cart_item_id", None)
         session_id = request.session.session_key
-        product_id = kwargs.get("product_id",None)
+        product_id = kwargs.get("product_id",0)
+        product_quantity = kwargs.get("product_quantity",0)
         try:
             product_obj = Product.objects.get(id=product_id)
+            
         except:
             product_obj = None
-        
-        qs = self.get_queryset().filter(id=cart_item_id)
+        print("just after try block in cartitems new or get, product returned:", product_obj)
+        qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
         if qs.count() == 1:
             cart_item_obj = qs.first()
             new_item_obj = False
             if product_obj and cart_item_obj.product is None:
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
+            if product_quantity and cart_item_obj.quantity is None:
+                cart_item_obj.quantity = product_quantity
+                cart_item_obj.save()
             print("cart item exists", cart_item_obj)
         else:
-            cart_item_obj = CartItem.objects.create(session_id = session_id, product=product_obj)
+            cart_item_obj = CartItem.objects.create(session_id = session_id, quantity=product_quantity, product=product_obj)
+            if product_obj and cart_item_obj.product is None:
+                cart_item_obj.product = product_obj
+                cart_item_obj.save()
             new_item_obj = True
-            request.session['cart_item_id'] = cart_item_obj.id
             print("cart item created", cart_item_obj)
+        request.session['cart_item_id'] = cart_item_obj.id
         return cart_item_obj, new_item_obj
             
 
 class CartItem(models.Model):
-    product         = models.ForeignKey(Product, default=None, blank=True, on_delete=models.CASCADE)
-    quantity        = models.IntegerField(default=0, null=True)
+    product         = models.ForeignKey(Product, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    quantity        = models.IntegerField(default=None, null=True)
     price_of_item   = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
     session_id      = models.CharField(max_length=120, default=0, null=True, blank=True)
     total           = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
