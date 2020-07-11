@@ -11,49 +11,19 @@
         <em>Product not available</em>
       </div>
     {% endif %}
-    Product in cart item Id: {{ cart_item_obj.product.id }} <br>
   </div>
   <div class="col-12 col-md-6">
-    {% for item in cart.cart_items.all %}
-    <div>
-      Item: {{ item.product.id }} <br>
-    </div>
-    {% endfor %}
-  
-    {% if object == cart_item_obj.product %}
-      In cart
-    {% else %}
-      Add to cart
-    {% endif %}
+    <p>
+      {% if cart_item_obj in cart_obj.cart_items.all %}
+        {% for item in cart_obj.cart_items.all %}
+          {% if product_obj == item.product %}
+            In cart<br>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        Add to cart
+      {% endif %}
+    </p>
   </div>
 </div>
-{% endblock %}  
-
-
-<div class="row">
-    <div class="col-12 col-md-6">
-
-      
-      Description:{{ object.description|linebreaks }}<br/>
-      {% if object.image %}
-          <img src='{{ object.image.url }}' class='image-fluid' height="200px"/> <br/>
-      {% else %}
-          <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg' class='image-fluid' height="200px"/> <br/>
-      {% endif %}
-    </div>    
-  </div>
-  {% include 'products/snippets/update-cart.html' with product=product %}
-
-
-
-
-
-
-  {% for item in cart.cart_items.all %}
-  <div>
-    Item: {{ item }} <br>
-    Quantity: {{ item.quantity }} <br>
-    Price: £{{ item.price_of_item }} <br>
-    Total: {{ item.total }} <br>
-  </div>
-  {% endfor %}
+{% endblock %}

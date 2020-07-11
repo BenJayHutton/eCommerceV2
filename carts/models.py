@@ -13,16 +13,10 @@ class CartItemManager(models.Manager):
             request.session.create()
         cart_item_id = request.session.get("cart_item_id", None)
         session_id = request.session.session_key
-        product_id = kwargs.get("product_id",0)
-        product_quantity = kwargs.get("product_quantity",0)
-        try:
-            product_obj = Product.objects.get(id=product_id)
-            
-        except:
-            product_obj = None
-        print("just after try block in cartitems new or get, product returned:", product_obj)
-        qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
-        if qs.count() == 1:
+        product_obj = kwargs.get("product_obj",None)
+        product_quantity = kwargs.get("product_quantity",None)
+        qs = self.get_queryset().filter(session_id=session_id, product=product_obj)
+        if qs:
             cart_item_obj = qs.first()
             new_item_obj = False
             if product_obj and cart_item_obj.product is None:
@@ -39,7 +33,7 @@ class CartItemManager(models.Manager):
                 cart_item_obj.save()
             new_item_obj = True
             print("cart item created", cart_item_obj)
-        request.session['cart_item_id'] = cart_item_obj.id
+            request.session['cart_item_id'] = cart_item_obj.id
         return cart_item_obj, new_item_obj
             
 

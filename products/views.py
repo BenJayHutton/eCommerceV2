@@ -5,7 +5,6 @@ from django.views.generic import TemplateView, DetailView, ListView
 from carts.models import Cart, CartItem
 from .models import Product
 
-
 class ProductListView(ListView):
     template_name = "products/list.html"
     queryset = Product.objects.all().active()
@@ -18,32 +17,32 @@ class ProductDetailSlugView(DetailView):
         request = self.request
         context = super(ProductDetailSlugView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get('slug')
-        product_id = kwargs.get('object')
-        print("kwargs", kwargs)
-        print("Slug: ", slug)
-
-        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
+        product_slug = kwargs.get('object')
         try:
             product_obj = Product.objects.get(slug=slug)
         except:
             product_obj = None
+        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
+        cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
         
-        print("product_obj", product_obj)
         context = {
-            'cart': cart_obj,
+            'cart_obj': cart_obj,
+            'cart_item_obj': cart_item_obj,
             'product_obj': product_obj,            
             }
         return context
 
     def post(self, request, *args, **kwargs):
+        product_id = request.POST.get('product_id', None)
+        product_quantity = request.POST.get('product_quantity',None)
         try:
-            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id = product_obj.id)
+            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id = product_obj.id, product_quantity=product_quantity)
             print("product in cart item: ",cart_item_obj.product)
         except:
             cart_item_obj = None
         context = {
-            'product_obj': product_obj,            
-            }
+            "cart_item_obj": cart_item_obj,
+        }
         return redirect("cart:cart", context)
 
     

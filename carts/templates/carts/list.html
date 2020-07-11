@@ -3,18 +3,19 @@
 {% block content%}
 
 <h1>Carts</h1>
-<div>
-
+<div class="row">
+  <div class="col-12 col-md-6">
     Cart: {{cart}} <br>
     items currently in cart: {{ cart.cart_items.all }} <br>
+    {{cart}}
     {% for item in cart.cart_items.all %}
-  <div>
-    Item: {{ item.product }} <br>
-    Quantity: {{ item.quantity }} <br>
-    Price: £{{ item.price_of_item }} <br>
-    Total: {{ item.total }} <br>
+    <div>
+      Item: {{ item.product.title }} <br>
+      Quantity: {{ item.quantity }} <br>
+      Price per item: {{ item.price_of_item }} <br>
+      total: {{ item.total }} <br>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
-
 {% endblock %}

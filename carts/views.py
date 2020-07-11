@@ -15,18 +15,6 @@ class CartHome(ListView):
             "cart_obj": cart_obj,
         }
         return render(request,"carts/list.html", context)
-    
-
-    def post(self, request, *args, **kwargs):
-        product_id = request.POST.get('product_id', None)
-        product_quantity = request.POST.get('product_quantity')
-        cart_item_obj = CartItem.objects.new_or_get(request, product_id=product_id, product_quantity=product_quantity)        
-        print(cart_item_obj)
-            
-        context = {
-            "cart_item_obj": cart_item_obj,
-        }
-        return render(request,"carts/list.html", context)
 
 def cart_update(request, *args, **kwargs):
     product_id = kwargs.get('product_id', None)
