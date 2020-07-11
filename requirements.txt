@@ -1,4 +1,4 @@
-Django==2.2.11
+Django==2.2.13
 django3==0.1
 Pillow==7.0.0
 python-dotenv==0.12.0
