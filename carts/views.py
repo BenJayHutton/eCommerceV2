@@ -32,5 +32,6 @@ def cart_update(request, *args, **kwargs):
             cart_obj.cart_items.add(cart_item_obj)
 
         if cart_item_obj in cart_obj.cart_items.all() and cart_item_update:
-            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)    
+            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
+    
     return redirect("cart:cart")

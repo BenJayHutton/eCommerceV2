@@ -12,11 +12,12 @@ class ProductListView(ListView):
     def get(self, request, *args, **kwargs):
         queryset = Product.objects.all().active()
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
-        print(queryset)
+        cart_item_obj = CartItem.objects.all().filter(session_id=request.session.session_key)
+        print("cart_item_obj", cart_item_obj)
         context = {
             'object_list': queryset,
             'cart_obj':cart_obj,
-
+            'cart_item_obj': cart_item_obj,
         }
         return render(request,"products/list.html", context)
 
