@@ -9,6 +9,18 @@ class ProductListView(ListView):
     template_name = "products/list.html"
     queryset = Product.objects.all().active()
 
+    def get(self, request, *args, **kwargs):
+        queryset = Product.objects.all().active()
+        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
+        print(queryset)
+        context = {
+            'object_list': queryset,
+            'cart_obj':cart_obj,
+
+        }
+        return render(request,"products/list.html", context)
+
+
 class ProductDetailSlugView(DetailView):
     queryset = Product.objects.all()
     template_name="products/detail.html"
@@ -24,6 +36,7 @@ class ProductDetailSlugView(DetailView):
             product_obj = None
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
         cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
+        print("product obj", product_obj)
         
         context = {
             'cart_obj': cart_obj,

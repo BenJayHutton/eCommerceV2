@@ -4,7 +4,8 @@
 {% if object_list %}
   {% for product in object_list %}
     <div class='col-sm-6 col-md-4 col-lg-3 my-2'>
-        {% include 'products/snippets/card.html' with product=product cart=cart %}
+      cart obj {{ cart_obj }}
+        {% include 'products/snippets/card.html' with product_obj=product cart_item_obj=cart %}
     </div>      
   {% endfor %}
 {% endif %}

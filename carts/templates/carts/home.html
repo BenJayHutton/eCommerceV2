@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Cart</h1>
+{% if cart_obj.cart_items.exists %}
+<table class="table cart-table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Product name</th>
+      <th scope="col">Product price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody class='cart-body'>
+  {% for cart_item in cart_obj.cart_items.all %}
+    <tr class='cart-product'>
+      <th scope="row">{{ forloop.counter }}</th>
+      <form class="form-product-ajax" method='POST' action='{% url "cart:update" %}' data-endpoint='{% url "cart:update" %}' class="form">{% csrf_token %}
+        <td><a href="{{ product.get_absolute_url }}">{{ cart_item.product.title }}</a>
+        </td>
+        <td>{{ cart_item.price_of_item }}</td>
+        <td> <input type="number" name="product_quantity" value="{{ cart_item.quantity }}" min="0" max="{{cart_item.product.quantity}}"> </td>
+        <td>{{ cart_item.total }}</td>
+        <td>{% include 'carts/snippets/update-cart-item.html' with cart_item=cart_item %}</td>
+      </form>
+    </tr>
+  {% endfor %}
+    <tr>
+      <td colspan="5"></td>
+      <td><b>Total</b> £<span class='cart-subtotal'> {{ cart_obj.total }}</span></td>
+    </tr>
+    <tr>
+        <td colspan="5"></td>
+        <td><b>Subtotal</b> £<span class='cart-subtotal'> {{ cart_obj.subtotal }}</span></td>      
+    </tr>
+    <tr>
+      <td colspan="5"></td>
+      <td><a class='btn btn-success' href='#'>Checkout</a> </td>
+    </tr>
+  </tbody>
+</table>
+<div class='cart-item-remove-form' style='display:none'>
+  {% include 'carts/snippets/update-cart-item.html' %}
+</div>
+{% else %}
+    <p class="lead"> Cart is empty</p>
+{% endif %}
+
+{% endblock %}

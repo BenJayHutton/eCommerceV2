@@ -22,7 +22,7 @@ class CartItemManager(models.Manager):
             if product_obj and cart_item_obj.product is None:
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
-            if product_quantity and cart_item_obj.quantity is None:
+            if product_quantity:
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
             print("cart item exists", cart_item_obj)
@@ -76,9 +76,9 @@ class CartManager(models.Manager):
 
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    cart_items    = models.ManyToManyField(CartItem, default=None, blank=True)
-    subtotal    = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    cart_items  = models.ManyToManyField(CartItem, default=None, blank=True)
     total       = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    subtotal    = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     updated     = models.DateTimeField(auto_now=True)
     timestamp   = models.DateTimeField(auto_now_add=True)
 
@@ -88,15 +88,28 @@ class Cart(models.Model):
         return str(self.id)
 
 
-def pre_save_cart_reciever(sender, instance, action, *args, **kwargs):
+
+def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
+    quantity        =   int(instance.quantity)
+    price_of_item   =   float(instance.product.price)    
+    instance.price_of_item  =   price_of_item
+    instance.total  =   quantity * price_of_item
+    print("quantity", quantity)
+    print("price_of_item", price_of_item)
+    print("instance.total", instance.total)
+
+pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
+    
+    
+def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
     if action =='post_add' or action=='post_remove' or action =='post_clear':
         cart_items = instance.cart_items.all()
         total = 0
         for x in cart_items:
             total += x.total
         if instance.subtotal != total:
-            instance.subtotal = total
-            instance.total = total
+            instance.total = float(total)
+            instance.subtotal = float(total) * float(1.1)
             instance.save()
 
-m2m_changed.connect(pre_save_cart_reciever, sender=Cart.cart_items.through)
+m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)

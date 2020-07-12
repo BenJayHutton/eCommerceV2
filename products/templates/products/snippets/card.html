@@ -12,7 +12,7 @@
     
     <div class="text-center">
       Quantity: {{ product.quantity}}<br>
-      {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_obj=cart_obj cart_item_obj=cart_item_obj %}
+      {% include 'products/snippets/update-cart.html' with product_obj=product cart_item_obj=cart_item_obj cart_obj=cart_obj %}
       <a href="{{ product.get_absolute_url }}" class="btn btn-primary my-2">View</a>
     </div>
   </div>
