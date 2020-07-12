@@ -33,5 +33,5 @@ def cart_update(request, *args, **kwargs):
 
         if cart_item_obj in cart_obj.cart_items.all() and cart_item_update:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
-    
+        request.session['cart_items'] = cart_obj.cart_items.count()
     return redirect("cart:cart")

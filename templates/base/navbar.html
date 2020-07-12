@@ -30,7 +30,7 @@
         <a class="nav-link" href="{{ contact_url }}">Contact</a>
       </li>
       <li class="nav-item {% if request.path == product_list_url %}active{% endif %}">
-        <a class="nav-link" href="{{ cart_url }}">Cart</a>
+        <a class="nav-link" href="{{ cart_url }}">Cart: {{ request.session.cart_items }}</a>
       </li>
     </ul>
   </div>
