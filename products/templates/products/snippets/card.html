@@ -1,6 +1,6 @@
 <div class="card" style="width: 15rem;">
   {% if cart_item_obj.image %}
-    <a href='{{ product.get_absolute_url }}'>
+    <a href='{{ product_obj.get_absolute_url }}'>
       <img class="card-img-top" src="{{product.image.url}}" alt="{{ product.title}} logo">
     </a>
   {% else %}
@@ -10,10 +10,9 @@
     <h5 class="card-title">{{ product_obj.title }}</h5>
     Quantity: {{ product_obj.quantity }} <br>
     <p class="card-text"> {{ product_obj.description|linebreaks|truncatewords:12 }}</p>
-    <div class="text-center">
-      <a href="{{ product.get_absolute_url }}" class="btn btn-primary my-2">View</a>
-      {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_obj=cart_obj %}
+    <div>
       
+      {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_obj=cart_obj cart_item_obj=cart_item_obj %} <a href="{{ product_obj.get_absolute_url }}" class="btn btn-primary my-2">View</a>
     </div>
   </div>
 </div>

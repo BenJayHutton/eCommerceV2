@@ -16,4 +16,12 @@
     {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_item_obj=cart_item_obj cart_obj=cart_obj %}
   </div>
 </div>
+
+Cart obj: {{cart_obj}} <br>
+product_obj {{product_obj}} <br>
+cart_obj.cart_items.all {{cart_obj.cart_items.all}} <br>
+{% for cart_items in cart_obj.cart_items.all %}
+  for item in cart_obj: {{cart_items.product}} <br>
+{% endfor %}
+cart_item_obj {{cart_item_obj}} <br>
 {% endblock %}

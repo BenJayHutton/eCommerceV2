@@ -7,19 +7,23 @@ from .models import Product
 
 class ProductListView(ListView):
     template_name = "products/list.html"
-    queryset = Product.objects.all().active()
+    #queryset = Product.objects.all().active()
 
-    def get(self, request, *args, **kwargs):
-        queryset = Product.objects.all().active()
-        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        
+        cart_obj, new_obj = Cart.objects.new_or_get(self.request)
         cart_item_obj = CartItem.objects.all().filter(session_id=request.session.session_key)
-        print("cart_item_obj", cart_item_obj)
-        context = {
-            'object_list': queryset,
-            'cart_obj':cart_obj,
-            'cart_item_obj': cart_item_obj,
-        }
-        return render(request,"products/list.html", context)
+        context['cart_obj'] = cart_obj
+        context['cart_item_obj'] = cart_item_obj
+        print(context)
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        return Product.objects.all()
+        
 
 
 class ProductDetailSlugView(DetailView):
