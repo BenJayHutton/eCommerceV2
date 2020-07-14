@@ -5,7 +5,7 @@
             {% if cart_item_obj in cart_obj.cart_items.all %}
                 {% for item in cart_obj.cart_items.all %}
                     {% if product_obj == item.product %}
-                        <a class='btn btn-link' href='{% url "cart:cart" %}'>In cart</a> <button type='submit' name="cart_item_remove"  value="True" class='btn btn-danger'>Remove</button></div>
+                        <a class='btn btn-link' href='{% url "cart:home" %}'>In cart</a> <button type='submit' name="cart_item_remove"  value="True" class='btn btn-danger'>Remove</button></div>
                     {% endif %}
                 {% endfor %}
             {% else %}

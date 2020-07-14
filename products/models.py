@@ -5,6 +5,7 @@ from django.db.models.signals import pre_save, post_save
 from django.shortcuts import reverse
 from django.template.defaultfilters import slugify
 
+from eCommerce.utils import unique_slug_generator
 from uuid import uuid4
 
 class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute

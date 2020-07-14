@@ -15,7 +15,10 @@ class CartItemManager(models.Manager):
         session_id = request.session.session_key
         product_obj = kwargs.get("product_obj",None)
         product_quantity = kwargs.get("product_quantity",None)
-        qs = self.get_queryset().filter(session_id=session_id, product=product_obj)
+        if product_obj:
+            qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
+        else:
+            qs = self.get_queryset().filter(id=cart_item_id)
         if qs:
             cart_item_obj = qs.first()
             new_item_obj = False
@@ -90,8 +93,14 @@ class Cart(models.Model):
 
 
 def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
-    quantity        =   int(instance.quantity)
-    price_of_item   =   float(instance.product.price)    
+    try:
+        quantity        =   int(instance.quantity)        
+    except:
+        quantity = 0
+    try:
+        price_of_item   =   float(instance.product.price)
+    except:
+        price_of_item = 0
     instance.price_of_item  =   price_of_item
     instance.total  =   quantity * price_of_item
     print("quantity", quantity)

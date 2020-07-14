@@ -9,8 +9,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.http import HttpResponse
 
-from eCommerce.utils import random_string_generator
+from eCommerce.utils import unique_order_id_generator
 from products.models import Product
+from carts.models import Cart
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -18,29 +19,15 @@ ORDER_STATUS_CHOICES = (
     ('shipped', 'Shipped'),
     ('refunded', 'Refunded'),
 )
-
-
-class OrderItem(models.Model):
-    product     = models.ForeignKey(Product, default=None, blank=True, on_delete=models.CASCADE)
-    quantity    = models.IntegerField(default=0, null=True)
-
-    def __str__(self):
-        return str(self.id)
-
-    def new_or_get_order(self):
-        return True
-        
-    def update_order(self):
-        return True
     
 
 class Order(models.Model):
     order_id            = models.CharField(max_length=120, unique=True, blank=True, null=True)
-    OrderItem             = models.ManyToManyField(OrderItem, default=None, blank=True)
+    cart                = models.ForeignKey(Cart, default=None, blank=True, on_delete=models.CASCADE)    
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
-    shipping_total      = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
-    tax                 = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
-    total               = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
+    shipping_total      = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
+    tax                 = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
+    total         = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
@@ -48,11 +35,19 @@ class Order(models.Model):
     billing_profile     = models.ForeignKey BillingProfile    
     shipping_address    = models.ForeignKey Address 
     billing_address     = models.ForeignKey Address
-    cart                = models.ForeignKey Cart    
+        
     '''
 
     def __str__(self):
         return self.order_id
+
+    def update_total(self):
+        cart_total = self.cart.subtotal
+        shipping_total = self.shipping_total
+        new_total = cart_total + shipping_total
+        self.total = new_total
+        self.save()
+        return new_total
 
 
     def new_or_get_order(self, *args, **kwargs):
@@ -65,12 +60,32 @@ class Order(models.Model):
         print("shipping total:", test_obj.shipping_total)
 
         obj = Order.objects.filter(order_id__exact=1)
-        print(obj)
-
-        print("product_id: ", product_id)
-        print("product_qty: ", product_qty)
-        print("session_order_id: ", session_order_id)
+        
         
     
-    def generate_order_id(self):
-         return random_string_generator(120)
+def pre_save_create_order_id(sender, instance, *args, **kwargs):
+    if not instance.order_id:
+        instance.order_id = unique_order_id_generator(instance)
+
+pre_save.connect(pre_save_create_order_id, sender=Order)
+
+def post_save_cart_total(sender, instance, created, *args, **kwargs):
+    if not created:
+        cart_obj = instance
+        cart_total  = cart_obj.total
+        cart_id = cart_obj.id
+        qs = Order.objects.filter(cart__id=cart_id)
+        if qs.count() == 1:
+            order_obj = qs.first()
+            order_obj.update_total()
+
+post_save.connect(post_save_cart_total, sender=Cart)
+
+
+def post_save_order(sender, instance, created, *args, **kwargs):
+    print("updateing order total, if cart has been created")
+    if created:
+        print("running")
+        instance.update_total()
+
+post_save.connect(post_save_order, sender=Order)

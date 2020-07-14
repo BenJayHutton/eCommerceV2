@@ -83,8 +83,6 @@ def unique_key_generator(instance):
     return key
 
 
-
-
 def unique_order_id_generator(instance):
     order_new_id = random_string_generator()
     Klass = instance.__class__

@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from .views import OrderDefaultView
+from .views import OrderHome
 
 urlpatterns = [
-    url(r'^$', OrderDefaultView.as_view(), name='default_home'),
-    url(r'^$', OrderDefaultView.as_view(), name='update_order'),
+    url(r'^$', OrderHome.as_view(), name='home'),
+    url(r'^$', OrderHome.as_view(), name='update_order'),
 ]

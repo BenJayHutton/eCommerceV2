@@ -3,14 +3,13 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponse, HttpRequest
 
-from .models import Order, OrderItem
+from .models import Order
 from products.models import Product
 
 
-class OrderDefaultView(TemplateView):
+class OrderHome(TemplateView):
     template_name = "orders/orders-home.html"
     session_id = SessionStore()
-    session_id["order_id"] = Order().generate_order_id()
     
     def get(self, request, *args, **kwargs):
         context = {
