@@ -15,10 +15,7 @@ class CartItemManager(models.Manager):
         session_id = request.session.session_key
         product_obj = kwargs.get("product_obj",None)
         product_quantity = kwargs.get("product_quantity",None)
-        if product_obj:
-            qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
-        else:
-            qs = self.get_queryset().filter(id=cart_item_id)
+        qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
         if qs:
             cart_item_obj = qs.first()
             new_item_obj = False

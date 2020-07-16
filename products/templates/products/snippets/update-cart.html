@@ -10,7 +10,7 @@
                 {% endfor %}
             {% else %}
                 <input name='product_quantity' type='number' min='0' max='{{ product_obj.quantity }}' value='0' style='width: 50px;' />
-                <button type='submit' class='btn btn-success'>Add to cart</button>
+                <button type='submit' name="cart_item_add" value="True" class='btn btn-success'>Add to cart</button>
             {% endif %}
         {% endif %}
     </span>

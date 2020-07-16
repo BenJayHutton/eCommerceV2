@@ -14,10 +14,7 @@ class ProductListView(ListView):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
         print("Session Key", request.session.session_key)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        cart_item_obj = CartItem.objects.new_or_get(request)
-        print("try cart_item_obj", cart_item_obj)
         context['cart_obj'] = cart_obj
-        context['cart_item_obj'] = cart_item_obj
         print(context)
         return context
 
@@ -41,8 +38,8 @@ class ProductDetailSlugView(DetailView):
         except:
             product_obj = None
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
-        cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
-        print("product obj", product_obj)
+        cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request)
+        print("product obj", product_obj.id)
         
         context = {
             'cart_obj': cart_obj,

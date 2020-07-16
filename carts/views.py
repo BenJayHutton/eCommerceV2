@@ -12,6 +12,7 @@ class CartHome(ListView):
 
     def get(self, request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
+        print("Cart Home", cart_obj)
         context = {
             "cart_obj": cart_obj,
         }
@@ -22,18 +23,33 @@ def cart_update(request, *args, **kwargs):
     product_quantity = request.POST.get('product_quantity', None)
     cart_item_update = request.POST.get('cart_item_update', False)
     cart_item_remove = request.POST.get('cart_item_remove', False)
+    cart_item_add = request.POST.get('cart_item_add', False)
+
     product_obj = Product.objects.get(id=product_id)
-    if product_obj is not None:
+    print("product_obj", product_obj)
+
+    if product_obj:
         cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
+        print("product is not None?", product_obj)
+        print("cart_item_obj is not None?", cart_item_obj)
 
         if cart_item_obj in cart_obj.cart_items.all() and cart_item_remove:
-            cart_obj.cart_items.remove(cart_item_obj)        
-        else:
-            cart_obj.cart_items.add(cart_item_obj)
+            print("cart_item_removed")
+            cart_obj.cart_items.remove(cart_item_obj)
 
         if cart_item_obj in cart_obj.cart_items.all() and cart_item_update:
+            print("cart_item_updated")
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
+        
+        if cart_item_add:
+            print("cart_item_added")
+            cart_obj.cart_items.add(cart_item_obj)
+
+        print("cart_item_update is: ", cart_item_update)
+        print("cart_item_remove is: ", cart_item_remove)
+        print("cart_item_add is: ", cart_item_add)
+
         request.session['cart_items'] = cart_obj.cart_items.count()
     return redirect("cart:home")
 
