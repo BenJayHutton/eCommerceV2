@@ -7,15 +7,12 @@ from .models import Product
 
 class ProductListView(ListView):
     template_name = "products/list.html"
-    #queryset = Product.objects.all().active()
 
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
-        print("Session Key", request.session.session_key)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         context['cart_obj'] = cart_obj
-        print(context)
         return context
 
     def get_queryset(self, *args, **kwargs):
@@ -39,7 +36,6 @@ class ProductDetailSlugView(DetailView):
             product_obj = None
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
         cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request)
-        print("product obj", product_obj.id)
         
         context = {
             'cart_obj': cart_obj,
@@ -53,7 +49,6 @@ class ProductDetailSlugView(DetailView):
         product_quantity = request.POST.get('product_quantity',None)
         try:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id = product_obj.id, product_quantity=product_quantity)
-            print("product in cart item: ",cart_item_obj.product)
         except:
             cart_item_obj = None
         context = {

@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
-
 from products.models import Product
 
 User = settings.AUTH_USER_MODEL
@@ -23,17 +22,14 @@ class CartItemManager(models.Manager):
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
             if product_quantity:
-                print("quantity updated")
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
-            print("cart item obj exists", cart_item_obj)
         else:
             cart_item_obj = CartItem.objects.create(session_id = session_id, quantity=product_quantity, product=product_obj)
             if product_obj and cart_item_obj.product is None:
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
             new_item_obj = True
-            print("cart item created", cart_item_obj)
             request.session['cart_item_id'] = cart_item_obj.id
         return cart_item_obj, new_item_obj
             
@@ -60,12 +56,10 @@ class CartManager(models.Manager):
             if request.user.is_authenticated and cart_obj.user is None:
                 cart_obj.user = request.user
                 cart_obj.save()
-            print("cart exists", cart_obj)
         else:
             cart_obj = Cart.objects.new(user=request.user)
             new_obj = True
-            request.session['cart_id'] = cart_obj.id  
-            print("cart created", cart_obj)
+            request.session['cart_id'] = cart_obj.id
         return cart_obj, new_obj
 
     def new(self, user=None):
@@ -77,7 +71,6 @@ class CartManager(models.Manager):
 
     def calculate_cart_total(self, request, *args, **kwargs):
         cart_obj = kwargs.get("cart_obj",None)
-        print("cart_obj items:- ", cart_obj.cart_items.all())
         total = 0
         for x in cart_obj.cart_items.all():
             total += x.total
@@ -100,7 +93,6 @@ class Cart(models.Model):
         return str(self.id)
 
 
-
 def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
     try:
         quantity = int(instance.quantity)        
@@ -112,9 +104,6 @@ def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):
         price_of_item = 0
     instance.price_of_item = price_of_item
     instance.total = quantity * price_of_item
-    print("quantity", quantity)
-    print("price_of_item", price_of_item)
-    print("instance.total", instance.total)
 
 pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
     

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpRequest
-
 from orders.models import Order
 from products.models import Product
 from .models import Cart, CartItem
@@ -12,7 +11,6 @@ class CartHome(ListView):
 
     def get(self, request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        print("Cart Home", cart_obj)
         context = {
             "cart_obj": cart_obj,
         }
@@ -30,43 +28,23 @@ def cart_update(request, *args, **kwargs):
         product_obj = Product.objects.get(id=product_id)
     except:
         product_obj = False
-    
-    print("-----------------------")
-    print("| cart_item_id", cart_item_id)
-    print("| cart_item_update", cart_item_update)
-    print("| cart_item_remove", cart_item_remove)
-    print("| cart_item_add", cart_item_add)
-    print("| product_id", product_id)
-    print("| product_quantity", product_quantity)
-    print("| product_obj", product_obj)
-    print("-----------------------")
 
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         if cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
-            print("cart_item_obj", cart_item_obj)
-            print("cart_item_removed")
-
         if cart_item_update:
             update_cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
-            print("cart_item_updat:", cart_item_obj, "product_obj:", product_obj, "qty", cart_item_obj.quantity)
             if int(product_quantity) != int(cart_item_obj.quantity):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
-                cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
-                print("quantity updated")
-            
+                cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)            
         
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
             cart_obj.cart_items.add(cart_item_obj)
-            print("cart_item_obj", cart_item_obj)
-            print("product_obj", product_obj)
-            print("cart_item_added", cart_obj, "=>", cart_item_obj)
-        
         request.session['cart_items'] = cart_obj.cart_items.count()
     return redirect("cart:home")
 
@@ -77,5 +55,4 @@ def checkout_home(request):
         redirect("cart:home")
     else:
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-    print(order_obj)
     return render(request, "carts/checkout.html",{"object": order_obj})
