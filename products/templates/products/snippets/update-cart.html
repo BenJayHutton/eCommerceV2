@@ -1,4 +1,5 @@
-<form class='form-product-ajax' method='POST' action='{% url "cart:update" %}' data-endpoint='#' class='form'{% if request.user.is_authenticated %} data-user='abc'{% endif %}>{% csrf_token %}
+<form class='form-product-ajax' method='POST' action='{% url "cart:update" %}' data-endpoint='#' class='form'{% if request.user.is_authenticated %} data-user='abc'{% endif %}>
+    {% csrf_token %}
     <input type='hidden' name='product_id' value='{{ product_obj.id }}' {% if product.is_digital %} data-is-digital='true'{% endif %} />    
     <span class='submit-span'>
         {% if product_obj.quantity > 0 %}

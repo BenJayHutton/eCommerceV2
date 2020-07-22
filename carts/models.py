@@ -23,9 +23,10 @@ class CartItemManager(models.Manager):
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
             if product_quantity:
+                print("quantity updated")
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
-            print("cart item exists", cart_item_obj)
+            print("cart item obj exists", cart_item_obj)
         else:
             cart_item_obj = CartItem.objects.create(session_id = session_id, quantity=product_quantity, product=product_obj)
             if product_obj and cart_item_obj.product is None:
@@ -74,6 +75,17 @@ class CartManager(models.Manager):
                 user_obj = user
         return self.model.objects.create(user=user_obj)
 
+    def calculate_cart_total(self, request, *args, **kwargs):
+        cart_obj = kwargs.get("cart_obj",None)
+        print("cart_obj items:- ", cart_obj.cart_items.all())
+        total = 0
+        for x in cart_obj.cart_items.all():
+            total += x.total
+            if cart_obj.total != total:
+                cart_obj.total = float(total)
+                cart_obj.subtotal = float(total) * float(1.1)
+                cart_obj.save()
+
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     cart_items  = models.ManyToManyField(CartItem, default=None, blank=True)
@@ -91,15 +103,15 @@ class Cart(models.Model):
 
 def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
     try:
-        quantity        =   int(instance.quantity)        
+        quantity = int(instance.quantity)        
     except:
         quantity = 0
     try:
-        price_of_item   =   float(instance.product.price)
+        price_of_item = float(instance.product.price)
     except:
         price_of_item = 0
-    instance.price_of_item  =   price_of_item
-    instance.total  =   quantity * price_of_item
+    instance.price_of_item = price_of_item
+    instance.total = quantity * price_of_item
     print("quantity", quantity)
     print("price_of_item", price_of_item)
     print("instance.total", instance.total)
@@ -108,6 +120,7 @@ pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
     
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
+    print("m2m changed, action taken: ", action)
     if action =='post_add' or action=='post_remove' or action =='post_clear':
         cart_items = instance.cart_items.all()
         total = 0
