@@ -75,7 +75,6 @@ class CartManager(models.Manager):
         total = Decimal()
         for x in cart_obj.cart_items.all():
             total += x.total
-        print("total variable type", type(total), total)
         if cart_obj.total != total:
             cart_obj.total = total
             try:
