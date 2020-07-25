@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
@@ -37,9 +38,9 @@ class CartItemManager(models.Manager):
 class CartItem(models.Model):
     product         = models.ForeignKey(Product, default=None, null=True, blank=True, on_delete=models.CASCADE)
     quantity        = models.IntegerField(default=None, null=True)
-    price_of_item   = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
+    price_of_item   = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     session_id      = models.CharField(max_length=120, default=0, null=True, blank=True)
-    total           = models.DecimalField(default=0.00, max_digits=20, decimal_places=2)
+    total           = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
 
     objects = CartItemManager()
 
@@ -71,13 +72,17 @@ class CartManager(models.Manager):
 
     def calculate_cart_total(self, request, *args, **kwargs):
         cart_obj = kwargs.get("cart_obj",None)
-        total = 0
+        total = Decimal()
         for x in cart_obj.cart_items.all():
             total += x.total
-            if cart_obj.total != total:
-                cart_obj.total = float(total)
-                cart_obj.subtotal = float(total) * float(1.1)
+        print("total variable type", type(total), total)
+        if cart_obj.total != total:
+            cart_obj.total = total
+            try:
+                cart_obj.subtotal = total * Decimal(1.1)
                 cart_obj.save()
+            except Exception as e:
+                print("error:", e)
 
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
@@ -95,13 +100,17 @@ class Cart(models.Model):
 
 def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
     try:
-        quantity = int(instance.quantity)        
+        quantity = int(instance.quantity)
     except:
         quantity = 0
     try:
-        price_of_item = float(instance.product.price)
+        price_of_item = instance.product.price
     except:
         price_of_item = 0
+
+    print("quantity type", type(quantity))
+    print("price_of_item type", type(price_of_item))
+
     instance.price_of_item = price_of_item
     instance.total = quantity * price_of_item
 
@@ -109,15 +118,15 @@ pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
     
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
-    print("m2m changed, action taken: ", action)
     if action =='post_add' or action=='post_remove' or action =='post_clear':
         cart_items = instance.cart_items.all()
         total = 0
         for x in cart_items:
             total += x.total
         if instance.subtotal != total:
-            instance.total = float(total)
-            instance.subtotal = float(total) * float(1.1)
+            instance.total = total
+            instance.subtotal = total * Decimal(1.1)
+            print("instance.subtotal", instance.subtotal)
             instance.save()
 
 m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)

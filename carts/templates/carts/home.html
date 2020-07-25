@@ -22,7 +22,9 @@
         <td><a href="{{ product.get_absolute_url }}">{{ cart_item.product.title }}</a>
         </td>
         <td>{{ cart_item.price_of_item }}</td>
-        <td> <input type="number" name="product_quantity" value="{{ cart_item.quantity }}" min="0" max="{{cart_item.product.quantity}}"> </td>
+        <td>
+          <input type="number" name="product_quantity" value="{{ cart_item.quantity }}" min="0" max="{{cart_item.product.quantity}}">
+        </td>
         <td>{{ cart_item.total }}</td>
         <td>{% include 'carts/snippets/update-cart-item.html' with cart_item=cart_item %}</td>
       </form>

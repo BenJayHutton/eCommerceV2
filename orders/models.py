@@ -44,7 +44,7 @@ class Order(models.Model):
     def update_total(self):
         cart_total = float(self.cart.subtotal)
         shipping_total = float(self.shipping_total)
-        new_total = cart_total + shipping_total
+        new_total = round(cart_total + shipping_total)
         self.total = new_total
         self.save()
         return new_total
@@ -83,9 +83,7 @@ post_save.connect(post_save_cart_total, sender=Cart)
 
 
 def post_save_order(sender, instance, created, *args, **kwargs):
-    print("updateing order total, if cart has been created")
     if created:
-        print("running")
         instance.update_total()
 
 post_save.connect(post_save_order, sender=Order)

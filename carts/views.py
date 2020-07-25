@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpRequest
+
+import traceback
+
 from orders.models import Order
 from products.models import Product
 from .models import Cart, CartItem
@@ -14,6 +17,7 @@ class CartHome(ListView):
         context = {
             "cart_obj": cart_obj,
         }
+        print("cart_obj", type(cart_obj.total), cart_obj.total)
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
@@ -40,12 +44,13 @@ def cart_update(request, *args, **kwargs):
             if int(product_quantity) != int(cart_item_obj.quantity):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
-                cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)            
+                cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+                print(type(cart_obj))
         
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
             cart_obj.cart_items.add(cart_item_obj)
-        request.session['cart_items'] = cart_obj.cart_items.count()
+        request.session['cart_item_count'] = cart_obj.cart_items.count()
     return redirect("cart:home")
 
 def checkout_home(request):
