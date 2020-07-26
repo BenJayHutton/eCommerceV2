@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
-from .views import contact_page, DefaultHomePage, login_page, register_page
+from .views import contact_page, DefaultHomePage
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,8 +29,8 @@ urlpatterns = [
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
-    url(r'^login/$', login_page, name='login'),
+    
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
-    url(r'^register/$', register_page, name='register'),
+    
 ]
