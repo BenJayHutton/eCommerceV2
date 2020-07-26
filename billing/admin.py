@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import BillingProfile, Invoice
+from .models import BillingProfile
 
 admin.site.register(BillingProfile)
-admin.site.register(Invoice)
