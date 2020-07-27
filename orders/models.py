@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from eCommerce.utils import unique_order_id_generator
 from products.models import Product
 from carts.models import Cart
+from billing.models import BillingProfile
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -32,9 +33,9 @@ class Order(models.Model):
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
     '''
-    billing_profile     = models.ForeignKey BillingProfile    
-    shipping_address    = models.ForeignKey Address 
-    billing_address     = models.ForeignKey Address
+    billing_profile     = models.ForeignKey(BillingProfile, default=None, blank=True, on_delete=models.CASCADE)
+    shipping_address    = models.ForeignKey(Address, default=None, blank=True, on_delete=models.CASCADE)
+    billing_address     = models.ForeignKey(Address,default=None, blank=True, on_delete=models.CASCADE)
         
     '''
 
@@ -44,7 +45,7 @@ class Order(models.Model):
     def update_total(self):
         cart_total = float(self.cart.subtotal)
         shipping_total = float(self.shipping_total)
-        new_total = round(cart_total + shipping_total)
+        new_total = cart_total + shipping_total
         self.total = new_total
         self.save()
         return new_total

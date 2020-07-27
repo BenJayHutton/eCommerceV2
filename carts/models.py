@@ -107,9 +107,6 @@ def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):
     except:
         price_of_item = 0
 
-    print("quantity type", type(quantity))
-    print("price_of_item type", type(price_of_item))
-
     instance.price_of_item = price_of_item
     instance.total = quantity * price_of_item
 
@@ -125,7 +122,6 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
         if instance.subtotal != total:
             instance.total = total
             instance.subtotal = total * Decimal(1.1)
-            print("instance.subtotal", instance.subtotal)
             instance.save()
 
 m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)
