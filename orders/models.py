@@ -20,6 +20,17 @@ ORDER_STATUS_CHOICES = (
     ('shipped', 'Shipped'),
     ('refunded', 'Refunded'),
 )
+
+class OrderManager(models.Manager):
+    def new_or_get(self, billing_profile, cart_obj):
+        qs = self.get_queryset().filter(billing_profile=billing_profile, cart=cart_obj, active = True)
+        if qs.count() == 1:
+            created = False
+            obj = qs.first()
+        else:
+            obj  = self.models.objects.create(billing_profile=billing_profile, cart=cart_obj)
+            created = False
+        return obj
     
 
 class Order(models.Model):
@@ -38,6 +49,8 @@ class Order(models.Model):
     shipping_address    = models.ForeignKey(Address, default=None, blank=True, on_delete=models.CASCADE)
     billing_address     = models.ForeignKey(Address,default=None, blank=True, on_delete=models.CASCADE)
     '''
+
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_id
@@ -67,6 +80,9 @@ class Order(models.Model):
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         instance.order_id = unique_order_id_generator(instance)
+    qs = Order.objects.filter(cart=instance.cart).exclude(billing_profile=instance.billing_profile)
+    if qs.exists():
+        qs.update(active=False)
 
 pre_save.connect(pre_save_create_order_id, sender=Order)
 
