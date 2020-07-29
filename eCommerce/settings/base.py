@@ -23,13 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '58p3^i8uxcm+hcg6pmii9-zpd-%4(5tu=-ho%^1tm38=!0wi6j'
-#print(SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -44,6 +40,7 @@ INSTALLED_APPS = [
 
     #our app
     'accounts',
+    'addresses',
     'billing',
     'carts',
     'orders',
@@ -114,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
