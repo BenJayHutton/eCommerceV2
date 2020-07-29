@@ -23,6 +23,7 @@ ORDER_STATUS_CHOICES = (
     
 
 class Order(models.Model):
+    billing_profile     = models.ForeignKey(BillingProfile, null=True, blank=True, on_delete=models.CASCADE)
     order_id            = models.CharField(max_length=120, unique=True, blank=True, null=True)
     cart                = models.ForeignKey(Cart, default=None, blank=True, on_delete=models.CASCADE)    
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
@@ -33,10 +34,9 @@ class Order(models.Model):
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
     '''
-    billing_profile     = models.ForeignKey(BillingProfile, default=None, blank=True, on_delete=models.CASCADE)
+    
     shipping_address    = models.ForeignKey(Address, default=None, blank=True, on_delete=models.CASCADE)
     billing_address     = models.ForeignKey(Address,default=None, blank=True, on_delete=models.CASCADE)
-        
     '''
 
     def __str__(self):

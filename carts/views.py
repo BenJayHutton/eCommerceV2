@@ -20,7 +20,6 @@ class CartHome(ListView):
         context = {
             "cart_obj": cart_obj,
         }
-        print("cart_obj", type(cart_obj.total), cart_obj.total)
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
@@ -48,7 +47,6 @@ def cart_update(request, *args, **kwargs):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
                 cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
-                print(type(cart_obj))
         
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
@@ -61,9 +59,7 @@ def checkout_home(request):
     order_obj = None
     if cart_created or cart_obj.cart_items.count() == 0:
         redirect("cart:home")
-    else:
-        order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-
+    
     user = request.user
     billing_profile = None
     login_form = LoginForm
@@ -71,13 +67,22 @@ def checkout_home(request):
     guest_email_id = request.session.get('guest_email_id')
     if user.is_authenticated:
         billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
-        print("billing_profile", billing_profile)
     elif guest_email_id is not None:
         guest_email_obj = GuestEmail.objects.get(id=guest_email_id)
         billing_profile, billing_guest_profile_created = BillingProfile.objects.get_or_create(email=guest_email_obj.email)
     else:
         pass
     
+    if billing_profile is not None:
+        order_qs = Order.objects.filter(billing_profile=billing_profile, cart=cart_obj, active = True)
+        if order_qs.count() == 1:
+            order_obj = order_qs.first()
+        else:
+            old_order_qs = Order.objects.exclude(billing_profile=billing_profile).filter(cart=cart_obj, active = True)
+            if old_order_qs.exists():
+                old_order_qs.update(active=False)
+            order_obj  = Order.objects.create(billing_profile=billing_profile, cart=cart_obj)
+
     context = {
         "object": order_obj,
         "billing_profile": billing_profile,
