@@ -40,14 +40,14 @@ class Order(models.Model):
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total      = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
     tax                 = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
-    total         = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
+    total               = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
     '''
     
-    shipping_address    = models.ForeignKey(Address, default=None, blank=True, on_delete=models.CASCADE)
-    billing_address     = models.ForeignKey(Address,default=None, blank=True, on_delete=models.CASCADE)
+    shipping_address    = models.ForeignKey(Address, null=True, blank=True, on_delete=models.CASCADE)
+    billing_address     = models.ForeignKey(Address,null=True, blank=True, on_delete=models.CASCADE)
     '''
 
     objects = OrderManager()

@@ -17,11 +17,14 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from .views import contact_page, DefaultHomePage
+from addresses.views import checkout_address_create_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', DefaultHomePage.as_view(display_name="home"), name='home'),
+    url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
+
     url(r'^$', DefaultHomePage.as_view(display_name="about"), name='about'),
     url(r'^contact/$', contact_page, name='contact'),
     url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
