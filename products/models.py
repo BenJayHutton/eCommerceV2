@@ -94,7 +94,7 @@ class Product(models.Model):
     featured        = models.BooleanField(default=False)
     quantity        = models.IntegerField(default=0)
     active          = models.BooleanField(default=True)
-    is_digital      = models.BooleanField(default=False) # User Library
+    is_digital      = models.BooleanField(default=False)
     timestamp       = models.DateTimeField(auto_now_add=True)
     
     objects = ProductManager()
