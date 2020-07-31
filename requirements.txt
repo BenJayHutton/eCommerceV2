@@ -1,6 +1,6 @@
 Django==2.2.14
 django3==0.1
-Pillow==7.0.0
+Pillow==7.2.0
 python-dotenv==0.12.0
 pytz==2019.3
 sqlparse==0.3.1
