@@ -11,6 +11,8 @@
         <em>Product not available</em>
       </div>
     {% endif %}
+    Description: <br>
+    {{product_obj.description}}
   </div>
   <div class="col-12 col-md-6">
     {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_item_obj=cart_item_obj cart_obj=cart_obj %}
