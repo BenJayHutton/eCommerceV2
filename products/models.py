@@ -18,8 +18,8 @@ class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
 	def search(self, query):
 		lookups = (Q(title__icontains=query) |
                    Q(description__icontains=query)|
-                   Q(price__icontains=query)|
-                   Q(tag__title__icontains=query)
+                   Q(price__icontains=query)
+                   #Q(tag__title__icontains=query)
                    )
 		return self.filter(lookups)
 
@@ -89,7 +89,7 @@ class Product(models.Model):
     title           = models.CharField(max_length=120)
     slug            = models.SlugField(blank=True, unique=True)
     description     = models.TextField()
-    price           = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+    price           = models.DecimalField(max_digits=100, decimal_places=2,  default=0.00)
     image           = models.ImageField(upload_to='products/', null=True, blank=True)
     featured        = models.BooleanField(default=False)
     quantity        = models.IntegerField(default=0)

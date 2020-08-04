@@ -45,9 +45,9 @@ class Order(models.Model):
     'billing_address', blank=True, on_delete=models.CASCADE)
     cart                = models.ForeignKey(Cart, default=None, blank=True, on_delete=models.CASCADE)    
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
-    shipping_total      = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
-    tax                 = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
-    total               = models.DecimalField(default=0.00, max_digits=4, decimal_places=2)
+    shipping_total      = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    tax                 = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    total               = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
@@ -61,10 +61,13 @@ class Order(models.Model):
     def update_total(self):
         cart_total = self.cart.subtotal
         shipping_total = self.shipping_total
-        new_total = Decimal(cart_total) + Decimal(shipping_total)
-        self.total = new_total
-        print(self.total)
-        self.save()
+        try:
+            new_total = Decimal(cart_total) + Decimal(shipping_total)
+            self.total = new_total
+            print(self.total)
+            self.save()
+        except Exception as e:
+            print(e)
         return new_total
 
 

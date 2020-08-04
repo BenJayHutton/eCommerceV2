@@ -35,5 +35,6 @@ urlpatterns = [
     
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
+    url(r'^search/', include(("search.urls", "search"), namespace='search')),
     
 ]

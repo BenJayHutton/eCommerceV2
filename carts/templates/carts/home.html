@@ -19,7 +19,7 @@
       <form class="form-product-ajax" method='POST' action='{% url "cart:update" %}' data-endpoint='{% url "cart:update" %}' class="form">
         {% csrf_token %}
         <input type="hidden" name="cart_item_id" value="{{cart_item.id}}">
-        <td><a href="{{ product.get_absolute_url }}">{{ cart_item.product.title }}</a>
+        <td><a href="{{ cart_item.product.get_absolute_url }}">{{ cart_item.product.title }}</a>
         </td>
         <td>{{ cart_item.price_of_item }}</td>
         <td>
