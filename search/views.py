@@ -16,7 +16,6 @@ class SearchProductView(ListView):
         context['query'] = query
         context['cart_obj'] = cart_obj
         # SearchQuery.objects.create(query=query)
-        print("context: ",context)
         return context
 
     def get_queryset(self, *args, **kwargs):

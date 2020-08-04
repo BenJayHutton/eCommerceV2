@@ -45,13 +45,8 @@ class ProductManager(models.Manager):
 		product = None
 		id = kwargs.get('id')
 		quantity = kwargs.get('quantity')
-		print(product)
-		print(id)
-		print(quantity)
 		if id is not None:
-			# look up product by Id
 			product = self.get_by_id(id)
-			print("product", product)
 			
 		if product is not None and quantity is not None:
 			product.quantity = product.quantity + quantity
@@ -60,19 +55,13 @@ class ProductManager(models.Manager):
 				product.save()
 			else:
 				product.save()
-		print("saved product quantity, new value = ", product.quantity) 
 
 	def decrease_qty_of_product(self, *args, **kwargs):
 		product = None
 		id = kwargs.get('id')
 		quantity = kwargs.get('quantity')
-		print(product)
-		print(id)
-		print(quantity)
 		if id is not None:
-			# look up product by Id
 			product = self.get_by_id(id)
-			print("product", product)
 			
 		if product is not None and quantity is not None:
 			product.quantity = product.quantity - quantity
@@ -81,9 +70,7 @@ class ProductManager(models.Manager):
 				product.save()
 			else:
 				product.save()
-		print("saved product quantity, new value = ", product.quantity) 
 
-    
 
 class Product(models.Model):
     title           = models.CharField(max_length=120)

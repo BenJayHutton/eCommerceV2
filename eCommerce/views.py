@@ -34,12 +34,8 @@ class DefaultHomePage(TemplateView):
         else:
             context["first_name"] = "New visitor"
         return render(request, "home_page.html", context)
-    
 
-
-
-
-
+        
 def contact_page(request):
     contact_form = ContactForm(request.POST or None)
     context = {
@@ -48,7 +44,6 @@ def contact_page(request):
         "form": contact_form,
         }
     if contact_form.is_valid():
-        print(contact_form.cleaned_data)
         if request.is_ajax():
             return JsonResponse({"message": "Thank you for your submission"})
     return render(request, "contact/view.html", context)

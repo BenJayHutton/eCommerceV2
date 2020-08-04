@@ -64,7 +64,6 @@ class Order(models.Model):
         try:
             new_total = Decimal(cart_total) + Decimal(shipping_total)
             self.total = new_total
-            print(self.total)
             self.save()
         except Exception as e:
             print(e)
@@ -75,24 +74,19 @@ class Order(models.Model):
         product_id = kwargs['product_id']
         product_qty = kwargs['product_qty']
         session_order_id = kwargs['session_order_id']
-
         test_obj = Order(order_id = session_order_id)
         test_obj.save()
-        print("shipping total:", test_obj.shipping_total)
-
         obj = Order.objects.filter(order_id__exact=1)
     
     def check_done(self):
         shipping_address_required = False #not self.cart.is_digital
-        shipping_done = False
-        
+        shipping_done = False        
         if shipping_address_required and self.shipping_address:
             shipping_done = True
         elif shipping_address_required and not self.shipping_address:
             shipping_done = False
         else:
-            shipping_done = True
-        
+            shipping_done = True        
         billing_profile = self.billing_profile
         billing_address = self.billing_address
         total = self.total
@@ -116,7 +110,6 @@ class Order(models.Model):
                 self.save()
                 #self.update_purchases()
         return self.status
-        
         
     
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
