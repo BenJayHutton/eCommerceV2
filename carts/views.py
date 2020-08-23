@@ -25,7 +25,7 @@ class CartHome(ListView):
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
-
+    print("request: ", request.POST)
     cart_item_id = request.POST.get('cart_item_id', None)
     cart_item_update = request.POST.get('cart_item_update', False)
     cart_item_remove = request.POST.get('cart_item_remove', False)
@@ -37,11 +37,14 @@ def cart_update(request, *args, **kwargs):
     except:
         product_obj = False
 
+
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
+        
         if cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
+
         if cart_item_update:
             update_cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
@@ -49,9 +52,12 @@ def cart_update(request, *args, **kwargs):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
                 cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
-        
+
         if cart_item_add:
-            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj, product_quantity=product_quantity)
+            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
+            cart_item_obj.quantity = product_quantity
+            cart_item_obj.save()
+            #, product_quantity=product_quantity
             cart_obj.cart_items.add(cart_item_obj)
         request.session['cart_item_count'] = cart_obj.cart_items.count()
     return redirect("cart:home")
