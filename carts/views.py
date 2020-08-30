@@ -27,9 +27,19 @@ class CartHome(ListView):
 def cart_update(request, *args, **kwargs):
     print("request: ", request.POST)
     cart_item_id = request.POST.get('cart_item_id', None)
-    cart_item_update = request.POST.get('cart_item_update', False)
-    cart_item_remove = request.POST.get('cart_item_remove', False)
-    cart_item_add = request.POST.get('cart_item_add', False)
+    cart_item_update = request.POST.get('cart_item_update')
+    cart_item_remove = request.POST.get('cart_item_remove')
+    cart_item_add = request.POST.get('cart_item_add')
+    
+    if cart_item_add is None:
+        cart_item_add = request.POST.get('cartItemAdd')
+    
+    if cart_item_update is None:
+        cart_item_update = request.POST.get('cartItemUpdate')
+    
+    if cart_item_remove is None:
+        cart_item_remove = request.POST.get('cartItemRemove')
+
     product_id = request.POST.get("product_id", None)
     product_quantity = request.POST.get('product_quantity', None)
     try:

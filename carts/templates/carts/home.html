@@ -18,6 +18,8 @@
       <th scope="row">{{ forloop.counter }}</th>
       <form class="form-product-ajax" method='POST' action='{% url "cart:update" %}' data-endpoint='{% url "cart:update" %}' class="form">
         {% csrf_token %}
+        <input type="hidden" name="cartItemRemove" value="">
+        <input type="hidden" name="cartItemUpdate" value="">
         <input type="hidden" name="cart_item_id" value="{{cart_item.id}}">
         <td><a href="{{ cart_item.product.get_absolute_url }}">{{ cart_item.product.title }}</a>
         </td>
