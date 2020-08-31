@@ -42,6 +42,8 @@
             success: function(data){
               console.log("Success: ")
               console.log(data)
+              var submitSpan = thisForm.find(".submit-span")
+              console.log(submitSpan.html())
             },
             error: function(errorData){
               console.log("error: ")

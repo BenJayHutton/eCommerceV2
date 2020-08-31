@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.sessions.backends.db import SessionStore
 from django.views.generic import DetailView, ListView
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 
 import traceback
 
@@ -26,19 +26,23 @@ class CartHome(ListView):
 
 def cart_update(request, *args, **kwargs):
     print("request: ", request.POST)
+    item_added = False
+    item_removed = False
+    item_updated = False
     cart_item_id = request.POST.get('cart_item_id', None)
-    cart_item_update = request.POST.get('cart_item_update')
-    cart_item_remove = request.POST.get('cart_item_remove')
-    cart_item_add = request.POST.get('cart_item_add')
+    cart_item_update = request.POST.get('cart_item_update', False)
+    cart_item_remove = request.POST.get('cart_item_remove', False)
+    cart_item_add = request.POST.get('cart_item_add', False)
+ 
     
-    if cart_item_add is None:
-        cart_item_add = request.POST.get('cartItemAdd')
+    if cart_item_add is False:
+        cart_item_add = request.POST.get('cartItemAdd', False)
     
-    if cart_item_update is None:
-        cart_item_update = request.POST.get('cartItemUpdate')
+    if cart_item_update is False:
+        cart_item_update = request.POST.get('cartItemUpdate', False)
     
-    if cart_item_remove is None:
-        cart_item_remove = request.POST.get('cartItemRemove')
+    if cart_item_remove is False:
+        cart_item_remove = request.POST.get('cartItemRemove', False)
 
     product_id = request.POST.get("product_id", None)
     product_quantity = request.POST.get('product_quantity', None)
@@ -54,6 +58,7 @@ def cart_update(request, *args, **kwargs):
         if cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
+            item_removed = True
 
         if cart_item_update:
             update_cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
@@ -62,14 +67,25 @@ def cart_update(request, *args, **kwargs):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
                 cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+            item_updated = True
 
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
             cart_item_obj.quantity = product_quantity
             cart_item_obj.save()
-            #, product_quantity=product_quantity
             cart_obj.cart_items.add(cart_item_obj)
+            item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
+        
+
+        if request.is_ajax():
+            print("Ajax request")
+            json_data= {
+                "added": item_added,
+                "removed": item_removed,
+                "updated": item_updated,
+            }
+            return JsonResponse(json_data)
     return redirect("cart:home")
 
 def checkout_home(request):

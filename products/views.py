@@ -40,32 +40,29 @@ class ProductDetailSlugView(DetailView):
         request = self.request
         context = super(ProductDetailSlugView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get('slug')
-        product_slug = kwargs.get('object')
+        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
+        cart_item_id = {}
+        cart_item_obj = []       
+        for items in cart_obj.cart_items.all():
+            cart_item_obj.append(items.product)
+            cart_item_id[items.product] = int(items.id)
+        
+
         try:
             product_obj = Product.objects.get(slug=slug)
         except:
             product_obj = None
-        cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
-        cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request)
+        
+        for items in cart_obj.cart_items.all():
+            cart_item_id[items.product] = int(items.id)
         
         context = {
             'cart_obj': cart_obj,
+            'product_obj': product_obj,
+            'cart_item_id': cart_item_id,
             'cart_item_obj': cart_item_obj,
-            'product_obj': product_obj,            
             }
         return context
-
-    def post(self, request, *args, **kwargs):
-        product_id = request.POST.get('product_id', None)
-        product_quantity = request.POST.get('product_quantity',None)
-        try:
-            cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_id = product_obj.id, product_quantity=product_quantity)
-        except:
-            cart_item_obj = None
-        context = {
-            "cart_item_obj": cart_item_obj,
-        }
-        return redirect("cart:cart", context)
 
     
     def get_object(self, *args, **kwargs):
