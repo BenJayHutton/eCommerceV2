@@ -1,25 +1,22 @@
 <form class='form-product-ajax' method='POST' action='{% url "cart:update" %}' data-endpoint='#' {% if request.user.is_authenticated %} data-user='abc'{% endif %}>
     {% csrf_token %}
     <input type='hidden' name='product_id' value='{{ product_obj.id }}' {% if product.is_digital %} data-is-digital='true'{% endif %} />
-    <input type="hidden" name="cartItemAdd" value="">
-    <input type="hidden" name="cartItemRemove" value="">
-    <input type="hidden" name="cartItemUpdate" value="">
+    <input type="hidden" id="cartItemAdd" name="cartItemAdd">
+    <input type="hidden" id="cartItemRemove" name="cartItemRemove">
+    <input type="hidden" id="cartItemUpdate" name="cartItemUpdate">
 
     {% for key, value in cart_item_id.items %}
     {% if product_obj == key %}
     <input type="hidden" name="cart_item_id" value="{{value}}">
     {% endif %}
     {% endfor %}
-    
         {% if product_obj.quantity > 0 %}
         <span class='submit-span'>
             {% if product_obj in cart_item_obj %}
-                <a class='btn btn-link' href='{% url "cart:home" %}'>In cart</a> <button type='submit' onclick='this.form.cartItemRemove.value=this.value' name='cart_item_remove'  value='True' class='btn btn-danger'>Remove</button>
+                <a class='btn btn-link' href='{% url "cart:home" %}'>In cart</a><button type='submit' onclick='this.form.cartItemRemove.value=this.value' name='cart_item_remove' value='True' class='btn btn-danger'>Remove</button>
             {% else %}
-                <input name='product_quantity' type='number' min='0' max='{{ product_obj.quantity }}' value='0' />
-                <button type='submit' onclick='this.form.cartItemAdd.value=this.value' name='cart_item_add' value='True' class='btn btn-success'>Add to cart</button>
+                <input name='product_quantity' type='number' min='0' max='{{ product_obj.quantity }}' value='0' /><button type='submit' onclick='this.form.cartItemAdd.value=this.value' name='cart_item_add' value='True' class='btn btn-success'>Add to cart</button>
             {% endif %}
         </span>
-        {% endif %}
-    
+        {% endif %}    
 </form>

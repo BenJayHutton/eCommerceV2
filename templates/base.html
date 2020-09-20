@@ -29,10 +29,16 @@
 
         productForm.submit(function(event){
           event.preventDefault();
+          console.log(event.currentTarget.cartItemAdd)
+          console.log(event.currentTarget.cartItemRemove)
+          console.log(event.currentTarget.cartItemUpdate)
+
           var thisForm = $(this)
           var actionEndpoint = thisForm.attr("action");
           var httpMethod = thisForm.attr("method");
           var formData= thisForm.serialize();
+          var cartItemAdd = thisForm.find("cartItemAdd")
+          
           
 
           $.ajax({
@@ -40,16 +46,15 @@
             method: httpMethod,
             data: formData,
             success: function(data){
-              console.log("Success: ")
-              console.log(data)
+              // console.log("Success: ")
+              // console.log(data)
               var submitSpan = thisForm.find(".submit-span")
-              console.log(submitSpan.html())
+              // console.log(submitSpan.html())
             },
             error: function(errorData){
               console.log("error: ")
               console.log(errorData)
             }
-
           })
         })
       })
