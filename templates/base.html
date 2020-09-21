@@ -29,27 +29,45 @@
 
         productForm.submit(function(event){
           event.preventDefault();
-          console.log(event.currentTarget.cartItemAdd)
-          console.log(event.currentTarget.cartItemRemove)
-          console.log(event.currentTarget.cartItemUpdate)
+          // console.log(event.currentTarget.cartItemAdd);
+          // console.log(event.currentTarget.cartItemRemove);
+          // console.log(event.currentTarget.cartItemUpdate);
 
-          var thisForm = $(this)
+          var thisForm = $(this);
           var actionEndpoint = thisForm.attr("action");
           var httpMethod = thisForm.attr("method");
           var formData= thisForm.serialize();
-          var cartItemAdd = thisForm.find("cartItemAdd")
-          
-          
 
           $.ajax({
             url: actionEndpoint,
             method: httpMethod,
             data: formData,
             success: function(data){
-              // console.log("Success: ")
-              // console.log(data)
-              var submitSpan = thisForm.find(".submit-span")
-              // console.log(submitSpan.html())
+            console.log('Success: ')
+            console.log('data: ',data)            
+            var submitSpan = thisForm.find('.submit-span')
+            var product_quantity = "{{ product_obj.quantity }}"
+             if (data.added){
+                var productId = thisForm.find('.cart_item_id')
+                console.log(productId)
+                console.log(data.cart_item_id)
+                submitSpan.html("<a class='btn btn-link' href='{% url 'cart:home' %}'>In cart</a><button type='submit' onclick='this.form.cartItemRemove.value=this.value' name='cart_item_remove' value='True' class='btn btn-danger'>Remove</button>")
+                elementCreateItemId = document.createElement("input");
+                $(elementCreateItemId).attr({type:"hidden", class:"cart_item_id", name:"cart_item_id", value:data.cart_item_id})
+                $('#cartItemAdd').removeAttr("value")
+              }else{
+                
+                submitSpan.html("<input name='product_quantity' type='number' min='0' max='' value='0' /><button type='submit' onclick='this.form.cartItemAdd.value=this.value' name='cart_item_add' value='True' class='btn btn-success'>Add to cart</button>")
+                $('#cartItemremove').removeAttr("value")
+             }
+
+
+          
+            
+            
+            
+            
+            //console.log("input#cartItemAdd: "+$('input#cartItemAdd').attr('id'))
             },
             error: function(errorData){
               console.log("error: ")

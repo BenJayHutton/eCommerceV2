@@ -74,6 +74,7 @@ def cart_update(request, *args, **kwargs):
             cart_item_obj.quantity = product_quantity
             cart_item_obj.save()
             cart_obj.cart_items.add(cart_item_obj)
+            cart_item_id = cart_item_obj.id
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
         
@@ -85,6 +86,10 @@ def cart_update(request, *args, **kwargs):
                 "removed": item_removed,
                 "updated": item_updated,
             }
+            if cart_item_id:
+                json_data.update({
+                    "cart_item_id": cart_item_id
+                })
             return JsonResponse(json_data)
     return redirect("cart:home")
 
