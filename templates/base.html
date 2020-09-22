@@ -54,7 +54,11 @@
                 submitSpan.html("<a class='btn btn-link' href='{% url 'cart:home' %}'>In cart</a><button type='submit' onclick='this.form.cartItemRemove.value=this.value' name='cart_item_remove' value='True' class='btn btn-danger'>Remove</button>")
                 elementCreateItemId = document.createElement("input");
                 $(elementCreateItemId).attr({type:"hidden", class:"cart_item_id", name:"cart_item_id", value:data.cart_item_id})
+                thisForm.append(elementCreateItemId)
+
+
                 $('#cartItemAdd').removeAttr("value")
+                console.log(elementCreateItemId);
               }else{
                 
                 submitSpan.html("<input name='product_quantity' type='number' min='0' max='' value='0' /><button type='submit' onclick='this.form.cartItemAdd.value=this.value' name='cart_item_add' value='True' class='btn btn-success'>Add to cart</button>")
