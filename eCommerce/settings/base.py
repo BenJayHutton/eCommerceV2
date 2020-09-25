@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'search',
 ]
 
+AUTH_USER_MODEL = 'accounts.User' #changes built it user to ours
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
