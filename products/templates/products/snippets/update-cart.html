@@ -1,7 +1,6 @@
 <form class='form-product-ajax' method='POST' action='{% url "cart:update" %}' data-endpoint='#' {% if request.user.is_authenticated %} data-user='abc'{% endif %}>
     {% csrf_token %}
     <input type='hidden' name='product_id' value='{{ product_obj.id }}' {% if product.is_digital %} data-is-digital='true'{% endif %} />
-    
     {% for key, value in cart_item_id.items %}
     {% if product_obj == key %}
     <input type="hidden" class="cart_item_id" name="cart_item_id" value="{{value}}">
