@@ -11,6 +11,7 @@ class UserManager(BaseUserManager):
             raise ValueError("users must have an email address")
         if not password:
             raise ValueError("Must enter password")
+        
         user_obj = self.model(
         email = self.normalize_email(email),
         full_name=full_name
@@ -45,8 +46,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email           = models.EmailField(max_length=255, unique=True)
     full_name       = models.CharField(max_length=255, blank=True, null=True)
-    guest        = models.BooleanField(default=True)
-    active       = models.BooleanField(default=True) #Can login
+    guest           = models.BooleanField(default=True)
+    active          = models.BooleanField(default=True) #Can login
     staff           = models.BooleanField(default=False) #Staff user, not super user
     admin           = models.BooleanField(default=False) #Superuser
     timestamp       = models.DateTimeField(auto_now_add=True)
