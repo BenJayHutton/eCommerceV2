@@ -2,7 +2,9 @@ from django.http import Http404
 from django.shortcuts import render, get_list_or_404, redirect
 from django.views.generic import TemplateView, DetailView, ListView
 
+from analytics.mixins import ObjectViewedMixin
 from carts.models import Cart, CartItem
+
 from .models import Product
 
 class ProductListView(ListView):
@@ -29,10 +31,9 @@ class ProductListView(ListView):
     def get_queryset(self, *args, **kwargs):
         request = self.request
         return Product.objects.all()
-        
 
 
-class ProductDetailSlugView(DetailView):
+class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
     template_name="products/detail.html"
 
@@ -40,6 +41,7 @@ class ProductDetailSlugView(DetailView):
         request = self.request
         context = super(ProductDetailSlugView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get('slug')
+        
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
         cart_item_obj = []       
@@ -77,5 +79,6 @@ class ProductDetailSlugView(DetailView):
             qs = Product.objects.get(slug=slug, active=True)
             instance = qs.first()
         except:
-            raise Http404("...")
+            raise Http404("Product not found")
+        
         return instance
