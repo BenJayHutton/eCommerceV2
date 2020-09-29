@@ -3,8 +3,16 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.urls import reverse
 
+
 from accounts.models import GuestEmail
 User = settings.AUTH_USER_MODEL
+
+import stripe
+
+STRIPE_SECRET_API_KEY = getattr(settings, "STRIPE_SECRET_API_KEY", None)
+stripe.api_key = STRIPE_SECRET_API_KEY
+
+
 
 class BillingProfileManager(models.Manager):
     def new_or_get(self, request):
@@ -35,11 +43,17 @@ class BillingProfile(models.Model):
         return self.email
 
 
-# def billing_profile_created_reciever(sender, instance, created, *args, **kwargs):
-#     if created:
-#         print("sending to stripe to create profile")
-#         instance.customer_id = newID
-#         instance.save
+def billing_profile_created_reciever(sender, instance, *args, **kwargs):
+    if not instance.customer_id and instance.email:
+        print("sending to stripe to create profile")
+        customer = stripe.Customer.create(
+            email = instance.email
+        )
+        print(customer)
+        instance.customer_id = customer.id
+
+        
+pre_save.connect(billing_profile_created_reciever, sender=BillingProfile)
 
 def user_created_reciever(sender, instance, created, *args, **kwargs):
     if created and instance.email:
