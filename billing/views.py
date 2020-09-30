@@ -40,5 +40,5 @@ def pay_method_createview(request):
     print("request.POST",request.POST)
     if request.method == "POST" and request.is_ajax():
         print(request.POST)
-        return JsonResponse({"message": "Done"})
+        return JsonResponse({"message": "Success! your card was added"})
     return HttpResponse("404...not found", status=404)
