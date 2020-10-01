@@ -28,7 +28,6 @@ class CartHome(ListView):
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
-    print("request: ", request.POST)
     item_added = False
     item_removed = False
     item_updated = False
@@ -83,7 +82,6 @@ def cart_update(request, *args, **kwargs):
         
 
         if request.is_ajax():
-            print("Ajax request")
             json_data= {
                 "added": item_added,
                 "removed": item_removed,
@@ -131,9 +129,10 @@ def checkout_home(request):
                 order_obj.mark_paid()
                 request.session['cart_item_count'] = 0
                 del request.session['cart_id']
+                if not billing_profile.user:
+                    billing_profile.set_cards_inactive() # is this the right spot for this?
                 return redirect("cart:success")
             else:
-                print(crg_msg)
                 return redirect("cart:checkout")
     context = {
         "object": order_obj,

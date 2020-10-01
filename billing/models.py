@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.urls import reverse
 
-
 from accounts.models import GuestEmail
 User = settings.AUTH_USER_MODEL
 
@@ -11,7 +10,6 @@ import stripe
 
 STRIPE_SECRET_API_KEY = getattr(settings, "STRIPE_SECRET_API_KEY", None)
 stripe.api_key = STRIPE_SECRET_API_KEY
-
 
 
 class BillingProfileManager(models.Manager):
@@ -47,6 +45,9 @@ class BillingProfile(models.Model):
 
     def get_cards(self):
         return self.card_set.all()
+    
+    def get_payment_method_url(self):
+        return reverse('billing:billing-payment-method')
 
     @property
     def has_card(self): # instance.has_card
@@ -55,18 +56,21 @@ class BillingProfile(models.Model):
     
     @property
     def default_card(self):
-        default_cards = self.get_cards().filter(default=True)
+        default_cards = self.get_cards().filter(active=True, default=True)
         if default_cards.exists():
             return default_cards.first()
         return None
+    
+    def set_cards_inactive(self):
+        card_qs = self.get_cards()
+        card_qs.update(active=False)
+        return card_qs.filter(active=True).count()
 
 def billing_profile_created_reciever(sender, instance, *args, **kwargs):
     if not instance.customer_id and instance.email:
-        print("sending to stripe to create profile")
         customer = stripe.Customer.create(
             email = instance.email
         )
-        print(customer)
         instance.customer_id = customer.id
 
         
@@ -79,6 +83,9 @@ def user_created_reciever(sender, instance, created, *args, **kwargs):
 post_save.connect(user_created_reciever, sender=User)
 
 class CardManager(models.Manager):
+    def all(self, *args, **kwargs):
+        return self.get_queryset().filter(active=True)
+
     def add_new(self, billing_profile, token):
         if token:
             customer = stripe.Customer.retrieve(billing_profile.customer_id)
@@ -107,6 +114,8 @@ class Card(models.Model):
     exp_year        = models.IntegerField(null=True, blank=True)
     last4           = models.CharField(max_length=4, null=True, blank=True)
     default         = models.BooleanField(default=True)
+    active          = models.BooleanField(default=True)
+    timestamp       = models.DateTimeField(auto_now_add=True)
 
     objects = CardManager()
 
@@ -130,7 +139,6 @@ class ChargeManager(models.Manager):
             source = card_obj.stripe_id,
             metadata={"Order_id: ": order_obj.order_id},
         )
-        print(c)
         new_charge_obj = self.model(
             billing_profile = billing_profile,
             stripe_id       = c.id,
@@ -144,6 +152,13 @@ class ChargeManager(models.Manager):
         new_charge_obj.save()
         return new_charge_obj.paid, new_charge_obj.seller_message
 
+def new_card_post_save_receiver(sender, instance, created, *args, **kwargs):
+    if instance.default:
+        billing_profile = instance.billing_profile
+        qs = Card.objects.filter(billing_profile=billing_profile).exclude(pk=instance.pk)
+        qs.update(default=False)
+
+post_save.connect(new_card_post_save_receiver, sender=Card)
 
 class Charge(models.Model):
     billing_profile = models.ForeignKey(BillingProfile,on_delete=models.CASCADE)
