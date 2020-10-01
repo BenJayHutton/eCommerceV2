@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.sessions.backends.db import SessionStore
+from django.conf import settings
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpRequest, JsonResponse
 
@@ -13,6 +14,8 @@ from billing.models import BillingProfile
 from orders.models import Order
 from products.models import Product
 from .models import Cart, CartItem
+
+STRIPE_PUB_KEY = getattr(settings,"STRIPE_PUB_KEY",None)
 
 class CartHome(ListView):
     template_name = "carts/home.html"
@@ -106,7 +109,7 @@ def checkout_home(request):
     shipping_address_id = request.session.get("shipping_address_id", None)
     billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
     address_qs = None
-
+    has_card = False
     if billing_profile is not None:
         if request.user.is_authenticated:
             address_qs = Address.objects.filter(billing_profile=billing_profile)
@@ -119,14 +122,19 @@ def checkout_home(request):
             del request.session["billing_address_id"]
         if billing_address_id or shipping_address_id:
             order_obj.save()
-    
+        has_card = billing_profile.has_card
     if request.method == "POST":
-        is_done = order_obj.check_done()
-        if is_done:
-            order_obj.mark_paid()
-            request.session['cart_item_count'] = 0
-            del request.session['cart_id']
-            return redirect("cart:success")
+        is_prepared = order_obj.check_done()
+        if is_prepared:
+            did_charge, crg_msg = billing_profile.charge(order_obj)
+            if did_charge:
+                order_obj.mark_paid()
+                request.session['cart_item_count'] = 0
+                del request.session['cart_id']
+                return redirect("cart:success")
+            else:
+                print(crg_msg)
+                return redirect("cart:checkout")
     context = {
         "object": order_obj,
         "billing_profile": billing_profile,
@@ -134,6 +142,8 @@ def checkout_home(request):
         "guest_form": guest_form,
         "address_form": address_form,
         "address_qs": address_qs,
+        "has_card": has_card,
+        "publish_key": STRIPE_PUB_KEY,
     }
     return render(request, "carts/checkout.html",context)
 

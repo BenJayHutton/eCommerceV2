@@ -5,7 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Buy high-quality products ranging from books to apparel">
+    
+    {% block javascript %}
     {% include 'base/css.html' %}
+    {% include 'base/js.html' %}
     
 </head>
 <body>
@@ -22,9 +25,6 @@
       </div>
       {% endif %}
       {% block content %}{% endblock %}
-      {% include 'base/js.html' %}
-      {% block javascript %}
-
       {%endblock %}
     </div>    
 </body>

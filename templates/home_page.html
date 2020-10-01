@@ -23,14 +23,14 @@
   </div>
   <div class='row'>
     <div class='col'>
-      <p>{{ content }}</p>
+      {% lorem 2 p %}
     </div>
   </div>
   {% if request.user.is_authenticated %}
     <div class='row'>
       <div class='col'>
         <h1>Premium</h1>
-        {{ premium_content }}
+        {% lorem 2 p %}
       </div>
     </div>
     {% endif %}
