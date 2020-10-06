@@ -5,6 +5,8 @@ AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 
+from marketing.utils import Mailchimp
+
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name=None, password=None, is_active=True, is_staff=False, is_admin=False):
         if not email:
@@ -95,23 +97,5 @@ class GuestEmail(models.Model):
 
     def __str__(self):
         return self.email
-        
-        
-# class UserBillingAddress(models.Model):
-#     userprofile = models.ForeignKey(User, on_delete=models.CASCADE)
-#     is_default  = models.BooleanField(default=True)
-#     timestamp   = models.DateTimeField(auto_now_add=True)
-#     updated     = models.DateTimeField(auto_now=True)
-    
-#     def __str__(self):
-#         return self.userprofile
-    
 
-# class UserShippingAddress(models.Model):
-#     userprofile = models.ForeignKey(User, on_delete=models.CASCADE)
-#     is_default  = models.BooleanField(default=True)
-#     timestamp   = models.DateTimeField(auto_now_add=True)
-#     updated     = models.DateTimeField(auto_now=True)
-    
-#     def __str__(self):
-#         return self.userprofile
+#add marketing.utils as a signel so GuestEmail.email is subscribed on creation

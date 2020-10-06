@@ -5,11 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Buy high-quality products ranging from books to apparel">
-    
     {% block javascript %}
     {% include 'base/css.html' %}
     {% include 'base/js.html' %}
-    
+    {%endblock %}
 </head>
 <body>
   {% include 'base/navbar.html' with brand_name='#SweetSweetSwag' %}
@@ -22,10 +21,7 @@
               {{ message }}<br/>
           </span>
           {% endfor %}
-      </div>
-      {% endif %}
-      {% block content %}{% endblock %}
-      {%endblock %}
-    </div>    
+      </div>{% endif %}{% block content %}{% endblock %}
+    </div>
 </body>
 </html>
