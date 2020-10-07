@@ -7,18 +7,8 @@ from django.conf import settings
 
 
 MAILCHIMP_API_KEY = getattr(settings, "MAILCHIMP_API_KEY", None)
-if MAILCHIMP_API_KEY is None:
-    raise NotImplementedError("MAILCHIMP_API_KEY must be set in the settings")
-
 MAILCHIMP_DATA_CENTER = getattr(settings, "MAILCHIMP_DATA_CENTER", None)
-
-if MAILCHIMP_DATA_CENTER is None:
-    raise NotImplementedError("MAILCHIMP_DATA_CENTER must be set in the settings, something like us17")
-
 MAILCHIMP_EMAIL_LIST_ID = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None)
-
-if MAILCHIMP_EMAIL_LIST_ID is None:
-    raise NotImplementedError("MAILCHIMP_EMAIL_LIST_ID must be set in the settings, something like us17")
 
 
 
