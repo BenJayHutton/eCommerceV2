@@ -28,6 +28,8 @@ class CartHome(ListView):
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
+    print("args", args)
+    print("kwargs", kwargs)
     item_added = False
     item_removed = False
     item_updated = False
