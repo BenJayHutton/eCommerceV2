@@ -1,7 +1,6 @@
 from .base import *
 
 # os.environ.get()
-SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ['.herokuapp.com']
 AWS_ACCESS_KEY_ID=os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -12,7 +11,7 @@ EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD")
 MAILCHIMP_API_KEY=os.environ.get("MAILCHIMP_API_KEY")
 MAILCHIMP_EMAIL_LIST_ID=os.environ.get("MAILCHIMP_EMAIL_LIST_ID")
 
-SECRET_KEY=os.environ.get("SECRET_KEY")
+#SECRET_KEY=os.environ.get("SECRET_KEY")
 STRIPE_PUB_KEY=os.environ.get("STRIPE_PUB_KEY")
 STRIPE_SECRET_API_KEY=os.environ.get("STRIPE_SECRET_API_KEY")
 
