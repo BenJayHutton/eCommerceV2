@@ -11,11 +11,8 @@ DISABLE_COLLECTSTATIC=1
 EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD")
 MAILCHIMP_API_KEY=os.environ.get("MAILCHIMP_API_KEY")
 MAILCHIMP_EMAIL_LIST_ID=os.environ.get("MAILCHIMP_EMAIL_LIST_ID")
-MAILCHIMP_DATA_CENTER=os.environ.get("MAILCHIMP_DATA_CENTER")
 
-SECRET_KEY="t_#3_gtv*hxj@q)(+j!ytnm9mm4s=(sk_skvy13ch0(rk7+(ps"
-#Secret key will be different to this
-
+SECRET_KEY=os.environ.get("SECRET_KEY")
 STRIPE_PUB_KEY=os.environ.get("STRIPE_PUB_KEY")
 STRIPE_SECRET_API_KEY=os.environ.get("STRIPE_SECRET_API_KEY")
 

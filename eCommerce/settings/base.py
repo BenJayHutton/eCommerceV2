@@ -46,6 +46,9 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'accounts.User' #changes built it user to ours
 
+SECRET_KEY="t_#3_gtv*hxj@q)(+j!ytnm9mm4s=(sk_skvy13ch0(rk7+(ps"
+# will be changed in production
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
