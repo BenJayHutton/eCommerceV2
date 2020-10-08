@@ -4,31 +4,26 @@
   <link rel='stylesheet' href='{% static "css/main.css" %}'/>
 {% endblock %}
 {% block content%}
-  <div class='text-center'>
-    <h1>{{ title }}</h1>
-  </div>
   <div class='row'>
-    {% if featured %}
-    <div class='col'>
-      <p>
-        <h1>Featured</h1>
-        {% for featured_items in featured %}
-        <div class='col'>
-          {% include 'products/snippets/card.html' with product=featured_items %}
-        </div>
-      {% endfor %}
-      </p>
-    </div>
-    {% endif %}
-  </div>
-  <div class='row'>
-    <div class='col'>
+    <div class='col-8'>
       {% lorem 2 p %}
     </div>
   </div>
+  <div class='row'>
+    {% if featured %}
+    <div class="col-12 text-center my-3">
+      <h1>Featured</h1>
+    </div>
+    {% for featured_items in featured %}
+    <div class='col-4 my-3'>
+          {% include 'products/snippets/card.html' with product_obj=featured_items cart_item_obj=cart_item_obj %}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
   {% if request.user.is_authenticated %}
     <div class='row'>
-      <div class='col'>
+      <div class='col-8'>
         <h1>Premium</h1>
         {% lorem 2 p %}
       </div>

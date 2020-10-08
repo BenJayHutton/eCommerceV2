@@ -15,6 +15,7 @@ class DefaultHomePage(TemplateView):
 
     def get(self, request):
         visitor_name = request.session.get("first_name")
+        print("featured: ",self.featured)
         if self.display_name == "home":
             context = {
                 "title": "Home Page",

@@ -55,6 +55,7 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             product_obj = Product.objects.get(slug=slug)
         except:
             product_obj = None
+
         
         for items in cart_obj.cart_items.all():
             cart_item_id[items.product] = int(items.id)
