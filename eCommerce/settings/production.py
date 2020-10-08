@@ -1,5 +1,3 @@
-#from .base import *
-
 """
 Django settings for eCommerce project.
 
@@ -13,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import datetime
+from eCommerce.aws.conf import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #Third party apps
+    'storages',
 
     #our app
     'accounts',
@@ -140,8 +143,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
 
 # Variables
 ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com']
-AWS_ACCESS_KEY_ID=os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY")
 DATABASE_URL=os.environ.get("DATABASE_URL")
 DEBUG = False
 DISABLE_COLLECTSTATIC=1
@@ -152,6 +153,7 @@ SECRET_KEY=os.environ.get("SECRET_KEY")
 
 STRIPE_PUB_KEY=os.environ.get("STRIPE_PUB_KEY")
 STRIPE_SECRET_API_KEY=os.environ.get("STRIPE_SECRET_API_KEY")
+
 
 #security settings for production.py:
 CORS_REPLACE_HTTPS_REFERER      = True
