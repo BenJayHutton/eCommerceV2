@@ -1,10 +1,10 @@
 <div class="card" style="width: 15rem;">
-  {% if cart_item_obj.image %}
+  {% if product_obj.image %}
     <a href='{{ product_obj.get_absolute_url }}'>
-      <img class="card-img-top" src="{{product.image.url}}" alt="{{ product.title}} logo">
+      <img class="card-img-top" src="{{product_obj.image.url}}" alt="{{ product_obj.title}} logo">
     </a>
   {% else %}
-      <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg' class='image-fluid' height="100px" width="100px"/> <br/>
+      <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg' class='image-fluid' height="100px" width="100px" alt="{{ product.title}} logo"/> <br/>
   {% endif %}
   <div class="card-body">
     <h5 class="card-title">{{ product_obj.title }}</h5>
