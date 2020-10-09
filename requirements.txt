@@ -1,3 +1,6 @@
+boto==2.49.0
+boto3==1.15.15
+botocore==1.18.15
 certifi==2020.6.20
 chardet==3.0.4
 dj-database-url==0.5.0
@@ -12,8 +15,8 @@ psycopg2==2.8.6
 python-dateutil==2.8.1
 pytz==2020.1
 requests==2.24.0
-sqlparse==0.3.1
 s3transfer==0.3.3
 six==1.15.0
+sqlparse==0.3.1
 stripe==2.53.0
 urllib3==1.25.10

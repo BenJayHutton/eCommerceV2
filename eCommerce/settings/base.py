@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'search',
 ]
 
-AUTH_USER_MODEL = 'accounts.User' #changes built it user to ours
+AUTH_USER_MODEL = 'accounts.User' #changes built-in user to ours
 
 
 MIDDLEWARE = [

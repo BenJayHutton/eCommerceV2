@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import datetime
-from eCommerce.aws.conf import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -47,7 +46,7 @@ INSTALLED_APPS = [
     'search',
 ]
 
-AUTH_USER_MODEL = 'accounts.User' #changes built it user to ours
+AUTH_USER_MODEL = 'accounts.User' #changes built-in user to ours
 
 
 MIDDLEWARE = [
@@ -138,8 +137,10 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
 
+from eCommerce.aws.conf import *
 
 # Variables
 ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com']
