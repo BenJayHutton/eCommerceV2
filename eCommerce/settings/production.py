@@ -138,15 +138,33 @@ STATICFILES_DIRS = [
 
 from eCommerce.aws.conf import *
 
-# Variables
+# Project settings
 ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com']
 DATABASE_URL=os.environ.get("DATABASE_URL")
 DEBUG = False
 DISABLE_COLLECTSTATIC=1
-EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD")
+SECRET_KEY=os.environ.get("SECRET_KEY")
+
+#Email Settings
+EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD", None)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
+EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD", None)
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", None)
+BASE_URL = os.environ.get("BASE_URL", None)
+DEFAULT_ACTIVATION_DAYS = 1
+MANAGER = os.environ.get("MANAGER",None)
+MANAGER_NAME = os.environ.get("MANAGER_NAME",None)
+
+Managers=(MANAGER, MANAGER_NAME)
+
+
+#Mailchimp Settings
 MAILCHIMP_API_KEY=os.environ.get("MAILCHIMP_API_KEY")
 MAILCHIMP_EMAIL_LIST_ID=os.environ.get("MAILCHIMP_EMAIL_LIST_ID")
-SECRET_KEY=os.environ.get("SECRET_KEY")
+
 
 STRIPE_PUB_KEY=os.environ.get("STRIPE_PUB_KEY")
 STRIPE_SECRET_API_KEY=os.environ.get("STRIPE_SECRET_API_KEY")
