@@ -1,4 +1,4 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_list_or_404, redirect
 from django.views.generic import TemplateView, DetailView, ListView
 
@@ -24,8 +24,6 @@ class ProductListView(ListView):
             cart_item_id[items.product] = int(items.id)
             
         context['cart_item_obj'] = cart_item_obj
-        print("cart_item_obj", cart_item_obj)
-        print("items: ", cart_item_id, type(cart_item_id))
         return context
         
 
@@ -67,6 +65,7 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             'cart_item_obj': cart_item_obj,
             }
         return context
+        
 
     
     def get_object(self, *args, **kwargs):

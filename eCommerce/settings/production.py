@@ -146,7 +146,6 @@ DISABLE_COLLECTSTATIC=1
 SECRET_KEY=os.environ.get("SECRET_KEY")
 
 #Email Settings
-EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD", None)
 EMAIL_HOST = os.environ.get("EMAIL_HOST", None)
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", None)
 EMAIL_HOST_PASSWORD=os.environ.get("EMAIL_HOST_PASSWORD", None)
