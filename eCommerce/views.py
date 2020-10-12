@@ -1,5 +1,5 @@
-
-from django.http import HttpResponse, JsonResponse, HttpRequest, HttpResponse
+from django.core.mail import send_mail
+from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView

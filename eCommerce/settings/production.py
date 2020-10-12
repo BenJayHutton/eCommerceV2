@@ -157,7 +157,9 @@ DEFAULT_ACTIVATION_DAYS = 1
 MANAGER = os.environ.get("MANAGER",None)
 MANAGER_NAME = os.environ.get("MANAGER_NAME",None)
 
-Managers=(MANAGER_NAME, MANAGER)
+ADMINS =[
+    (MANAGER_NAME, MANAGER),
+]
 
 #Mailchimp Settings
 MAILCHIMP_API_KEY=os.environ.get("MAILCHIMP_API_KEY")
