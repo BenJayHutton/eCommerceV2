@@ -36,44 +36,6 @@ class MarketingPreferenceUpdateView(SuccessMessageMixin, UpdateView):
         return obj
 
 
-
-
-'''
-POST METHOD
-
-data[merges][FNAME]: Ben
-
-data[list_id]: d70ff2ba46
-
-data[merges][ADDRESS]:
-
-data[ip_opt]: 196.52.84.23
-
-data[reason]: manual
-
-data[email_type]: html
-
-data[merges][EMAIL]: benjayhutton@outlook.com
-
-data[merges][LNAME]: Hutton
-
-data[id]: d12ef5ee6f
-
-data[merges][PHONE]:
-
-fired_at: 2020-10-06 16:01:47
-
-data[merges][BIRTHDAY]:
-
-type: unsubscribe
-
-data[web_id]: 339463537
-
-data[email]: benjayhutton@outlook.com
-
-'''
-
-
 class MailchimpWebhookView(CsrfExemptMixin, View):
     def post(self, request, *args, **kwargs):
         data = request.POST
