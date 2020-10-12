@@ -3,12 +3,12 @@ import hashlib
 import re
 import json
 import requests
-from django.conf import settings
+import os
 
 
-MAILCHIMP_API_KEY = getattr(settings, "MAILCHIMP_API_KEY", None)
-MAILCHIMP_DATA_CENTER = getattr(settings, "MAILCHIMP_DATA_CENTER", None)
-MAILCHIMP_EMAIL_LIST_ID = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None)
+MAILCHIMP_API_KEY = os.environ.get("MAILCHIMP_API_KEY", None)
+MAILCHIMP_DATA_CENTER = os.environ.get("MAILCHIMP_DATA_CENTER", None)
+MAILCHIMP_EMAIL_LIST_ID = os.environ.get("MAILCHIMP_EMAIL_LIST_ID", None)
 
 
 
