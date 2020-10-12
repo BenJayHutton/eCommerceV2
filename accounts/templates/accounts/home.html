@@ -1,5 +1,50 @@
 {% extends "base.html" %}
 {% block content%}
-<h1>{{ page_header }}</h1>
-<p>{{ content }}</p>
+<div class="row">
+    <div class="col-12">
+        <h1>Accounts</h1>
+        <hr>
+    </div>
+
+    <div class="card col-sm-12 col-md-3 my-3">
+        <div class="card-body">
+          <h5 class="card-title">Support</h5>
+          <div class="list-group">
+            <a href='/about/' class="list-group-item">About</a>
+            <a href="#" class="list-group-item">Contact</a>
+          </div>
+        </div>
+    </div>
+
+    <div class="card col-sm-12 col-md-3 my-3">
+        <div class="card-body">
+            <h5 class="card-title">Billing</h5>
+            <div class="list-group">
+                <a href="#" class="list-group-item">Orders</a>
+                <a href="/billing/payment-method/" class="list-group-item">Payment Method</a>
+                <a href="#" class="list-group-item">Addreess</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card col-sm-12 col-md-3 my-3">
+        <div class="card-body">
+          <h5 class="card-title">Preferences</h5>
+          <div class="list-group">
+            <a href="#" class="list-group-item">Edit Details</a>
+            <a href="/marketing/settings/email/" class="list-group-item">Email Marketing</a>
+            <a href="#" class="list-group-item">Password reset</a>
+           </div>
+        </div>
+    </div>
+
+    <div class="card col-sm-12 col-md-3 my-3">
+        <div class="card-body">
+            <h5 class="card-title">History</h5>
+            <div class="list-group">
+                <a href="#" class="list-group-item">Products Viewed</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

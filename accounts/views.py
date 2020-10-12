@@ -1,15 +1,16 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, FormView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url
-from django.views.generic import TemplateView
+from django.views.generic import DetailView
 
 from .forms import LoginForm, RegisterForm, GuestForm
 from .models import GuestEmail
 from .signals import user_logged_in
 
-class Accounts(TemplateView):
+class Accounts(LoginRequiredMixin, DetailView):
     template_name = "accounts/home.html"
     
     def get(self, request):
