@@ -28,7 +28,7 @@ class BillingProfileManager(models.Manager):
         return obj, created
     
 class BillingProfile(models.Model):
-    user        = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user        = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL)
     email       = models.EmailField()
     active      = models.BooleanField(default=True)
     update      = models.DateTimeField(auto_now=True)
@@ -106,7 +106,7 @@ class CardManager(models.Manager):
         
 
 class Card(models.Model):
-    billing_profile = models.ForeignKey(BillingProfile,on_delete=models.CASCADE)
+    billing_profile = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)
     stripe_id       = models.CharField(max_length=120)
     brand           = models.CharField(max_length=120, null=True, blank=True)
     country         = models.CharField(max_length=20, null=True, blank=True)
@@ -161,7 +161,7 @@ def new_card_post_save_receiver(sender, instance, created, *args, **kwargs):
 post_save.connect(new_card_post_save_receiver, sender=Card)
 
 class Charge(models.Model):
-    billing_profile = models.ForeignKey(BillingProfile,on_delete=models.CASCADE)
+    billing_profile = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)
     stripe_id       = models.CharField(max_length=120)
     paid            = models.BooleanField(default=False)
     refunded        = models.BooleanField(default=False)
