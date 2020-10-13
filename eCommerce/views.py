@@ -47,3 +47,10 @@ def contact_page(request):
         if request.is_ajax():
             return JsonResponse({"message": "Thank you for your submission"})
     return render(request, "contact/view.html", context)
+
+
+def about_page(request):
+    context = {
+        "title": "About Page",
+        }
+    return render(request, "about.html", context)

@@ -10,8 +10,8 @@
         <div class="card-body">
           <h5 class="card-title">Support</h5>
           <div class="list-group">
-            <a href='/about/' class="list-group-item">About</a>
-            <a href="#" class="list-group-item">Contact</a>
+            <a href="{% url 'about' %}" class="list-group-item">About</a>
+            <a href="{% url 'contact' %}" class="list-group-item">Contact</a>
           </div>
         </div>
     </div>
@@ -33,7 +33,7 @@
           <div class="list-group">
             <a href="#" class="list-group-item">Edit Details</a>
             <a href="{% url 'marketing:marketing-pref' %}" class="list-group-item">Email Marketing</a>
-            <a href="#" class="list-group-item">Password reset</a>
+            <a href="{% url 'password_change' %}" class="list-group-item">Change Password</a>
            </div>
         </div>
     </div>

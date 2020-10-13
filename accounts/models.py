@@ -2,10 +2,16 @@ from django.conf import settings
 from django.contrib.auth.models import (
 AbstractBaseUser, BaseUserManager
 )
+from django.core.mail import send_mail
+from django.template.loader import get_template
 from django.db import models
 from django.utils import timezone
 
 from marketing.utils import Mailchimp
+
+verify_txt = get_template("registration/emails/verify.txt")
+verify_html = get_template("registration/emails/verify.html")
+#send_mail(subject, message, from_email, recipiant_list, html_message)
 
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name=None, password=None, is_active=True, is_staff=False, is_admin=False):
@@ -21,7 +27,7 @@ class UserManager(BaseUserManager):
         user_obj.set_password(password)#can be used to change password
         user_obj.staff = is_staff
         user_obj.admin = is_admin
-        user_obj.active = is_active
+        user_obj.is_active = is_active
         user_obj.save(using=self._db)
         return user_obj
     
@@ -49,7 +55,7 @@ class User(AbstractBaseUser):
     email           = models.EmailField(max_length=255, unique=True)
     full_name       = models.CharField(max_length=255, blank=True, null=True)
     guest           = models.BooleanField(default=True)
-    active          = models.BooleanField(default=True) #Can login
+    is_active       = models.BooleanField(default=False)
     staff           = models.BooleanField(default=False) #Staff user, not super user
     admin           = models.BooleanField(default=False) #Superuser
     timestamp       = models.DateTimeField(auto_now_add=True)
@@ -84,9 +90,9 @@ class User(AbstractBaseUser):
     def is_admin(self):
         return self.admin
     
-    @property
-    def is_active(self):
-        return self.active
+    # @property
+    # def is_active(self):
+    #     return self.active
 
 
 class GuestEmail(models.Model):

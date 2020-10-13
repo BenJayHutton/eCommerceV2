@@ -16,7 +16,9 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
-from .views import contact_page, DefaultHomePage
+from django.views.generic import RedirectView
+
+from .views import about_page, contact_page, DefaultHomePage
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 
 
@@ -25,15 +27,16 @@ urlpatterns = [
     url(r'^$', DefaultHomePage.as_view(display_name="home"), name='home'),
     url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
     url(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
-    url(r'^$', DefaultHomePage.as_view(display_name="about"), name='about'),
+    url(r'^about/$', about_page, name='about'),
     url(r'^contact/$', contact_page, name='contact'),
-    url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
+    url(r'^accounts/$', RedirectView.as_view(url='/account')),
     url(r'^account/', include(("accounts.urls", "accounts"), namespace='account')),
+    url(r'^accounts/', include("accounts.password.urls")),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
     url(r'^marketing/', include(("marketing.urls", "marketing"), namespace='marketing')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
-    url(r'^search/', include(("search.urls", "search"), namespace='search')),    
+    url(r'^search/', include(("search.urls", "search"), namespace='search')),
 ]
