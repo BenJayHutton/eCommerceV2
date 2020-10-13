@@ -13,9 +13,9 @@ from .utils import get_client_ip
 User = settings.AUTH_USER_MODEL
 
 class ObjectViewed(models.Model):
-    user            = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    user            = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     ip_address      = models.CharField(max_length=220, blank=True, null=True)
-    content_type    = models.ForeignKey(ContentType, on_delete=models.CASCADE) #any sort of object, User, Product, Order, Cart, Address etc
+    content_type    = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.SET_NULL) #any sort of object, User, Product, Order, Cart, Address etc
     object_id       = models.PositiveIntegerField() #id of the object above
     content_object  = GenericForeignKey('content_type', 'object_id') #instance of the object above
     timestamp       = models.DateTimeField(auto_now_add=True)
@@ -43,7 +43,7 @@ object_viewed_signal.connect(object_viewed_receiver)
 
 
 class UserSession(models.Model):
-    user            = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    user            = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     ip_address      = models.CharField(max_length=220, blank=True, null=True)
     session_key     = models.CharField(max_length=100, blank=True, null=True)
     active          = models.BooleanField(default=True)
