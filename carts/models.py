@@ -36,11 +36,11 @@ class CartItemManager(models.Manager):
             
 
 class CartItem(models.Model):
-    product         = models.ForeignKey(Product, default=None, null=True, blank=True, on_delete=models.CASCADE)
+    product         = models.ForeignKey(Product, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     quantity        = models.IntegerField(default=None, null=True)
-    price_of_item   = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    price_of_item   = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     session_id      = models.CharField(max_length=120, default=0, null=True, blank=True)
-    total           = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    total           = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
     objects = CartItemManager()
 
@@ -84,10 +84,10 @@ class CartManager(models.Manager):
                 print("error:", e)
 
 class Cart(models.Model):
-    user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     cart_items  = models.ManyToManyField(CartItem, default=None, blank=True)
-    total       = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
-    subtotal    = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    total       = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    subtotal    = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     updated     = models.DateTimeField(auto_now=True)
     timestamp   = models.DateTimeField(auto_now_add=True)
 
