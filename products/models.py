@@ -9,67 +9,67 @@ from eCommerce.utils import unique_slug_generator
 from uuid import uuid4
 
 class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
-	def active(self):
-		return self.filter(active=True)
+    def active(self):
+        return self.filter(active=True)
 
-	def featured(self):
-		return self.filter(featured=True, active=True)
+    def featured(self):
+        return self.filter(featured=True, active=True)
 
-	def search(self, query):
-		lookups = (Q(title__icontains=query) |
+    def search(self, query):
+        lookups = (Q(title__icontains=query) |
                    Q(description__icontains=query)|
                    Q(price__icontains=query)
                    #Q(tag__title__icontains=query)
                    )
-		return self.filter(lookups)
+        return self.filter(lookups)
 
 class ProductManager(models.Manager):
-	#overriding get_queryset so we can use the queryset above
-	def get_queryset(self):
-		return ProductQuerySet(self.model, using=self._db)
+    #overriding get_queryset so we can use the queryset above
+    def get_queryset(self):
+        return ProductQuerySet(self.model, using=self._db)
 
-	def active(self):
-		return self.get_queryset().active()
-	
-	def get_by_id(self, id):
-		qs = self.get_queryset().filter(id=id)
-		if qs.count() == 1:
-			return qs.first()
-		else:
-			return None
+    def active(self):
+        return self.get_queryset().active()
     
-	def search(self, query):
-		return self.get_queryset().active().search(query)
+    def get_by_id(self, id):
+        qs = self.get_queryset().filter(id=id)
+        if qs.count() == 1:
+            return qs.first()
+        else:
+            return None
+    
+    def search(self, query):
+        return self.get_queryset().active().search(query)
 
-	def increase_qty_of_product(self, *args, **kwargs):
-		product = None
-		id = kwargs.get('id')
-		quantity = kwargs.get('quantity')
-		if id is not None:
-			product = self.get_by_id(id)
-			
-		if product is not None and quantity is not None:
-			product.quantity = product.quantity + quantity
-			if product.quantity < 0:
-				product.quantity = 0
-				product.save()
-			else:
-				product.save()
+    def increase_qty_of_product(self, *args, **kwargs):
+        product = None
+        id = kwargs.get('id')
+        quantity = kwargs.get('quantity')
+        if id is not None:
+            product = self.get_by_id(id)
+            
+        if product is not None and quantity is not None:
+            product.quantity = product.quantity + quantity
+            if product.quantity < 0:
+                product.quantity = 0
+                product.save()
+            else:
+                product.save()
 
-	def decrease_qty_of_product(self, *args, **kwargs):
-		product = None
-		id = kwargs.get('id')
-		quantity = kwargs.get('quantity')
-		if id is not None:
-			product = self.get_by_id(id)
-			
-		if product is not None and quantity is not None:
-			product.quantity = product.quantity - quantity
-			if product.quantity < 0:
-				product.quantity = 0
-				product.save()
-			else:
-				product.save()
+    def decrease_qty_of_product(self, *args, **kwargs):
+        product = None
+        id = kwargs.get('id')
+        quantity = kwargs.get('quantity')
+        if id is not None:
+            product = self.get_by_id(id)
+            
+        if product is not None and quantity is not None:
+            product.quantity = product.quantity - quantity
+            if product.quantity < 0:
+                product.quantity = 0
+                product.save()
+            else:
+                product.save()
 
 
 class Product(models.Model):
@@ -86,6 +86,9 @@ class Product(models.Model):
     
     objects = ProductManager()
     
+    def has_quantity(self):
+        return self.quantity > 0
+
     def get_absolute_url(self):
         return reverse("products:detail", kwargs={"slug": self.slug})
     
@@ -99,36 +102,36 @@ class Product(models.Model):
     
     
 class ItemImage(models.Model):
-	upload_date = models.DateTimeField(
-		auto_now_add=True
-	)
-	image = models.ImageField(
-		upload_to='item-images/'
-	)
-	items = models.ManyToManyField(
-		Product
-	)
+    upload_date = models.DateTimeField(
+        auto_now_add=True
+    )
+    image = models.ImageField(
+        upload_to='item-images/'
+    )
+    items = models.ManyToManyField(
+        Product
+    )
 
-	def __str__(self):
-		return str(self.upload_date)
+    def __str__(self):
+        return str(self.upload_date)
 
 
 class ItemTag(models.Model):
-	name = models.CharField(
-		max_length=25,
-		unique=True
-	)
-	public = models.BooleanField(
-		default=False
-	)
-	items = models.ManyToManyField(
-		Product,
-		blank=True
-	)
-	blurb = models.CharField(
-		max_length = 500,
-		null = True
-	)
+    name = models.CharField(
+        max_length=25,
+        unique=True
+    )
+    public = models.BooleanField(
+        default=False
+    )
+    items = models.ManyToManyField(
+        Product,
+        blank=True
+    )
+    blurb = models.CharField(
+        max_length = 500,
+        null = True
+    )
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name
