@@ -40,7 +40,6 @@ class Mailchimp(object):
                                     api_url = self.api_url,
                                     list_id=self.list_id
                         )
-        print("self.api_url", self.api_url)
 
 
     def get_members_endpoint(self):

@@ -74,7 +74,6 @@ def post_save_session_receiver(sender, instance, created, *args, **kwargs):
 post_save.connect(post_save_session_receiver, sender=UserSession)
 
 def user_logged_in_receiver(sender, instance, request, *args, **kwargs):
-    print(instance)
     user = instance
     ip_address = get_client_ip(request)
     session_key = request.session.session_key

@@ -114,13 +114,11 @@ pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
 
 def cart_post_save_reciever(sender, instance, *args, **kwargs):
     cart_items = instance.cart_items.all()
-    print(cart_items)
     total_vat = 0
     for x in cart_items:
         total_vat += Decimal(x.product.vat * x.quantity)
     instance.total_vat = total_vat
     instance.subtotal = instance.total + total_vat
-    print("instance.subtotal", instance.subtotal)
 
 post_save.connect(cart_post_save_reciever, sender=Cart)
     
