@@ -62,12 +62,18 @@ def cart_update(request, *args, **kwargs):
             item_removed = True
 
         if cart_item_update:
-            update_cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
+            
             if int(product_quantity) != int(cart_item_obj.quantity):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
-                cart_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+                total, vat_total, sub_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+                if total and vat_total and sub_total:
+                    cart_obj.total = total
+                    cart_obj.vat_total = vat_total
+                    cart_obj.subtotal = sub_total
+                    cart_obj.save()
+                    print(total, vat_total, sub_total)
             item_updated = True
 
         if cart_item_add:

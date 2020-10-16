@@ -73,20 +73,19 @@ class CartManager(models.Manager):
     def calculate_cart_total(self, request, *args, **kwargs):
         cart_obj = kwargs.get("cart_obj",None)
         total = Decimal()
+        vat_total = Decimal()
+        sub_total = Decimal()
         for x in cart_obj.cart_items.all():
             total += x.total
-        if cart_obj.total != total:
-            cart_obj.total = total
-            try:
-                cart_obj.subtotal = total * Decimal(1.1)
-                cart_obj.save()
-            except Exception as e:
-                print("error:", e)
+        vat_total = total * Decimal(0.2)
+        sub_total = total + vat_total
+        return total, vat_total, sub_total
 
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     cart_items  = models.ManyToManyField(CartItem, default=None, blank=True)
     total       = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    vat_total   = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     subtotal    = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     updated     = models.DateTimeField(auto_now=True)
     timestamp   = models.DateTimeField(auto_now_add=True)
@@ -111,6 +110,19 @@ def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.total = quantity * price_of_item
 
 pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
+
+
+def cart_post_save_reciever(sender, instance, *args, **kwargs):
+    cart_items = instance.cart_items.all()
+    print(cart_items)
+    total_vat = 0
+    for x in cart_items:
+        total_vat += Decimal(x.product.vat * x.quantity)
+    instance.total_vat = total_vat
+    instance.subtotal = instance.total + total_vat
+    print("instance.subtotal", instance.subtotal)
+
+post_save.connect(cart_post_save_reciever, sender=Cart)
     
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
@@ -121,7 +133,6 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
             total += x.total
         if instance.subtotal != total:
             instance.total = total
-            instance.subtotal = total * Decimal(1.1)
             instance.save()
 
 m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)
