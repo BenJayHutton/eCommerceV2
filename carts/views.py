@@ -59,7 +59,15 @@ def cart_update(request, *args, **kwargs):
         if cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
+            total, vat_total, sub_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+            if total and vat_total and sub_total:
+                cart_obj.total = total
+                cart_obj.vat_total = vat_total
+                cart_obj.subtotal = sub_total
+                cart_obj.save()
+                print(total, vat_total, sub_total)
             item_removed = True
+            request.session['cart_item_count'] = cart_obj.cart_items.count()
 
         if cart_item_update:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
@@ -75,6 +83,7 @@ def cart_update(request, *args, **kwargs):
                     cart_obj.save()
                     print(total, vat_total, sub_total)
             item_updated = True
+            
 
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
@@ -82,6 +91,13 @@ def cart_update(request, *args, **kwargs):
             cart_item_obj.save()
             cart_obj.cart_items.add(cart_item_obj)
             cart_item_id = cart_item_obj.id
+            total, vat_total, sub_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
+            if total and vat_total and sub_total:
+                cart_obj.total = total
+                cart_obj.vat_total = vat_total
+                cart_obj.subtotal = sub_total
+                cart_obj.save()
+                print(total, vat_total, sub_total)
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
         

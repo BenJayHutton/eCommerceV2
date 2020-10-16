@@ -54,9 +54,10 @@
                 <p>Cart Items: {% for cart_item in object.cart.cart_items.all %}{{cart_item.product}}{% if not forloop.last %}, {% endif %}{% endfor %} </p>
                 <p>Shipping address {{ object.shipping_address.get_address}}</p>
                 <p>Billing address {{ object.shipping_address.get_address}}</p>
-                <p>Cart Total: £{{ object.cart.total}}</p>
-                <p>Shipping Total: £{{ object.shipping_total}}</p>
                 <p>Payment Method: {{billing_profile.default_card}} (<a href="{{ billing_profile.get_payment_method_url }}?next={{ request.build_absolute_uri }}">Change</a>)</p>
+                <p>Cart Total: £{{ object.cart.total}}</p>
+                <p>Vat Total: £{{ object.cart.vat_total}}</p>
+                <p>Shipping Total: £{{ object.shipping_total}}</p>
                 <p>Order Total: £{{ object.total}}</p>
                 <form class="form" method="POST" action="">
                     {% csrf_token %}
