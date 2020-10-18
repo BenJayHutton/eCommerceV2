@@ -79,4 +79,4 @@ class RegisterView(CreateView):
 
 def logout_view(request):
     logout(request)
-    return redirect("accounts:login")
+    return redirect("account:login")
