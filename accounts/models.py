@@ -6,7 +6,9 @@ AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
+from django.urls import reverse
 from django.utils import timezone
 
 from marketing.utils import Mailchimp
@@ -118,6 +120,8 @@ class EmailActivationManager(models.Manager):
     def confirmable(self):
         return self.get_queryset().confirmable()
 
+    def email_exists(self, email):
+        return self.get_queryset().filter(Q(email=email) | Q(user__email=email)).filter(activated=False)
 
 
 class EmailActivation(models.Model):
@@ -164,7 +168,7 @@ class EmailActivation(models.Model):
         if not self.activated and not self.forced_expired:
             if self.key:
                 base_url = getattr(settings, 'BASE_URL', None)
-                key_path = self.key # use reverse
+                key_path = reverse("account:email-activate", kwargs={'key': self.key})
                 path = "{base}{path}".format(base=base_url, path=key_path)
                 context = {
                     'path': path,
