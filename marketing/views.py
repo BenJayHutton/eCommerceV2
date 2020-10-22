@@ -56,24 +56,3 @@ class MailchimpWebhookView(CsrfExemptMixin, View):
                 if qs.exits():
                     qs.Update(subscribed=is_subbed, mailchimp_subscribed = mailchimp_subbed, mailchimp_msg=str(data))
         return HttpResponse("Thank you", status=200)
-
-
-# def mailchimp_webhook_view(request):
-#     data = request.POST
-#     list_id = data,get('data[list_id]')
-#     if str(list_id) == str(MAILCHIMP_EMAIL_LIST_ID):
-#         hook_type = data.get("type")
-#         email = data.get('data[email]')
-#         response_status, response_status = Mailchimp().check_subscription_status(email)
-#         sub_status = response['status']
-#         is_subbed = None
-#         mailchimp_subbed = None
-#         if sub_status =="subscribed":
-#             is_subbed, mailchimp_subbed(True,True)
-#         elif sub_status =="unsubscribed":
-#             is_subbed, mailchimp_subbed(False,False)
-#         if is_subbed is not None and mailchimp_subbed is not None:
-#             qs = MarketingPreference.objects.filter(user__email__iexact=email)
-#             if qs.exits():
-#                 qs.Update(subscribed=is_subbed, mailchimp_subscribed = mailchimp_subbed, mailchimp_msg=str(data))
-#     return HttpResponse("Thank you", status=200)

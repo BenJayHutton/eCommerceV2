@@ -20,6 +20,7 @@ from django.views.generic import RedirectView
 
 from .views import about_page, contact_page, DefaultHomePage
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
+from accounts.views import LoginView
 
 
 urlpatterns = [
@@ -29,12 +30,14 @@ urlpatterns = [
     url(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
     url(r'^about/$', about_page, name='about'),
     url(r'^contact/$', contact_page, name='contact'),
-    url(r'^accounts/$', RedirectView.as_view(url='/account')),
     url(r'^account/', include(("accounts.urls", "accounts"), namespace='account')),
+    url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
+    #url(r'^accounts/$', RedirectView.as_view(url='/account')),
     url(r'^accounts/', include("accounts.password.urls")),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
+    #url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^marketing/', include(("marketing.urls", "marketing"), namespace='marketing')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
