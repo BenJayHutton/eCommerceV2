@@ -5,7 +5,7 @@ from .views import (
     LoginView, 
     RegisterView, 
     logout_view, 
-    guest_register_page, 
+    GuestRegisterView, 
     AccountEmailActivateView,
     )
 
@@ -15,6 +15,6 @@ urlpatterns = [
     url(r'^email/resend-activation/$', AccountEmailActivateView.as_view(), name='resend-activation'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
-    url(r'^register/guest/$', guest_register_page, name='guest_register'),    
+    url(r'^register/guest/$', GuestRegisterView.as_view(), name='guest_register'),    
     url(r'^logout/$', logout_view, name='logout'),
 ]
