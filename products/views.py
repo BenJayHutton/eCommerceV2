@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_list_or_404, redirect
 from django.views.generic import TemplateView, DetailView, ListView
@@ -25,11 +26,34 @@ class ProductListView(ListView):
             
         context['cart_item_obj'] = cart_item_obj
         return context
-        
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
         return Product.objects.all()
+
+class UserProductHistoryView(LoginRequiredMixin, ListView):
+    template_name = "products/user-history.html"
+    
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(UserProductHistoryView, self).get_context_data(*args, **kwargs)
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        cart_item_id = {}
+        context['cart_obj'] = cart_obj
+        context['cart_item_id'] = cart_item_id        
+        cart_item_obj = []       
+        for items in cart_obj.cart_items.all():
+            cart_item_obj.append(items.product)
+            cart_item_id[items.product] = int(items.id)            
+        context['cart_item_obj'] = cart_item_obj
+        return context
+        
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        views = request.user.objectviewed_set.by_model(Product, model_queryset=False)
+        return views
+
 
 
 class ProductDetailSlugView(ObjectViewedMixin, DetailView):
@@ -39,25 +63,19 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductDetailSlugView, self).get_context_data(*args, **kwargs)
-        slug = self.kwargs.get('slug')
-        
+        slug = self.kwargs.get('slug')        
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
         cart_item_obj = []       
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
-        
-
         try:
             product_obj = Product.objects.get(slug=slug)
         except:
-            product_obj = None
-
-        
+            product_obj = None        
         for items in cart_obj.cart_items.all():
             cart_item_id[items.product] = int(items.id)
-        
         context = {
             'cart_obj': cart_obj,
             'product_obj': product_obj,
@@ -65,13 +83,11 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             'cart_item_obj': cart_item_obj,
             }
         return context
-        
 
-    
+
     def get_object(self, *args, **kwargs):
         request = self.request
         slug = self.kwargs.get('slug')
-
         try:
             instance = Product.objects.get(slug=slug, active=True)
         except Product.DoesNotExist:
@@ -80,6 +96,5 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             qs = Product.objects.get(slug=slug, active=True)
             instance = qs.first()
         except:
-            raise Http404("Product not found")
-        
+            raise Http404("Product not found")        
         return instance
