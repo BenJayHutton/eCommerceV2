@@ -95,7 +95,6 @@ def cart_update(request, *args, **kwargs):
                 cart_obj.vat_total = vat_total
                 cart_obj.subtotal = sub_total
                 cart_obj.save()
-                print(total, vat_total, sub_total)
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
         

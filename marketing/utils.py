@@ -71,7 +71,6 @@ class Mailchimp(object):
 
     def check_subscription_status(self, email):
         subscriber_hash     = get_subscriber_hash(email)
-        print(subscriber_hash)
         members_endpoint       = self.get_members_endpoint()
         endpoint            = "{members_endpoint}/{sub_hash}".format(
                                 members_endpoint=members_endpoint, 
