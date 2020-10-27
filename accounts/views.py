@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.http import is_safe_url
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, FormView, DetailView, View, UpdateView
@@ -103,7 +103,7 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
-    success_url = 'account/login/'
+    success_url = reverse_lazy('account:login')
 
 class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserDetailChangeForm
