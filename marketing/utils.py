@@ -82,19 +82,6 @@ class Mailchimp(object):
         return r.status_code, r.json()
 
     def add_email(self, email):
-        # status = "subscribed"
-        # endpoint = self.get_members_endpoint()
-        # message ="Test Message"
-        # data = { 
-        #         "email_address": email, 
-        #         "status": status,
-        #         "message": message
-        #         }
-        # r = requests.post(endpoint, 
-        #             auth=("", MAILCHIMP_API_KEY), 
-        #             data=json.dumps(data)
-        #             )
-        # return r.status_code, r.json()
         return self.change_subscription_status(email, status='subscribed')
 
         

@@ -57,9 +57,6 @@ class UserDetailChangeForm(forms.ModelForm):
 
 
 
-
-
-
 class UserAdminChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
@@ -145,31 +142,6 @@ class LoginForm(forms.Form):
         except:
             pass
         return data
-
-
-    # def form_valid(self,form):
-    #     request = self.request
-    #     next_ = request.GET.get('next')
-    #     next_post = request.POST.get('next')
-    #     redirect_path = next_ or next_post or None
-        
-        
-    #     if user is not None:
-    #         if not user.is_active:
-    #             messages.error(request, "this user is inactive")
-    #             return super(LoginView, self).form_invalid(form)
-    #         login(request, user)
-    #         user_logged_in.send(user.__class__, instance=user, request=request)
-    #         try:
-    #             del request.session['guest_email_id']
-    #         except:
-    #             pass
-            
-    #         if is_safe_url(redirect_path, request.get_host()):
-    #             return redirect(redirect_path)
-    #         else:
-    #             return redirect("/")
-    #     return super(LoginView, self).form_invalid(form)
 
 
 class RegisterForm(forms.ModelForm):

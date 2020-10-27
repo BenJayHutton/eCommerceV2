@@ -86,12 +86,6 @@ class GuestRegisterView(NextUrlMixin, RequestFormAttachMixin, CreateView):
     def form_invalid(self, form):
         return redirect(self.default_next)
 
-    # def form_valid(self, form):
-    #     request = self.request
-    #     email = form.cleaned_data.get("email")
-    #     new_guest_email = GuestEmail.objects.create(email=email)
-        
-    #     return redirect(self.get_next_url())
 
 
 
