@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from .views import OrderHome
+from .views import OrderListView, OrderDetailView
 
 urlpatterns = [
-    url(r'^$', OrderHome.as_view(), name='home'),
-    url(r'^$', OrderHome.as_view(), name='update_order'),
+    url(r'^$', OrderListView.as_view(), name='list'),
+    url(r'^(?P<order_id>[0-9A-Za-z]+)$', OrderDetailView.as_view(), name='detail'),
 ]

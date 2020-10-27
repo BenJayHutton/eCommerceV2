@@ -24,11 +24,25 @@ ORDER_STATUS_CHOICES = (
     ('refunded', 'Refunded'),
 )
 
+class OrderManagerQuerySet(models.query.QuerySet):
+    def by_request(self, request):
+        billing_profile, created = BillingProfile.objects.new_or_get(request)
+        return self.filter(billing_profile=billing_profile)
+    
+    def not_created(self):
+        return self.exclude(status='created')
+
 class OrderManager(models.Manager):
+    def get_queryset(self):
+        return OrderManagerQuerySet(self.model, using=self._db)
+
+    def by_request(self, request):
+        return self.get_queryset().by_request(request)
+
     def new_or_get(self, billing_profile, cart_obj):
+        created = False
         qs = self.get_queryset().filter(billing_profile=billing_profile, cart=cart_obj, active = True, status='created')
         if qs.count() == 1:
-            created = False
             obj = qs.first()
         else:
             obj  = self.model.objects.create(billing_profile=billing_profile, cart=cart_obj)
@@ -53,6 +67,20 @@ class Order(models.Model):
     
     objects = OrderManager()
 
+    class Meta:
+        ordering = ['-timestamp', '-updated']
+
+    def get_absolute_url(self):
+        return reverse("orders:detail", kwargs={'order_id':self.order_id})
+
+    def get_status(self):
+        if self.status =="refunded":
+            return "Refunded Order"
+        elif self.status == "shipped":
+            return "Shipped"
+        return "Shipping Soon"
+
+    
     def __str__(self):
         return self.order_id
 
