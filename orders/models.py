@@ -130,11 +130,12 @@ class Order(models.Model):
         return ProductPurchase.objects.filter(order_id = self.order_id).count()
 
     def mark_paid(self):
-        if self.status != 'paid':
-            if self.check_done():
-                self.status = "paid"
-                self.save()
-                #self.update_purchases()
+        if self.status !='paid':
+            if self.status != 'paid':
+                if self.check_done():
+                    self.status = "paid"
+                    self.save()
+                    #self.update_purchases()
         return self.status
         
     
@@ -165,3 +166,21 @@ def post_save_order(sender, instance, created, *args, **kwargs):
         instance.update_total()
 
 post_save.connect(post_save_order, sender=Order)
+
+
+class ProductPurchaseManager(models.Manager):
+    def all(self):
+        return self.get_queryset().filter(refunded=False)
+
+class ProductPurchese(models.Model):
+    user                = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+    billing_profile     = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)
+    product             = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    refunded            = models.BooleanField(default=False)
+    updated             = models.DateTimeField(auto_now=True)
+    timestamp           = models.DateTimeField(auto_now_add=True)
+
+    objects = ProductPurchaseManager()
+
+    def __str__(self):
+        return self.product.title
