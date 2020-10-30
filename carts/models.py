@@ -95,6 +95,15 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+    @property
+    def is_digital(self):
+        qs = self.cart_items.all()
+        print(qs)
+        for x in qs:
+            if not x.product.is_digital:
+                return False
+        return True
+
 
 def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
     try:

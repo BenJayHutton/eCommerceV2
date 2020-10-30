@@ -101,11 +101,11 @@ class Product(models.Model):
     def __str__(self):
         return  self.title
     
-def product_pre_save_reciever(sender, instance, *args, **kwargs):    
+def product_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.vat = instance.price * decimal.Decimal(0.2)
     
 
-pre_save.connect(product_pre_save_reciever, sender=Product)    
+pre_save.connect(product_pre_save_reciever, sender=Product)
     
 class ItemImage(models.Model):
     upload_date = models.DateTimeField(

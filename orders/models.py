@@ -105,7 +105,7 @@ class Order(models.Model):
         obj = Order.objects.filter(order_id__exact=1)
     
     def check_done(self):
-        shipping_address_required = False #not self.cart.is_digital
+        shipping_address_required = not self.cart.is_digital
         shipping_done = False        
         if shipping_address_required and self.shipping_address:
             shipping_done = True
@@ -116,7 +116,7 @@ class Order(models.Model):
         billing_profile = self.billing_profile
         billing_address = self.billing_address
         total = self.total
-        if billing_profile and shipping_done and billing_address and total > 0:
+        if billing_profile and shipping_done and billing_address and total >=0:
             return True
         return False
     

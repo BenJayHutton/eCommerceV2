@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
+import os
 from products.models import Product
 from .forms import ContactForm
 
@@ -37,16 +38,24 @@ class DefaultHomePage(TemplateView):
 
         
 def contact_page(request):
-    contact_form = ContactForm(request.POST or None)
-    context = {
-        "title": "Contact Page",
-        "content": "Welcome to the contact page",
-        "form": contact_form,
-        }
-    if contact_form.is_valid():
-        if request.is_ajax():
-            return JsonResponse({"message": "Thank you for your submission"})
-    return render(request, "contact/view.html", context)
+    # send_mail(
+    #     'Test Subject',
+    #     'Test',
+    #     os.environ.get("DEFAULT_FROM_EMAIL", None),
+    #     [os.environ.get("DEFAULT_FROM_EMAIL", None)],
+    #     fail_silently=False,
+    # )
+    return HttpResponse("contact")
+    # contact_form = ContactForm(request.POST or None)
+    # context = {
+    #     "title": "Contact Page",
+    #     "content": "Welcome to the contact page",
+    #     "form": contact_form,
+    #     }
+    # if contact_form.is_valid():
+    #     if request.is_ajax():
+    #         return JsonResponse({"message": "Thank you for your submission"})
+    # return render(request, "contact/view.html", context)
 
 
 def about_page(request):
