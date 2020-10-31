@@ -48,7 +48,7 @@ class OrderManager(models.Manager):
             obj  = self.model.objects.create(billing_profile=billing_profile, cart=cart_obj)
             created = True
         return obj
-    
+
 
 class Order(models.Model):
     billing_profile     = models.ForeignKey(BillingProfile, null=True, blank=True, on_delete=models.SET_NULL)
@@ -63,8 +63,8 @@ class Order(models.Model):
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
-    
-    
+
+
     objects = OrderManager()
 
     class Meta:
@@ -80,7 +80,7 @@ class Order(models.Model):
             return "Shipped"
         return "Shipping Soon"
 
-    
+
     def __str__(self):
         return self.order_id
 
@@ -103,7 +103,7 @@ class Order(models.Model):
         test_obj = Order(order_id = session_order_id)
         test_obj.save()
         obj = Order.objects.filter(order_id__exact=1)
-    
+
     def check_done(self):
         shipping_address_required = not self.cart.is_digital
         shipping_done = False        
@@ -119,16 +119,15 @@ class Order(models.Model):
         if billing_profile and shipping_done and billing_address and total >=0:
             return True
         return False
-    
+
     def update_purchases(self):
         for p in self.cart.cart_items.all():
-            print(p.product)
-            obj, create = ProductPurchese.objects.get_or_create(
+            obj, create = ProductPurchase.objects.get_or_create(
                 order_id = self.order_id,
                 product = p.product,
                 billing_profile= self.billing_profile,
             )
-        return ProductPurchese.objects.filter(order_id = self.order_id).count()
+        return ProductPurchase.objects.filter(order_id = self.order_id).count()
 
     def mark_paid(self):
         if self.status !='paid':
@@ -138,8 +137,8 @@ class Order(models.Model):
                     self.save()
                     self.update_purchases()
         return self.status
-        
-    
+
+
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         instance.order_id = unique_order_id_generator(instance)
@@ -173,7 +172,7 @@ class ProductPurchaseManager(models.Manager):
     def all(self):
         return self.get_queryset().filter(refunded=False)
 
-class ProductPurchese(models.Model):
+class ProductPurchase(models.Model):
     order_id            = models.CharField(max_length=120)
     billing_profile     = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)
     product             = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)

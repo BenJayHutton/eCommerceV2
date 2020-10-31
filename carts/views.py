@@ -36,13 +36,13 @@ def cart_update(request, *args, **kwargs):
     cart_item_update = request.POST.get('cart_item_update', False)
     cart_item_remove = request.POST.get('cart_item_remove', False)
     cart_item_add = request.POST.get('cart_item_add', False)
-    
+
     if cart_item_add is False:
         cart_item_add = request.POST.get('cartItemAdd', False)
-    
+
     if cart_item_update is False:
         cart_item_update = request.POST.get('cartItemUpdate', False)
-    
+
     if cart_item_remove is False:
         cart_item_remove = request.POST.get('cartItemRemove', False)
 
@@ -56,7 +56,7 @@ def cart_update(request, *args, **kwargs):
 
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        
+
         if cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
@@ -71,7 +71,7 @@ def cart_update(request, *args, **kwargs):
 
         if cart_item_update:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
-            
+
             if int(product_quantity) != int(cart_item_obj.quantity):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
@@ -82,7 +82,7 @@ def cart_update(request, *args, **kwargs):
                     cart_obj.subtotal = sub_total
                     cart_obj.save()
             item_updated = True
-            
+
 
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
@@ -98,7 +98,7 @@ def cart_update(request, *args, **kwargs):
                 cart_obj.save()
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
-        
+
 
         if request.is_ajax():
             json_data= {
@@ -118,7 +118,7 @@ def checkout_home(request):
     order_obj = None
     if cart_created or cart_obj.cart_items.count() == 0:
         redirect("cart:home")
-    
+
     login_form = LoginForm(request=request)
     guest_form = GuestForm(request=request)
     address_form = AddressForm
