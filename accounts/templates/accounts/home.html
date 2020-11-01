@@ -21,7 +21,7 @@
             <h5 class="card-title">Billing</h5>
             <div class="list-group">
                 <a href="{% url 'orders:list' %}" class="list-group-item">Orders</a>
-                <a href="/billing/payment-method/" class="list-group-item">Payment Method</a>
+                <a href="{% url 'library' %}" class="list-group-item">Library</a>
                 <a href="#" class="list-group-item">Addreess</a>
             </div>
         </div>
@@ -33,6 +33,7 @@
           <div class="list-group">
             <a href="{% url 'account:user-update' %}" class="list-group-item">Edit Details</a>
             <a href="{% url 'marketing:marketing-pref' %}" class="list-group-item">Email Marketing</a>
+            <a href="/billing/payment-method/" class="list-group-item">Payment Method</a>
             <a href="{% url 'password_change' %}" class="list-group-item">Change Password</a>
            </div>
         </div>

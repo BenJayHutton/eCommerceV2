@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 from .views import about_page, contact_page, DefaultHomePage
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from accounts.views import LoginView
+from orders.views import LibraryView
 
 
 urlpatterns = [
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
     url(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
     url(r'^contact/$', contact_page, name='contact'),
+    url(r'^library/$', LibraryView.as_view(), name='library'),
     url(r'^marketing/', include(("marketing.urls", "marketing"), namespace='marketing')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
