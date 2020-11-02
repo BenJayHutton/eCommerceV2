@@ -103,10 +103,31 @@ class Product(models.Model):
     
 def product_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.vat = instance.price * decimal.Decimal(0.2)
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
     
 
 pre_save.connect(product_pre_save_reciever, sender=Product)
-    
+
+
+def upload_product_file_loc(instance, filename):
+    print(instance.id)
+    slug = instance.product.slug
+    if not slug:
+        slug = unique_slug_generator(instance.product)
+    location = "product/{}/".format(slug)
+    return location + filename
+
+
+class ProductFile(models.Model):
+    product         = models.ForeignKey(Product, blank=True, null=True, on_delete=models.SET_NULL)
+    file            = models.FileField(upload_to=upload_product_file_loc)
+
+    def __str__(self):
+        return str(self.file.name)
+
+
+
 class ItemImage(models.Model):
     upload_date = models.DateTimeField(
         auto_now_add=True
