@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_list_or_404, redirect
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, View
 
 from analytics.mixins import ObjectViewedMixin
 from carts.models import Cart, CartItem
 
-from .models import Product
+from .models import Product, ProductFile
 
 class ProductListView(ListView):
     template_name = "products/list.html"
@@ -53,8 +53,34 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
         request = self.request
         views = request.user.objectviewed_set.by_model(Product, model_queryset=False)
         return views
+import os
+from wsgiref.util import FileWrapper
+from django.conf import settings
+from mimetypes import guess_type
 
-
+class ProductDownloadView(View):
+        def get (self, *args, **kwargs):
+            slug = kwargs.get('slug')
+            pk = kwargs.get('pk')
+            downloads_qs = ProductFile.objects.filter(pk=pk, product__slug=slug)
+            if downloads_qs.count() !=1:
+                raise Http404("Download not found")
+            download_obj = downloads_qs.first()
+            # permission check
+            file_root = settings.PROTECTED_ROOT
+            filepath = download_obj.file.path
+            final_filepath = os.path.join(file_root, filepath) #Where the file is stored
+            with open(final_filepath, 'rb') as f:
+                wrapper = FileWrapper(f)
+                mimetype = 'application/force-download'
+                guessed_mimetype = guess_type(filepath)[0]
+                if guessed_mimetype:
+                    mimetype = guessed_mimetype
+                response = HttpResponse(wrapper, content_type=mimetype)
+                response['Content-Disposition'] = "attachment;filename=%s"%(download_obj.name)
+                response['X-SendFile'] = str(download_obj.name)
+                return response
+            #return redirect(download_obj.get_default_url())
 
 class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
@@ -98,3 +124,5 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
         except:
             raise Http404("Product not found")        
         return instance
+    
+    
