@@ -15,6 +15,8 @@ S3DIRECT_REGION = os.environ.get("S3DIRECT_REGION", None)
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 MEDIA_ROOT = MEDIA_URL
+PROTECTED_ROOT_URL = '//%s.s3.amazonaws.com/protected/' % AWS_STORAGE_BUCKET_NAME
+PROTECTED_ROOT = PROTECTED_ROOT_URL
 STATIC_URL = S3_URL + 'static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 two_months = datetime.timedelta(days=61)
