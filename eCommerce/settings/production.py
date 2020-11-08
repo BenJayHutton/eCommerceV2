@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
     BASE_DIR, "static_my_proj",
 ]
 
-from eCommerce.aws.conf import *
+#from eCommerce.aws.conf import *
 
 # Project settings
 ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com']

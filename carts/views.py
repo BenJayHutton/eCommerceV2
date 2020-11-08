@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
 from django.contrib.sessions.backends.db import SessionStore
 from django.conf import settings
-from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpRequest, JsonResponse
-
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views.generic import DetailView, ListView
 import traceback
 
 from accounts.forms import LoginForm, GuestForm
@@ -29,6 +29,8 @@ class CartHome(ListView):
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
+    print("args: ", args)
+    print("kwargs: ", kwargs)
     item_added = False
     item_removed = False
     item_updated = False
@@ -109,6 +111,14 @@ def cart_update(request, *args, **kwargs):
             if cart_item_id:
                 json_data.update({
                     "cart_item_id": cart_item_id
+                })
+            if product_obj:
+                json_data.update({
+                    "productQty": product_obj.quantity
+                })
+            if item_added:
+                json_data.update({
+                    "inCartUrl": reverse("cart:home")
                 })
             return JsonResponse(json_data)
     return redirect("cart:home")
