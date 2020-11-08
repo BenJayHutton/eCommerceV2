@@ -101,6 +101,7 @@ def cart_update(request, *args, **kwargs):
                 "added": item_added,
                 "removed": item_removed,
                 "updated": item_updated,
+                "cartItemCount": cart_obj.cart_items.count()
             }
             if cart_item_id:
                 json_data.update({
