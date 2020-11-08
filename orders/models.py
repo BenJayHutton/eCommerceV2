@@ -173,7 +173,6 @@ class ProductPurchaseQuerySet(models.query.QuerySet):
 
     def by_request(self, request):
         billing_profile, created = BillingProfile.objects.new_or_get(request)
-        print("billing profile called from: orders.by_request", billing_profile)
         return self.filter(billing_profile=billing_profile)
 
     def digital(self):

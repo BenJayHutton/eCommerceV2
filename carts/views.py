@@ -22,15 +22,12 @@ class CartHome(ListView):
 
     def get(self, request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        print(cart_obj.is_digital)
         context = {
             "cart_obj": cart_obj,
         }
         return render(request,"carts/home.html", context)
 
 def cart_update(request, *args, **kwargs):
-    print("args: ", args)
-    print("kwargs: ", kwargs)
     item_added = False
     item_removed = False
     item_updated = False
@@ -54,7 +51,6 @@ def cart_update(request, *args, **kwargs):
         product_obj = Product.objects.get(id=product_id)
     except:
         product_obj = False
-
 
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
@@ -85,7 +81,6 @@ def cart_update(request, *args, **kwargs):
                     cart_obj.save()
             item_updated = True
 
-
         if cart_item_add:
             cart_item_obj, new_item_obj = CartItem.objects.new_or_get(request, product_obj=product_obj)
             cart_item_obj.quantity = product_quantity
@@ -100,7 +95,6 @@ def cart_update(request, *args, **kwargs):
                 cart_obj.save()
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
-
 
         if request.is_ajax():
             json_data= {
@@ -155,7 +149,6 @@ def checkout_home(request):
         has_card = billing_profile.has_card
     if request.method == "POST":
         is_prepared = order_obj.check_done()
-        print(is_prepared)
         if is_prepared:
             did_charge, crg_msg = billing_profile.charge(order_obj)
             if did_charge:

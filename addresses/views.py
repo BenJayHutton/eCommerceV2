@@ -22,11 +22,8 @@ def checkout_address_create_view(request):
             instance.billing_profile =  billing_profile
             instance.address_type = address_type
             instance.save()
-
-            request.session[address_type + "_address_id"] = instance.id
-            
+            request.session[address_type + "_address_id"] = instance.id            
         else:
-            print("error with checkout")
             return redirect("cart:checkout")
 
         if is_safe_url(redirect_path, request.get_host()):

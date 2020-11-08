@@ -98,7 +98,6 @@ class Cart(models.Model):
     @property
     def is_digital(self):
         qs = self.cart_items.all()
-        print(qs)
         for x in qs:
             if not x.product.is_digital:
                 return False
