@@ -120,7 +120,6 @@ pre_save.connect(product_pre_save_reciever, sender=Product)
 
 
 def upload_product_file_loc(instance, filename):
-    print(instance.id)
     slug = instance.product.slug
     if not slug:
         slug = unique_slug_generator(instance.product)
