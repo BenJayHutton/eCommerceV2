@@ -28,3 +28,8 @@ AWS_HEADERS = {
 }
 AWS_GROUP_NAME = os.environ.get("AWS_GROUP_NAME", None)
 AWS_USERNAME = os.environ.get("AWS_USERNAME", None)
+
+PROTECTED_DIR_NAME = 'protected'
+PROTECTED_MEDIA_URL = '//%s.s3.amazonaws.com/%s/' %( AWS_STORAGE_BUCKET_NAME, PROTECTED_DIR_NAME)
+
+AWS_DOWNLOAD_EXPIRE = 5000 #(0ptional, in milliseconds)

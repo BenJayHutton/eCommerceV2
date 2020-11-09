@@ -1,5 +1,50 @@
 $(document).ready(function(){
     var productForm = $(".form-product-ajax")
+
+    function getOwnedProduct(productId, submitSpan){
+        var actionEndPoint = '/orders/endpoint/verify/ownership/';
+        var httpMethod = 'GET';
+        var data = {
+            product_id: productId
+        }
+        var isOwner
+        $.ajax({
+            url: actionEndPoint,
+            method: httpMethod,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if (data.owner){
+                    isOwner = true;
+                    submitSpan.html("<a class='btn btn-warning' href='/library/'>In Library</a>");
+                }else{
+                    isOwner = false;
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+        return isOwner;
+    }
+
+    
+    $.each(productForm, function(index, object){
+        var $this = $(this);
+        var isUser = $this.attr("data-user");
+        var submitSpan = $this.find(".submit-span");
+        var productInput = $this.find("[name='product_id']");
+        var productId = productInput.attr("value");
+        var productIsDigital = productInput.attr("data-is-digital");
+        var isOwned;
+        console.log("productId", productId);
+        if (productIsDigital && isUser){
+            var isOwned = getOwnedProduct(productId, submitSpan);
+            console.log("is owned", isOwned)
+        }
+        
+    })
+
     productForm.submit(function(event){
         event.preventDefault();
         var thisForm = $(this)
