@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center">
+        <h1>Analytics</h1>
+        <hr>
+    </div>
+    
+    <div class="col-4">
+        <p>Recent Sales</p>
+        <p>total: £{{recent_order_total.total__sum}}</p>
+        <ol>
+        {% for order in recent_orders %}
+        <li>{{order.order_id}}
+        {{order.total}}
+        {{order.updated}}</li>
+        {% endfor %}
+        </ol>
+    </div>
+
+    <div class="col-4">
+        <p>Shipped</p>
+        <ol>
+            {% for order in shipped_orders %}
+                <li>{{order.order_id}}
+                {{order.total}}
+                {{order.updated}}</li>
+            {% endfor %}
+    </ol>
+    </div>
+
+    <div class="col-4">
+        <p>Paid</p>
+        <ol>
+        {% for order in paid_orders %}
+        <li>{{order.order_id}}
+        {{order.total}}
+        {{order.updated}}</li>
+        {% endfor %}
+    </ol>
+    </div>
+
+    <div class="col-4">
+        <p>Refunded</p>
+        <ol>
+        {% for order in refunded_orders %}
+        <li>{{order.order_id}}
+        {{order.total}}
+        {{order.updated}}</li>
+        {% endfor %}
+    </ol>
+    </div>
+  </div>
+{% endblock %}
+
+context['orders'] = qs

@@ -3,8 +3,6 @@ from django.http import Http404, JsonResponse
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
 
-
-
 from billing.models import BillingProfile
 from .models import Order, ProductPurchase
 

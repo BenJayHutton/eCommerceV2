@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^account/', include(("accounts.urls", "accounts"), namespace='account')),
     url(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
     url(r'^accounts/', include("accounts.password.urls")),
+    url(r'^analytics/', include(("analytics.urls", "analytics"), namespace='analytics')),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
