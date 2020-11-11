@@ -143,7 +143,7 @@ PROTECTED_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "protecte
 from eCommerce.aws.conf import *
 
 # Project settings
-ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com']
+ALLOWED_HOSTS = ['.herokuapp.com', '.benjayhutton.com', '.sweetsweetswag.com']
 DATABASE_URL=os.environ.get("DATABASE_URL")
 DEBUG = False
 DISABLE_COLLECTSTATIC=1
