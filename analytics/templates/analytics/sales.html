@@ -1,29 +1,59 @@
 {% extends "base.html" %}
-
 {%block javascript %}
 <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3, 9],
-                backgroundColor: 'rgba(100, 255, 34, .2)',
-                borderColor: 'rgba(100, 255, 34, .6)',
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
+    $(document).ready(function(){
+
+        function renderChart(id, data, labels){
+            var ctx = $('#' + id);
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales',
+                        data: data,
+                        backgroundColor: 'rgba(100, 255, 34, .2)',
+                        borderColor: 'rgba(100, 255, 34, .6)',
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                }
+            });
         }
-    });
+
+        function getSalesData(id, type){
+            var url = '/analytics/sales/data/'
+            var method = 'GET'
+            var data = {"type":type}
+
+            $.ajax({
+            url: url,
+            method: method,
+            data:data,
+            success: function(responseData){
+                renderChart(id, responseData.data, responseData.labels)
+            },
+            error: function(error){
+                $.alert("An error occurred")
+            }
+            })
+        }
+        
+        var chartsToRender = $('.bjh-render-chart')
+        $.each(chartsToRender, function(index, html){
+            var $this = $(this)
+            if($this.attr('id') && $this.attr('data-type')){
+                getSalesData($this.attr('id'), $this.attr('data-type'))
+            }
+        })
+    })
 </script>
 {% endblock %}
 
@@ -35,7 +65,6 @@
     </div>
 </div>
 <!-- Today's Sales -->
-
 <div class="row my-4">    
     <div class="col-4">
         <h2>Today's Sales</h2>
@@ -47,10 +76,8 @@
         {{order.total}}
         {{order.updated}}</li>
         {% endfor %}
-        </ol>    
-
+        </ol>
         <!-- This Weeks Sales -->
-    
         <h2>This week</h2>
         <hr>
         <p>Recent Totals: £{{this_week.recent_data.total__sum}}</p>
@@ -63,31 +90,21 @@
         </ol>
     </div>
     <div class="col">
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <canvas class="bjh-render-chart" id="thisWeekSales" data-type="week" width="400" height="400"></canvas>
     </div>
 </div>
-
-
 <!-- last Month's Sales -->
-
 <div class="row my-3">
-    <div class="col-12">
+    <div class="col-4">
         <h2>Last 4 Weeks</h2>
         <hr>
-    </div>
-    
-    <div class="col-4">
-        <p>Month Totals: £{{last_four_weeks.recent_data.total__sum}}</p>
-    </div>
-
-    <div class="col-4">
-        <p>Shipped £{{last_four_weeks.shipped_data.total__sum}}</p>
-    </div>
-
-    <div class="col-4">
+        <p>Month Totals: £{{last_four_weeks.recent_data.total__sum}}</p> 
+        <p>Shipped Total: £{{last_four_weeks.shipped_data.total__sum}}</p>
         <p>Paid Totals: £{{ last_four_weeks.paid_data.total__sum }}</p>
     </div>
+
+    <div class="col">
+        <canvas class="bjh-render-chart" id="fourWeekSales" data-type="4weeks" width="400" height="400"></canvas>
+    </div>
   </div>
-  
-  
 {% endblock %}

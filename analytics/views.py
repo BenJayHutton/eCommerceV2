@@ -1,13 +1,26 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Sum, Avg
-from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import TemplateView, View
 from django.shortcuts import render
 from django.utils import timezone
 
 import datetime
 
 from orders.models import Order
+
+class SalesAjaxView(View):
+    def get(self, request, *args, **kwargs):
+        data = {}
+        if request.user.is_staff:
+            if request.GET.get('type') == 'week':
+                data['labels'] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+                data['data'] = [123, 256, 190, 209, 100, 300, 280]
+            
+            if request.GET.get('type') == '4weeks':
+                data['labels'] = ['Last Week', 'Two Weeks Ago', 'Three Weeks Ago', 'Four Weeks Ago']
+                data['data'] = [123, 256, 190, 209]
+        return JsonResponse(data)
 
 class SalesView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/sales.html'
@@ -20,8 +33,6 @@ class SalesView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(SalesView, self).get_context_data(*args, **kwargs)
-        # two_weeks_ago = timezone.now() - datetime.timedelta(days=14)
-        # one_week_ago = timezone.now() - datetime.timedelta(days=7)
         qs = Order.objects.all().by_weeks_range(weeks_ago=10, number_of_weeks=10)
         context['today'] = qs.by_range(start_date=timezone.now().date()).get_sales_breakdown()
         context['this_week'] = qs.by_weeks_range(weeks_ago=1, number_of_weeks=1).get_sales_breakdown()
