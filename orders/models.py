@@ -27,6 +27,10 @@ ORDER_STATUS_CHOICES = (
 class OrderManagerQuerySet(models.query.QuerySet):
     def recent(self):
         return self.order_by("-updated", "-timestamp")
+    
+    def by_date(self):
+        now = timezone.now().date() - datetime.timedelta(days=7)
+        return self.filter(updated__date__gte=now)
 
     def totals_data(self):
         return self.aggregate(Sum("total"), Avg("total"))
