@@ -1,4 +1,32 @@
 {% extends "base.html" %}
+
+{%block javascript %}
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3, 9],
+                backgroundColor: 'rgba(100, 255, 34, .2)',
+                borderColor: 'rgba(100, 255, 34, .6)',
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row my-5">
     <div class="col-12 text-center">
@@ -8,13 +36,10 @@
 </div>
 <!-- Today's Sales -->
 
-<div class="row">
-    <div class="col-12">
+<div class="row my-4">    
+    <div class="col-4">
         <h2>Today's Sales</h2>
         <hr>
-    </div>
-    
-    <div class="col-4">
         <p>Recent Totals: £{{today.recent_data.total__sum}}</p>
         <ol>
         {% for order in today.recent|slice:":5" %}
@@ -22,42 +47,12 @@
         {{order.total}}
         {{order.updated}}</li>
         {% endfor %}
-        </ol>
-    </div>
+        </ol>    
 
-    <div class="col-4">
-        <p>Shipped £{{today.shipped_data.total__sum}}</p>
-        <ol>
-            {% for order in today.shipped|slice:":5" %}
-                <li>{{order.order_id}}
-                {{order.total}}
-                {{order.updated}}</li>
-            {% endfor %}
-    </ol>
-    </div>
-
-    <div class="col-4">
-        <p>Paid Totals: £{{ today.paid_data.total__sum }}</p>
-        <ol>
-        {% for order in today.paid|slice:":5" %}
-        <li>{{order.order_id}}
-        {{order.total}}
-        {{order.updated}}</li>
-        {% endfor %}
-    </ol>
-    </div>
-</div>
-
-
-<!-- This Weeks Sales -->
-
-<div class="row">
-    <div class="col-12">
+        <!-- This Weeks Sales -->
+    
         <h2>This week</h2>
         <hr>
-    </div>
-    
-    <div class="col-4">
         <p>Recent Totals: £{{this_week.recent_data.total__sum}}</p>
         <ol>
         {% for order in this_week.recent|slice:":5" %}
@@ -67,29 +62,12 @@
         {% endfor %}
         </ol>
     </div>
-
-    <div class="col-4">
-        <p>Shipped £{{this_week.shipped_data.total__sum}}</p>
-        <ol>
-            {% for order in this_week.shipped|slice:":5" %}
-                <li>{{order.order_id}}
-                {{order.total}}
-                {{order.updated}}</li>
-            {% endfor %}
-    </ol>
-    </div>
-
-    <div class="col-4">
-        <p>Paid Totals: £{{ this_week.paid_data.total__sum }}</p>
-        <ol>
-        {% for order in this_week.paid|slice:":5" %}
-        <li>{{order.order_id}}
-        {{order.total}}
-        {{order.updated}}</li>
-        {% endfor %}
-    </ol>
+    <div class="col">
+        <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 </div>
+
+
 <!-- last Month's Sales -->
 
 <div class="row my-3">
@@ -110,5 +88,6 @@
         <p>Paid Totals: £{{ last_four_weeks.paid_data.total__sum }}</p>
     </div>
   </div>
+  
   
 {% endblock %}

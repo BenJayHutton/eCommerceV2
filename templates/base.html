@@ -6,10 +6,6 @@
     <link rel="shortcut icon" href="/static/img/favicon/wikipedia.ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Buy high-quality products ranging from books to apparel">
-    {% block javascript %}
-    {% include 'base/css.html' %}
-    {% include 'base/js.html' %}
-    {%endblock %}
 </head>
 <body>
   {% include 'base/navbar.html' with brand_name='#SweetSweetSwag' %}
@@ -24,5 +20,9 @@
           {% endfor %}
       </div>{% endif %}{% block content %}{% endblock %}
     </div>
+    {% include 'base/css.html' %}
+    {% include 'base/js.html' %}
+    {% block javascript %}    
+    {%endblock %}
 </body>
 </html>
