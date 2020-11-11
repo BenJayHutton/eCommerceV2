@@ -19,18 +19,12 @@ class SalesView(LoginRequiredMixin, TemplateView):
         context = super(SalesView, self).get_context_data(*args, **kwargs)
         qs = Order.objects.all()        
         context['orders'] = qs
-        context['recent_orders'] = qs.recent()[:6]
+        context['recent_orders'] = qs.recent().not_refunded()[:5]
+        context['recent_orders_data'] = context['recent_orders'].totals_data()
+        context['recent_orders_cart_data'] = context['recent_orders'].cart_data()        
         context['shipped_orders'] = qs.recent().by_status(status="shipped")[:5]
-        context['paid_orders'] = qs.recent().by_status(status="paid")[:5]
+        context['shipped_orders_data'] = context['shipped_orders'].totals_data()
+        context['paid_orders'] = qs.recent().not_refunded().by_status(status="paid")[:5]
+        context['paid_orders_data'] = context['paid_orders'].totals_data()
         context['refunded_orders'] = qs.recent().by_status(status="refunded")[:5]
-        context['recent_order_total'] = context['recent_orders'].aggregate(
-                                            Sum("total"),
-                                            Avg("total")
-                                            )
-        context['recent_cart_data'] = context['recent_orders'].aggregate(
-                                            Avg("cart__cart_items__total"),
-                                            Count("cart__cart_items__quantity")
-                                            )
-        #qs = Order.objects.all().aggregate(Sum("total"), Avg("total"), Avg("cart__cart_items__total"), Count("cart__cart_items__quantity"))
-        # ann = qs.annotate(products_avg=Avg('cart__products__price'), product_total = Sum('cart__products__price'), product_count = Count('cart__products'))
         return context

@@ -31,6 +31,10 @@ class OrderManagerQuerySet(models.query.QuerySet):
     def totals_data(self):
         return self.aggregate(Sum("total"), Avg("total"))
     
+    def cart_data(self):
+        return self.aggregate(Sum("cart__cart_items__total"), Avg("cart__cart_items__total"), Count("cart__cart_items__quantity"))
+
+
     def by_status(self, status='shipped'):
         return self.filter(status=status)
 
