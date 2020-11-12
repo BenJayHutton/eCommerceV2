@@ -49,11 +49,32 @@ $(document).ready(function(){
         event.preventDefault();
         var thisForm = $(this)
         var actionEndPoint = thisForm.attr("action");
-        //var actionEndPoint = thisForm.attr("data-endpoint")
         var httpMethod = thisForm.attr("method");
         var submitBtnAdd = thisForm.find(".cart_item_add");
         var submitBtnRemove = thisForm.find(".cart_item_remove");
+        var submitBtnUpdate = thisForm.find(".cart_item_update");
+        var cartBtnRemove = thisForm.find(".cart_item_remove");
         var formData = thisForm.serialize();
+
+        console.log("cartBtnRemove", cartBtnRemove)
+
+        if (typeof cartBtnRemove !== 'undefined' && typeof cartBtnRemove.prevObject[0][5] !== 'undefined'){
+            cartBtnRemove.click(function(event){
+                var btnSerialzeUpdate = cartBtnRemove.prevObject[0][5].name +"="+ cartBtnRemove.prevObject[0][5].value;
+                formData = formData+"&"+btnSerialzeUpdate;
+            })
+            
+        }
+
+        if (typeof submitBtnUpdate !== 'undefined' && typeof submitBtnUpdate.prevObject[0][4] !== 'undefined'){
+            var btnSerialzeUpdate = submitBtnUpdate.prevObject[0][4].name +"="+ submitBtnUpdate.prevObject[0][4].value;
+            formData = formData+"&"+btnSerialzeUpdate;
+        }
+
+        if (typeof submitBtnUpdate !== 'undefined' && typeof submitBtnUpdate.prevObject[0][4] !== 'undefined'){
+            var btnSerialzeUpdate = submitBtnUpdate.prevObject[0][4].name +"="+ submitBtnUpdate.prevObject[0][4].value;
+            formData = formData+"&"+btnSerialzeUpdate;
+        }
         
         if (typeof submitBtnAdd !== 'undefined' && typeof submitBtnAdd.prevObject[0][3] !== 'undefined'){
             var btnSerialzeAdd = submitBtnAdd.prevObject[0][3].name +"="+ submitBtnAdd.prevObject[0][3].value;
@@ -76,7 +97,15 @@ $(document).ready(function(){
         method: httpMethod,
         data: formData,
         success: function(data){
-            var submitSpan = thisForm.find(".submit-span")            
+            var submitSpan = thisForm.find(".submit-span")
+            var cartUpdateSpanTotal = $(".cart-total")
+            var cartUpdateSpanVatTotal = $(".cart-vattotal")
+            var cartUpdateSpanSubtotal = $(".cart-subtotal")
+            if(data.updated){
+                cartUpdateSpanTotal.html(data.cart_total)
+                cartUpdateSpanVatTotal.html(data.cart_vat)
+                cartUpdateSpanSubtotal.html(data.cart_subtotal)
+            }
             if(data.added){
                 submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button type="submit" id="cart_item_remove" name="cart_item_remove" value="true" class="btn btn-danger">Remove</button></div>')
                 console.log(data.cart_item_id)
@@ -86,10 +115,10 @@ $(document).ready(function(){
             }
             var navbarCount = $(".navbar-cart-count")
             navbarCount.text(data.cartItemCount)
-            var currentPath = window.location.href
-            if (currentPath.indexOf("cart") != -1){
-            refreshCart()
-            }
+            // var currentPath = window.location.href
+            // if (currentPath.indexOf("cart") != -1){
+            // refreshCart()
+            // }
         },
         error: function(errorData){
             $.alert({

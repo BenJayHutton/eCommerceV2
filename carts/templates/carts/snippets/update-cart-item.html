@@ -1,4 +1,5 @@
 <input class='cart-item-product-id' type="hidden" name="product_id" value="{{ cart_item.product.id }}" />
-<button type="submit" onclick="this.form.cartItemUpdate.value=this.value" name="cart_item_update" class="btn btn-primary btn-sm" style="padding:0px;cursor: pointer;" value="True">Update</button>
-<button type="submit" onclick="this.form.cartItemRemove.value=this.value" name="cart_item_remove" class="btn btn-danger btn-sm" style="padding:0px;cursor: pointer;" value="True">Remove</button>
-<span class='submit-span'></span>
+<span class='update-span'>
+    <button type="submit" name="cart_item_update" id="cart_item_update" class="btn btn-primary btn-sm" value="True">Update</button>
+    <button type="submit" name="cart_remove" id="cart_item_remove" class="btn btn-danger btn-sm" value="True">Remove</button>
+</span>

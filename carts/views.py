@@ -115,6 +115,12 @@ def cart_update(request, *args, **kwargs):
                 json_data.update({
                     "inCartUrl": reverse("cart:home")
                 })
+            if item_updated:
+                json_data.update({
+                    "cart_total": cart_obj.total,
+                    "cart_vat": float(cart_obj.vat_total),
+                    "cart_subtotal":float(cart_obj.subtotal)
+                    })
             return JsonResponse(json_data)
     return redirect("cart:home")
 
