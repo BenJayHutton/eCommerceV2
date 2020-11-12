@@ -1,12 +1,19 @@
 from decimal import Decimal
 from django.conf import settings
 from django.db import models
+from django.db.models import Count, Sum, Avg
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from products.models import Product
 
 User = settings.AUTH_USER_MODEL
 
+class CartItemManagerQuerySet(models.query.QuerySet):
+    def update_total(self):
+        return self.aggregate(Sum("total"))
+
 class CartItemManager(models.Manager):
+    def get_queryset(self):
+        return CartItemManagerQuerySet(self.model, using=self._db)
 
     def new_or_get(self, request, *args, **kwargs):
         if not request.session.exists(request.session.session_key):
@@ -104,7 +111,7 @@ class Cart(models.Model):
         return True
 
 
-def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):    
+def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):
     try:
         quantity = int(instance.quantity)
     except:
@@ -122,23 +129,33 @@ pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
 
 def cart_post_save_reciever(sender, instance, *args, **kwargs):
     cart_items = instance.cart_items.all()
-    total_vat = 0
-    for x in cart_items:
-        total_vat += Decimal(x.product.vat * x.quantity)
-    instance.total_vat = total_vat
-    instance.subtotal = instance.total + total_vat
+    vat_total = Decimal(0.0)
+    sub_total = Decimal(0.0)
+    cart_item_total = cart_items.update_total()['total__sum']
+    if cart_item_total is None:
+        cart_item_total = Decimal(0)
+    vat_total = Decimal(cart_item_total) * Decimal(0.2)
+    sub_total = Decimal(cart_item_total + vat_total)
+    instance.total = cart_item_total
+    instance.vat_total = vat_total
+    instance.subtotal = sub_total
 
 post_save.connect(cart_post_save_reciever, sender=Cart)
     
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
     if action =='post_add' or action=='post_remove' or action =='post_clear':
+        vat_total = Decimal(0.0)
+        sub_total = Decimal(0.0)
         cart_items = instance.cart_items.all()
-        total = 0
-        for x in cart_items:
-            total += x.total
-        if instance.subtotal != total:
-            instance.total = total
-            instance.save()
+        cart_item_total = cart_items.update_total()['total__sum']
+        if cart_item_total is None:
+            cart_item_total = Decimal(0)
+        vat_total = Decimal(cart_item_total) * Decimal(0.2)
+        sub_total = Decimal(cart_item_total + vat_total)
+        instance.total = cart_item_total
+        instance.vat_total = vat_total
+        instance.subtotal = sub_total
+        instance.save()
 
 m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)
