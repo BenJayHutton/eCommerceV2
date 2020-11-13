@@ -14,7 +14,7 @@
   </thead>
   <tbody class='cart-body'>
   {% for cart_item in cart_obj.cart_items.all %}
-    <tr class='cart-product'>
+    <tr class='cart-product' id="{{cart_item.id}}">
       <th scope="row">{{ forloop.counter }}</th>
       <form class="form-product-ajax" method='POST' action='{% url "cart:update" %}' data-endpoint='{% url "cart:update" %}' class="form">
         {% csrf_token %}
