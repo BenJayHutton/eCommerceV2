@@ -33,7 +33,7 @@ def cart_update(request, *args, **kwargs):
     item_updated = False
     cart_item_id = request.POST.get('cart_item_id', None)
     cart_item_update = request.POST.get('cart_item_update', False)
-    cart_item_remove = request.POST.get('cart_item_remove', False)
+    product_item_remove = request.POST.get('product_item_remove', False)
     cart_item_add = request.POST.get('cart_item_add', False)
 
     if cart_item_add is False:
@@ -42,8 +42,8 @@ def cart_update(request, *args, **kwargs):
     if cart_item_update is False:
         cart_item_update = request.POST.get('cartItemUpdate', False)
 
-    if cart_item_remove is False:
-        cart_item_remove = request.POST.get('cartItemRemove', False)
+    if product_item_remove is False:
+        product_item_remove = request.POST.get('cartItemRemove', False)
 
     product_id = request.POST.get("product_id", None)
     product_quantity = request.POST.get('product_quantity', None)
@@ -55,7 +55,7 @@ def cart_update(request, *args, **kwargs):
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
 
-        if cart_item_remove:
+        if product_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
             total, vat_total, sub_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
@@ -117,9 +117,10 @@ def cart_update(request, *args, **kwargs):
                 })
             if item_updated:
                 json_data.update({
-                    "cart_total": cart_obj.total,
+                    "cart_total": float(cart_obj.total),
                     "cart_vat": float(cart_obj.vat_total),
-                    "cart_subtotal":float(cart_obj.subtotal)
+                    "cart_subtotal":float(cart_obj.subtotal),
+                    "price_of_item":float(cart_item_obj.total)
                     })
             return JsonResponse(json_data)
     return redirect("cart:home")

@@ -54,8 +54,8 @@ $(document).ready(function(){
 
         if(cartSubmitBtn == "cart_item_update"){
             data = data+"&"+cartSubmitBtn+"=true"
-        }else if(cartSubmitBtn == "cart_item_remove"){
-            data = data+"&cart_item_remove=true"
+        }else if(cartSubmitBtn == "product_item_remove"){
+            data = data+"&"+cartSubmitBtn+"=true"
         }else if(cartSubmitBtn == "cart_item_add"){
             data = data+"&"+cartSubmitBtn+"=true"
         }
@@ -69,6 +69,9 @@ $(document).ready(function(){
             data:formData,
             success: function(data){
                 var submitSpan = thisForm.find(".submit-span")
+                var priceOfItem = thisForm.find(".cart-table")
+                console.log("thisForm", thisForm)
+                console.log("priceOfItem", priceOfItem)
                 if(data.updated){
                     var cartUpdateSpanTotal = $(".cart-total")
                     var cartUpdateSpanVatTotal = $(".cart-vattotal")
@@ -76,13 +79,15 @@ $(document).ready(function(){
                     cartUpdateSpanTotal.html(data.cart_total)
                     cartUpdateSpanVatTotal.html(data.cart_vat)
                     cartUpdateSpanSubtotal.html(data.cart_subtotal)
+                    priceOfItem.text(data.price_of_item)
                 }
                 if(data.added){
-                    submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button onclick="this.form.submitted=this.value;" type="submit" id="product_item_remove" name="cart_item_remove" value="true" class="btn btn-danger">Remove</button></div>')
+                    submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button onclick="this.form.submitted=this.value;" type="submit" id="product_item_remove" name="product_item_remove" value="true" class="btn btn-danger">Remove</button></div>')
                 }
                 if(data.removed){
                     submitSpan.html('<input id="product_quantity" name="product_quantity" type="number" min="1" max="'+data.productQty+'" value="1" /><button onclick="this.form.submitted=this.value;" type="submit" id="cart_item_add" name="cart_item_add" value="true" class="btn btn-success btn-add">Add to cart</button>')
                 }
+                console.log("data", data)
             },
             error: function(error){
                 console.log("error", error)
