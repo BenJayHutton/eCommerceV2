@@ -46,6 +46,9 @@ def cart_update(request, *args, **kwargs):
     if product_item_remove is False:
         product_item_remove = request.POST.get('cartItemRemove', False)
 
+    if cart_item_remove is False:
+        cart_item_remove = request.POST.get('cartItemRemove', False)
+
     product_id = request.POST.get("product_id", None)
     product_quantity = request.POST.get('product_quantity', None)
     try:
@@ -56,7 +59,7 @@ def cart_update(request, *args, **kwargs):
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
 
-        if product_item_remove:
+        if product_item_remove or cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
             total, vat_total, sub_total = Cart.objects.calculate_cart_total(request, cart_obj=cart_obj)
