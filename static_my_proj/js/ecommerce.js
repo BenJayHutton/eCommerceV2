@@ -1,6 +1,4 @@
 $(document).ready(function(){
-    var formData = $(".form-product-ajax")
-
     function getOwnedProduct(productId, submitSpan){
         var actionEndPoint = '/orders/endpoint/verify/ownership/';
         var httpMethod = 'GET';
@@ -27,7 +25,7 @@ $(document).ready(function(){
         return isOwner;
     }
 
-    
+    var formData = $(".form-product-ajax")
     $.each(formData, function(index, object){
         var $this = $(this);
         var isUser = $this.attr("data-user");
@@ -49,14 +47,13 @@ $(document).ready(function(){
         var method = 'POST'
         var data = thisForm.serialize();
 
-        console.log("cartSubmitBtn", cartSubmitBtn)
-        console.log("Event", event)
-
         if(cartSubmitBtn == "cart_item_update"){
             data = data+"&"+cartSubmitBtn+"=true"
         }else if(cartSubmitBtn == "product_item_remove"){
             data = data+"&"+cartSubmitBtn+"=true"
         }else if(cartSubmitBtn == "cart_item_add"){
+            data = data+"&"+cartSubmitBtn+"=true"
+        }else if(cartSubmitBtn == "cart_item_remove"){
             data = data+"&"+cartSubmitBtn+"=true"
         }
         upDateOrder(url, method, data, thisForm)
@@ -69,17 +66,16 @@ $(document).ready(function(){
             data:formData,
             success: function(data){
                 var submitSpan = thisForm.find(".submit-span")
-                var priceOfItem = thisForm.find(".cart-table")
-                console.log("thisForm", thisForm)
-                console.log("priceOfItem", priceOfItem)
+                var cartItemPrice = $("#"+data.cart_item_id+" #cart_item_price")
+                console.log("cartItemPrice", cartItemPrice)
                 if(data.updated){
                     var cartUpdateSpanTotal = $(".cart-total")
                     var cartUpdateSpanVatTotal = $(".cart-vattotal")
                     var cartUpdateSpanSubtotal = $(".cart-subtotal")
+                    cartItemPrice.html(data.price_of_item);
                     cartUpdateSpanTotal.html(data.cart_total)
                     cartUpdateSpanVatTotal.html(data.cart_vat)
                     cartUpdateSpanSubtotal.html(data.cart_subtotal)
-                    priceOfItem.text(data.price_of_item)
                 }
                 if(data.added){
                     submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button onclick="this.form.submitted=this.value;" type="submit" id="product_item_remove" name="product_item_remove" value="true" class="btn btn-danger">Remove</button></div>')

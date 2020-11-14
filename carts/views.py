@@ -34,6 +34,7 @@ def cart_update(request, *args, **kwargs):
     cart_item_id = request.POST.get('cart_item_id', None)
     cart_item_update = request.POST.get('cart_item_update', False)
     product_item_remove = request.POST.get('product_item_remove', False)
+    cart_item_remove = request.POST.get('cart_item_remove', False)
     cart_item_add = request.POST.get('cart_item_add', False)
 
     if cart_item_add is False:
