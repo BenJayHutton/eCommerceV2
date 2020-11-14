@@ -56,7 +56,6 @@ $(document).ready(function(){
         }else if(cartSubmitBtn == "cart_item_remove"){
             data = data+"&"+cartSubmitBtn+"=true"
         }
-        console.log("thisForm.serialised ", data)
         upDateOrder(url, method, data, thisForm)
     });
 
@@ -69,8 +68,6 @@ $(document).ready(function(){
                 var submitSpan = thisForm.find(".submit-span")
                 var cartItemRow = $("#"+data.cart_item_id)
                 var cartItemPrice = $("#"+data.cart_item_id+" #cart_item_price")
-                var contentBody = $(".content-body")
-                console.log("cartItemRow", cartItemRow)
                 if(data.updated){
                     var cartUpdateSpanTotal = $(".cart-total")
                     var cartUpdateSpanVatTotal = $(".cart-vattotal")
@@ -93,7 +90,6 @@ $(document).ready(function(){
                 }
                 var navbarCount = $(".navbar-cart-count")
                 navbarCount.text(data.cartItemCount);
-                console.log("data", data);
             },
             error: function(error){
                 console.log("error", error);
