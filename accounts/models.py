@@ -18,7 +18,6 @@ from random import randint
 DEFAULT_ACTIVATION_DAYS = getattr(settings, "DEFAULT_ACTIVATION_DAYS", 7)
 verify_txt = get_template("registration/emails/verify.txt")
 verify_html = get_template("registration/emails/verify.html")
-#send_mail(subject, message, from_email, recipiant_list, html_message)
 
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name=None, password=None, is_active=True, is_staff=False, is_admin=False):
