@@ -94,20 +94,6 @@ class ProductDownloadView(View):
             aws_filepath = download_obj.generate_download_url()
             print(aws_filepath)
             return HttpResponseRedirect(aws_filepath)
-            # file_root = settings.PROTECTED_ROOT
-            # filepath = download_obj.file.path
-            # final_filepath = os.path.join(file_root, filepath) #Where the file is stored
-            # with open(final_filepath, 'rb') as f:
-            #     wrapper = FileWrapper(f)
-            #     mimetype = 'application/force-download'
-            #     guessed_mimetype = guess_type(filepath)[0]
-            #     if guessed_mimetype:
-            #         mimetype = guessed_mimetype
-            #     response = HttpResponse(wrapper, content_type=mimetype)
-            #     response['Content-Disposition'] = "attachment;filename=%s"%(download_obj.name)
-            #     response['X-SendFile'] = str(download_obj.name)
-            #     return response
-            #return redirect(download_obj.get_default_url())
 
 class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
@@ -151,5 +137,3 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
         except:
             raise Http404("Product not found")        
         return instance
-    
-    

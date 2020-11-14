@@ -121,10 +121,10 @@ def cart_update(request, *args, **kwargs):
                 })
             if item_updated:
                 json_data.update({
-                    "cart_total": float(cart_obj.total),
-                    "cart_vat": float(cart_obj.vat_total),
-                    "cart_subtotal":float(cart_obj.subtotal),
-                    "price_of_item":float(cart_item_obj.total)
+                    "cart_total": round(cart_obj.total, 2),
+                    "cart_vat": round(cart_obj.vat_total, 2),
+                    "cart_subtotal":round(cart_obj.subtotal, 2),
+                    "price_of_item":round(cart_item_obj.total, 2)
                     })
             return JsonResponse(json_data)
     return redirect("cart:home")
