@@ -46,7 +46,15 @@
     {% else %}
         {% if not has_card %}
             <!-- Enter credit card here -->
+            <h5>--DEMO--</h5>
             <div class='stripe-payment-form' data-token='{{publish_key}}' data-next-url='{{request.build_absolute_uri}}' data-btn-title='Add Payment Method'></div>
+            <p>
+                Use demo card details <br>
+                card details: 4242424242424242<br>
+                exp: 12/29<br>
+                cvc: 222
+                zipcode: 22222<br>
+            </p>
         {% else %}
         <div class="row">
             <div class="col-12">
