@@ -44,7 +44,7 @@
     </tr>
     <tr>
       <td colspan="5"></td>
-      <td><a class='btn btn-success' href='{% url "cart:checkout" %}'>Checkout</a> </td>
+      <td id="checkoutBtn"><a class='btn btn-success' href='{% url "cart:checkout" %}'>Checkout</a> </td>
     </tr>
   </tbody>
 </table>
@@ -53,5 +53,6 @@
 </div>
 {% else %}
     <p class="lead"> Cart is empty</p>
+    <a href="{% url 'products:list' %}" class="btn btn-success"><< Products</a>
 {% endif %}
 {% endblock %}

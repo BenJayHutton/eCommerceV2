@@ -79,9 +79,6 @@ $(document).ready(function(){
                     cartUpdateSpanTotal.html(data.cart_total)
                     cartUpdateSpanVatTotal.html(data.cart_vat)
                     cartUpdateSpanSubtotal.html(data.cart_subtotal)
-                    if(data.cartItemCount < 1){                
-                        contentBody.html("<h1>Cart</h1><p class='lead'> Cart is empty</p>")
-                    }
                 }
                 if(data.added){
                     submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button onclick="this.form.submitted=this.value;" type="submit" id="product_item_remove" name="product_item_remove" value="true" class="btn btn-danger">Remove</button></div>')
@@ -90,13 +87,16 @@ $(document).ready(function(){
                     submitSpan.html('<input id="product_quantity" name="product_quantity" type="number" min="1" max="'+data.productQty+'" value="1" /><button onclick="this.form.submitted=this.value;" type="submit" id="cart_item_add" name="cart_item_add" value="true" class="btn btn-success btn-add">Add to cart</button>')
                     cartItemRow.html("<td class='.text-muted'>Removed</td>")
                 }
-                
+
+                if(data.cartItemCount < 1){
+                    $(".cart-table").html("<p class='lead'>Cart is empty</p><a href='/products/' class='btn btn-success'><< Products</a>");
+                }
                 var navbarCount = $(".navbar-cart-count")
-                navbarCount.text(data.cartItemCount)
-                console.log("data", data)
+                navbarCount.text(data.cartItemCount);
+                console.log("data", data);
             },
             error: function(error){
-                console.log("error", error)
+                console.log("error", error);
             }
         })
     }
