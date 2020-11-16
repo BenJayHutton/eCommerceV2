@@ -5,16 +5,7 @@
 {% endblock %}
 {% block content%}
   <div class='row'>
-    <div class='col-8'>
-      {% lorem 2 p %}
-    </div>
-  </div>
-  <div class='row'>
     {% if featured %}
-    <div class="col-12 text-center my-3">
-      <h1>Featured</h1>
-      <hr>
-    </div>
     {% for featured_items in featured %}
     <div class='col-4 my-3'>
           {% include 'products/snippets/card.html' with product_obj=featured_items cart_item_obj=cart_item_obj %}
