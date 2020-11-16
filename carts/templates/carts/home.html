@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Cart</h1>
+<h1>Basket</h1>
 {% if cart_obj.cart_items.exists %}
-<table class="table cart-table">
+<div class="table-responsive">
+<table class="table cart-table table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -10,14 +11,16 @@
       <th scope="col">Price</th>
       <th scope="col">Quantity</th>
       <th scope="col">Total</th>
+      <th scope="col">#</th>
     </tr>
   </thead>
   <tbody class='cart-body'>
   {% for cart_item in cart_obj.cart_items.all %}
     <tr class='cart-product' id="{{cart_item.id}}">
-      <th class="product-info" scope="row">{{ forloop.counter }}</th>
+      
       <form class="form-product-ajax" method='POST' action='{% url "cart:update" %}' data-endpoint='{% url "cart:update" %}' class="form">
         {% csrf_token %}
+        <td style="width:5%">{% include 'carts/snippets/remove-cart-item.html' with cart_item=cart_item %}</td>
         <input type="hidden" name="cart_item_id" value="{{cart_item.id}}">
         <td><a href="{{ cart_item.product.get_absolute_url }}">{{ cart_item.product.title }}</a>
         </td>
@@ -26,7 +29,7 @@
           <input type="number" name="product_quantity" value="{{ cart_item.quantity }}" min="0" max="{{cart_item.product.quantity}}">
         </td>
         <td id="cart_item_price">£{{ cart_item.total }}</td>
-        <td>{% include 'carts/snippets/update-cart-item.html' with cart_item=cart_item %}</td>
+        <td style="width:5%">{% include 'carts/snippets/update-cart-item.html' with cart_item=cart_item %}</td>
       </form>
     </tr>
   {% endfor %}
@@ -44,12 +47,10 @@
     </tr>
     <tr>
       <td colspan="5"></td>
-      <td id="checkoutBtn"><a class='btn btn-success' href='{% url "cart:checkout" %}'>Checkout</a> </td>
+      <td id="checkoutBtn"><a class='btn btn-success' href='{% url "cart:checkout" %}'>Buy it now</a></td>
     </tr>
   </tbody>
 </table>
-<div class='cart-item-remove-form' style='display:none'>
-  {% include 'carts/snippets/update-cart-item.html' %}
 </div>
 {% else %}
     <p class="lead"> Cart is empty</p>
