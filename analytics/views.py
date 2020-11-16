@@ -10,6 +10,23 @@ import datetime
 
 from orders.models import Order
 
+class OrderView(LoginRequiredMixin, TemplateView):
+    template_name = 'analytics/orders.html'
+    paginate_by = 2
+    model = Order
+
+    def dispatch(self,*args, **kwargs):
+        user = self.request.user
+        if not user.is_staff:
+            return render(self.request, "400.html", {})
+        return super(OrderView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(OrderView, self).get_context_data(*args, **kwargs)
+        qs = Order.objects.all()
+        return context
+
+
 class SalesAjaxView(View):
     def get(self, request, *args, **kwargs):
         data = {}
@@ -34,7 +51,6 @@ class SalesAjaxView(View):
                     salesItems.append(
                         day_total
                     )
-                    #print(datetime_list)
                 data['labels'] = labels
                 data['data'] = salesItems
             

@@ -47,5 +47,27 @@
             </div>
         </div>
     </div>
+
+    {% if user.is_staff %}
+    <div class="card col-sm-12 col-md-12 col-lg-12 my-3">
+        <div class="card-body">
+            <h5 class="card-title">Ecommerce</h5>
+            <div class="list-group">
+                <a href="{% url 'analytics:sales-analytics' %}">Sales</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user.is_admin %}
+    <div class="card col-sm-12 col-md-12 col-lg-12 my-3">
+        <div class="card-body">
+            <h5 class="card-title">Admin</h5>
+            <div class="list-group">
+                <a href="#">Sales</a>
+            </div>
+        </div>
+    </div>
 </div>
+{% endif %}
 {% endblock %}

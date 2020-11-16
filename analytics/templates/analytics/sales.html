@@ -11,7 +11,7 @@
     <div class="col-4">
         <h2>Today's Sales</h2>
         <hr>
-        <p>Order Totals: £{{today.recent_data.total__sum}}</p>
+        <p>Order Totals: £{% if today.recent_data.total__sum %}{{today.recent_data.total__sum}}{% else %}0 {% endif %}</p>
         <ol>
         {% for order in today.recent|slice:":5" %}
         <li class="my-3">
@@ -24,7 +24,7 @@
         <!-- This Weeks Sales -->
         <h2>This week</h2>
         <hr>
-        <p>Order Totals: £{{this_week.recent_data.total__sum}}</p>
+        <p>Order Totals: £{% if this_week.recent_data.total__sum %}{{this_week.recent_data.total__sum}}{% else %}0 {% endif %}</p>
         <ol>
         {% for order in this_week.recent %}
         <li class="my-3">
