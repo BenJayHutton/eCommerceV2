@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Basket</h1>
 {% if cart_obj.cart_items.exists %}
 <div class="table-responsive">
 <table class="table cart-table table-hover">
@@ -52,8 +51,9 @@
   </tbody>
 </table>
 </div>
+
 {% else %}
-    <p class="lead"> Cart is empty</p>
+    <p class="lead">Basket is empty</p>
     <a href="{% url 'products:list' %}" class="btn btn-success"><< Products</a>
 {% endif %}
 {% endblock %}
