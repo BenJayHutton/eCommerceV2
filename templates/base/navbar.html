@@ -26,18 +26,18 @@
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item {% if request.path == account_url %}active{% endif %}" href="{{ account_url }}">Home</a>
+          <a class="dropdown-item {% if request.path == account_url %}active{% endif %}" href="{{ account_url }}">Profile</a>
           <a class="dropdown-item" href="#">Billing</a>
           <a class="dropdown-item" href="{% url 'account:user-product-history' %}">History</a>
           <a class="dropdown-item" href="{% url 'library' %}">Library</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ logout_url }}">Logout</a>
+          <a class="dropdown-item" href="{{ logout_url }}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
         </div>
       </li>
       
       {% else %}
       <li class="nav-item {% if request.path == login_url %}active{% endif %}">
-        <a class="nav-link" href="{{ login_url }}">Login</a>
+        <a class="nav-link" href="{{ login_url }}"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
       </li>
       <li class="nav-item {% if request.path == register_url %}active{% endif %}">
         <a class="nav-link" href="{{ register_url }}">Register</a>
