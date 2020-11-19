@@ -56,7 +56,12 @@
                 <p>Order Total: £{{ object.total}}</p>
                 
             </div>
-            <div class="col-4" id="paypal-button-container"></div>           
+            <div class="col-4" id="paypal-button-container"></div>
+            <div>
+                <h3>test account</h3>
+                <p>Username: sb-jijye3780764@personal.example.com</p>
+                <p>Password: %_V=2o:}</p>
+            </div>
         </div>
 
         <!-- Paypal JS -->
@@ -65,35 +70,6 @@
         </script>
 
         <script>
-            // function completeOrder(data, paymentMethod,is_paid){
-            //     var url = "{% url 'payment:paypal' %}"
-            //     var paypalData = data
-            //     var jsonData = {
-            //         'paymentMethod':paymentMethod,
-            //         'orderPk': '{{object.pk }}',
-            //         'orderId': '{{object.order_id }}',
-            //         'total': '{{ object.cart.total}}',
-            //         'vat': '{{ object.cart.vat_total}}',
-            //         'shipping': '{{ object.shipping_total}}',
-            //         'subTotal': '{{ object.total}}',
-            //         'paypalOrderID': paypalData.orderID,
-            //         'paypalPayerID': paypalData.payerID,
-            //         'is_paid':is_paid,
-            //     }
-            //     console.log("jsonData", JSON.stringify(jsonData))
-            //     console.log("paypal data", paypalData)
-
-            //     response = fetch(url, {
-            //         method:'POST',
-            //         headers:{
-            //             'Content-type':'application/json',
-            //             'X-CSRFToken':csrftoken,
-            //         },
-            //         body:JSON.stringify(jsonData)
-            //     })
-            //     console.log("response",response)
-            // }
-
             function ajaxCompleteOrder(paypalData, paymentMethod,is_paid){
                 var url = "{% url 'payment:paypal' %}"
                 var paypalData = paypalData
@@ -150,7 +126,6 @@
                 // This function captures the funds from the transaction.
                 return actions.order.capture().then(function(details) {
                     // This function shows a transaction success message to your buyer.
-                    // completeOrder(data, "Paypal", true)
                     ajaxCompleteOrder(data, "Paypal", true)
                     alert('Transaction completed by ' + details.payer.name.given_name);
                 });
