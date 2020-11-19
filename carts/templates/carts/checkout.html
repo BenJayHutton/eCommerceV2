@@ -44,36 +44,119 @@
         </div>
     </div>
     {% else %}
-        {% if not has_card %}
-            <!-- Enter credit card here -->
-            <h5>--DEMO--</h5>
-            <div class='stripe-payment-form' data-token='{{publish_key}}' data-next-url='{{request.build_absolute_uri}}' data-btn-title='Add Payment Method'></div>
-            <p>
-                Use demo card details <br>
-                card details: 4242424242424242<br>
-                exp: 12/29<br>
-                cvc: 222
-                zipcode: 22222<br>
-            </p>
-        {% else %}
         <div class="row">
             <div class="col-12">
                 <h5>Checkout</h5>
                 <p>Cart Items: {% for cart_item in object.cart.cart_items.all %}{{cart_item.product}}{% if not forloop.last %}, {% endif %}{% endfor %} </p>
                 <p>Shipping address {{ object.shipping_address.get_address}}</p>
                 <p>Billing address {{ object.billing_address.get_address}}</p>
-                <p>Payment Method: {{billing_profile.default_card}} (<a href="{{ billing_profile.get_payment_method_url }}?next={{ request.build_absolute_uri }}">Change</a>)</p>
                 <p>Cart Total: £{{ object.cart.total}}</p>
                 <p>Vat Total: £{{ object.cart.vat_total}}</p>
                 <p>Shipping Total: £{{ object.shipping_total}}</p>
                 <p>Order Total: £{{ object.total}}</p>
-                <form class="form" method="POST" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success" >Buy</button>
-                </form>
+                
             </div>
-        </div>       
-        {% endif %} 
+            <div class="col-4" id="paypal-button-container"></div>           
+        </div>
+
+        <!-- Paypal JS -->
+        <script
+        src="https://www.paypal.com/sdk/js?client-id=ASF3VbRUAJt_HLAxTM-bRKLCTEgjbv51yow395DZLwc1FKanSa33kZZAQMyU7BvOVUGUtZ59RsPFxRg-&currency=GBP">
+        </script>
+
+        <script>
+            // function completeOrder(data, paymentMethod,is_paid){
+            //     var url = "{% url 'payment:paypal' %}"
+            //     var paypalData = data
+            //     var jsonData = {
+            //         'paymentMethod':paymentMethod,
+            //         'orderPk': '{{object.pk }}',
+            //         'orderId': '{{object.order_id }}',
+            //         'total': '{{ object.cart.total}}',
+            //         'vat': '{{ object.cart.vat_total}}',
+            //         'shipping': '{{ object.shipping_total}}',
+            //         'subTotal': '{{ object.total}}',
+            //         'paypalOrderID': paypalData.orderID,
+            //         'paypalPayerID': paypalData.payerID,
+            //         'is_paid':is_paid,
+            //     }
+            //     console.log("jsonData", JSON.stringify(jsonData))
+            //     console.log("paypal data", paypalData)
+
+            //     response = fetch(url, {
+            //         method:'POST',
+            //         headers:{
+            //             'Content-type':'application/json',
+            //             'X-CSRFToken':csrftoken,
+            //         },
+            //         body:JSON.stringify(jsonData)
+            //     })
+            //     console.log("response",response)
+            // }
+
+            function ajaxCompleteOrder(paypalData, paymentMethod,is_paid){
+                var url = "{% url 'payment:paypal' %}"
+                var paypalData = paypalData
+                var data = {
+                    'paymentMethod':paymentMethod,
+                    'orderPk': '{{object.pk }}',
+                    'orderId': '{{object.order_id }}',
+                    'total': '{{ object.cart.total}}',
+                    'vat': '{{ object.cart.vat_total}}',
+                    'shipping': '{{ object.shipping_total}}',
+                    'subTotal': '{{ object.total}}',
+                    'paypalOrderID': paypalData.orderID,
+                    'paypalPayerID': paypalData.payerID,
+                    'is_paid':is_paid,
+                }
+                jsonData = JSON.stringify(data)
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data:jsonData,
+                    success: function(data){
+                        if(data.cartSuccess){
+                            $(location).attr('href','success/');
+                        }
+                    },
+                    error: function(error){
+                        console.log("error", error);
+                    }
+                })
+            }
+
+
+            var subTotal = "{{ object.total}}";
+            //var csrftoken = getCookie('csrftoken');
+
+            paypal.Buttons({
+                style: {
+                    color: 'blue',
+                    shape: 'rect',
+                    label: 'pay',
+                    height: 40
+                },
+            createOrder: function(data, actions) {
+                // This function sets up the details of the transaction, including the amount and line item details.
+                return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                    value: subTotal
+                    }
+                }]
+                });
+            },
+            onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                    // This function shows a transaction success message to your buyer.
+                    // completeOrder(data, "Paypal", true)
+                    ajaxCompleteOrder(data, "Paypal", true)
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                });
+                }
+            }).render('#paypal-button-container');
+        </script> 
     {% endif %}
 {% endif %}
 {% endblock %}

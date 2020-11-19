@@ -129,9 +129,12 @@ def cart_update(request, *args, **kwargs):
             return JsonResponse(json_data)
     return redirect("cart:home")
 
-def checkout_home(request):
+def checkout_home(request, *args, **kwargs):
+    print(args)
+    print(kwargs)
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
+    did_charge = False
     if cart_created or cart_obj.cart_items.count() == 0:
         redirect("cart:home")
 
@@ -162,7 +165,8 @@ def checkout_home(request):
     if request.method == "POST":
         is_prepared = order_obj.check_done()
         if is_prepared:
-            did_charge, crg_msg = billing_profile.charge(order_obj)
+            if not did_charge:
+                did_charge, crg_msg = billing_profile.charge(order_obj)
             if did_charge:
                 order_obj.mark_paid()
                 request.session['cart_item_count'] = 0

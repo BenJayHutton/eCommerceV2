@@ -86,7 +86,7 @@ $(document).ready(function(){
                 }
 
                 if(data.cartItemCount < 1){
-                    $(".cart-table").html("<p class='lead'>Basket is empty</p><a href='/products/' class='btn btn-success'><< Products</a>");
+                    $(".cart-table").html("<p class='lead'>Basket is empty</p><a href='/products/' class='btn btn-success'><i class='fa fa-chevron-left' aria-hidden='true'></i><i class='fa fa-chevron-left' aria-hidden='true'></i> Products</a>");
                 }
                 var navbarCount = $(".navbar-cart-count")
                 navbarCount.text(data.cartItemCount);

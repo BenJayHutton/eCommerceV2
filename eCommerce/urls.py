@@ -42,5 +42,6 @@ urlpatterns = [
     url(r'^marketing/', include(("marketing.urls", "marketing"), namespace='marketing')),
     url(r'^orders/', include(("orders.urls", "orders"), namespace='orders')),
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
+    url(r'^payment/', include(("payment.urls", "payment"), namespace='payment')),
     url(r'^search/', include(("search.urls", "search"), namespace='search')),
 ]
