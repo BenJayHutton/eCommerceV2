@@ -70,6 +70,8 @@
         </script>
 
         <script>
+            var subTotal = "{{ object.total}}";
+
             function ajaxCompleteOrder(paypalData, paymentMethod,is_paid){
                 var url = "{% url 'payment:paypal' %}"
                 var paypalData = paypalData
@@ -100,10 +102,6 @@
                     }
                 })
             }
-
-
-            var subTotal = "{{ object.total}}";
-            //var csrftoken = getCookie('csrftoken');
 
             paypal.Buttons({
                 style: {
