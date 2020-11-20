@@ -38,24 +38,15 @@ class DefaultHomePage(TemplateView):
 
         
 def contact_page(request):
-    # send_mail(
-    #     'Test Subject',
-    #     'Test',
-    #     os.environ.get("DEFAULT_FROM_EMAIL", None),
-    #     [os.environ.get("DEFAULT_FROM_EMAIL", None)],
-    #     fail_silently=False,
-    # )
-    return HttpResponse("contact")
-    # contact_form = ContactForm(request.POST or None)
-    # context = {
-    #     "title": "Contact Page",
-    #     "content": "Welcome to the contact page",
-    #     "form": contact_form,
-    #     }
-    # if contact_form.is_valid():
-    #     if request.is_ajax():
-    #         return JsonResponse({"message": "Thank you for your submission"})
-    # return render(request, "contact/view.html", context)
+    contact_form = ContactForm(request.POST or None)
+    context = {
+        "title": "Contact Page",
+        "form": contact_form,
+        }
+    if contact_form.is_valid():
+        if request.is_ajax():
+            return JsonResponse({"message": "Thank you for your submission"})
+    return render(request, "contact/view.html", context)
 
 
 def about_page(request):
