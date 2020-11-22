@@ -1,6 +1,7 @@
 .DS_STORE
 *.sublime-project
 fasttracktojquery/
+*.sqlite3
 
 # Virtualenv related
 bin/
@@ -9,7 +10,7 @@ pip-selfcheck.json
 
 # Django related 
 # ecommerce.settings/local.py
-eCommerce/settings/local.py
+#eCommerce/settings/local.py
 static_my_proj/
 
 
