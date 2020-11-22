@@ -2,12 +2,9 @@
 This is an adapted version of an eCommerce course I followed on Udemy <br>
 code of which can be found here: [coding for entrepreneurs Ecommerce](https://github.com/codingforentrepreneurs/eCommerce)
 
-# Task list
-- [ ] Update Billing profile, so guests can later register and not recieve an error when they buy stuff
-- [x] Arithamitic during checkout is off. need to fix how everything adds up
-- [ ] Format the finalised checkout better, have it send an email as well
-- [ ] Allow you to re/send order invoices via email
-- [ ] Add some spam protection to the contact us page (disabled at the minute)
-- [ ] Add other payment methods other than stripe, paypal, cashapp, etc
-- [ ] Add more functinality for staff users via their account home page. allow for admin related tasks to be done online
-- [ ] incorporate an api response for reports/invoices/etc (internal only?)
+#Setup
+if you clone this repo be sure to rename:
+  .env_ to .env
+  local.py_ to local.py
+
+Once done you can fill in the variables in .env as and when you need them
