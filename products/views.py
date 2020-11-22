@@ -8,25 +8,25 @@ from analytics.mixins import ObjectViewedMixin
 from orders.models import ProductPurchase
 from carts.models import Cart, CartItem
 
-from .models import Product, ProductFile, ItemTag
+from .models import Product, ProductFile
 
 class ProductListView(ListView):
     template_name = "products/list.html"
-    
+
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
-        
+
         context['cart_obj'] = cart_obj
         context['cart_item_id'] = cart_item_id
-        
-        cart_item_obj = []       
+
+        cart_item_obj = []
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
-            
+
         context['cart_item_obj'] = cart_item_obj
         return context
 
@@ -36,21 +36,21 @@ class ProductListView(ListView):
 
 class UserProductHistoryView(LoginRequiredMixin, ListView):
     template_name = "products/user-history.html"
-    
+
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(UserProductHistoryView, self).get_context_data(*args, **kwargs)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
         context['cart_obj'] = cart_obj
-        context['cart_item_id'] = cart_item_id        
-        cart_item_obj = []       
+        context['cart_item_id'] = cart_item_id
+        cart_item_obj = []
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
-            cart_item_id[items.product] = int(items.id)            
+            cart_item_id[items.product] = int(items.id)
         context['cart_item_obj'] = cart_item_obj
         return context
-        
+
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
@@ -87,7 +87,7 @@ class ProductDownloadView(View):
                 purchased_products = ProductPurchase.objects.products_by_request(request)
                 if download_obj.product in purchased_products:
                     can_download = True
-            
+
             if not can_download or not user_ready:
                 messages.error(request, "You don't have access to download media")
                 return redirect(download_obj.get_default_url())
@@ -103,17 +103,17 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductDetailSlugView, self).get_context_data(*args, **kwargs)
-        slug = self.kwargs.get('slug')        
+        slug = self.kwargs.get('slug')
         cart_obj, new_cart_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
-        cart_item_obj = []       
+        cart_item_obj = []
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
         try:
             product_obj = Product.objects.get(slug=slug)
         except:
-            product_obj = None        
+            product_obj = None
         for items in cart_obj.cart_items.all():
             cart_item_id[items.product] = int(items.id)
         context = {
@@ -136,5 +136,5 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             qs = Product.objects.get(slug=slug, active=True)
             instance = qs.first()
         except:
-            raise Http404("Product not found")        
+            raise Http404("Product not found")
         return instance
