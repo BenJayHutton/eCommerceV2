@@ -193,6 +193,21 @@ class ItemImage(models.Model):
         return str(self.upload_date)
 
 
+
+class ItemTagQuerySet(models.query.QuerySet): # class.objects.all().attribute
+    def  get_product_by_tag_name(self, tag_name):
+        qs = self.filter(name=tag_name)
+        return qs
+    
+    def public_tag(self):
+        return self.filter(public=True)
+
+
+class ItemTagManager(models.Manager):
+    #overriding get_queryset so we can use the queryset above
+    def get_queryset(self):
+        return ItemTagQuerySet(self.model, using=self._db)
+
 class ItemTag(models.Model):
     name = models.CharField(
         max_length=25,
@@ -201,7 +216,7 @@ class ItemTag(models.Model):
     public = models.BooleanField(
         default=False
     )
-    items = models.ManyToManyField(
+    products = models.ManyToManyField(
         Product,
         blank=True
     )
@@ -209,6 +224,8 @@ class ItemTag(models.Model):
         max_length = 500,
         null = True
     )
+
+    objects = ItemTagManager()
 
     def __str__(self):
         return self.name

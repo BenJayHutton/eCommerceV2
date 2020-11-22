@@ -8,7 +8,7 @@ from analytics.mixins import ObjectViewedMixin
 from orders.models import ProductPurchase
 from carts.models import Cart, CartItem
 
-from .models import Product, ProductFile
+from .models import Product, ProductFile, ItemTag
 
 class ProductListView(ListView):
     template_name = "products/list.html"
@@ -18,6 +18,7 @@ class ProductListView(ListView):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
+        
         context['cart_obj'] = cart_obj
         context['cart_item_id'] = cart_item_id
         
