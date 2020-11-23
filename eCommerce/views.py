@@ -32,7 +32,8 @@ class DefaultHomePage(TemplateView):
                 "content": "Welcome to the home page",
                 "featured": self.featured,
                 "tag_item_books_obj": self.tag_item_books_obj,
-                'cart_item_obj': cart_item_obj
+                'cart_item_obj': cart_item_obj,
+                'cart_item_id': cart_item_id,
                 }
         elif self.display_name == "about":
             context = {
