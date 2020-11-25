@@ -34,14 +34,14 @@ class ProductManager(models.Manager):
 
     def active(self):
         return self.get_queryset().active()
-    
+
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
         if qs.count() == 1:
             return qs.first()
         else:
             return None
-    
+
     def search(self, query):
         return self.get_queryset().active().search(query)
 
@@ -51,7 +51,7 @@ class ProductManager(models.Manager):
         quantity = kwargs.get('quantity')
         if id is not None:
             product = self.get_by_id(id)
-            
+
         if product is not None and quantity is not None:
             product.quantity = product.quantity + quantity
             if product.quantity < 0:
@@ -66,7 +66,7 @@ class ProductManager(models.Manager):
         quantity = kwargs.get('quantity')
         if id is not None:
             product = self.get_by_id(id)
-            
+
         if product is not None and quantity is not None:
             product.quantity = product.quantity - quantity
             if product.quantity < 0:
@@ -74,6 +74,14 @@ class ProductManager(models.Manager):
                 product.save()
             else:
                 product.save()
+
+class Tag(models.Model):
+    name = models.CharField(max_length=128,unique=True)
+    public = models.BooleanField(default=False)
+    blurb = models.CharField(max_length = 500, null = True)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -87,20 +95,21 @@ class Product(models.Model):
     quantity        = models.IntegerField(default=0)
     active          = models.BooleanField(default=True)
     is_digital      = models.BooleanField(default=False)
+    tags            = models.ManyToManyField(Tag, blank=True)
     timestamp       = models.DateTimeField(auto_now_add=True)
-    
+
     objects = ProductManager()
-    
+
     def has_quantity(self):
         return self.quantity > 0
 
     def get_absolute_url(self):
         return reverse("products:detail", kwargs={"slug": self.slug})
-    
+
     def get_by_id(self, id):
         qs = Product.objects.get(pk=id)
         return qs
-        
+
     def __str__(self):
         return  self.title
 
@@ -111,12 +120,12 @@ class Product(models.Model):
     def get_downloads(self):
         qs = self.productfile_set.all()
         return qs
-    
+
 def product_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.vat = instance.price * decimal.Decimal(0.2)
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-    
+
 
 pre_save.connect(product_pre_save_reciever, sender=Product)
 
@@ -138,8 +147,6 @@ def upload_product_file_loc(instance, filename):
     return location + filename
 
 
-
-
 class ProductFile(models.Model):
     product         = models.ForeignKey(Product, blank=True, null=True, on_delete=models.SET_NULL)
     name            = models.CharField(max_length=120, null=True, blank=True)
@@ -149,14 +156,14 @@ class ProductFile(models.Model):
 
     def __str__(self):
         return str(self.file.name)
-    
+
     @property
     def display_name(self):
         og_name = get_filename(self.file.name)
         if self.name:
             return self.name
         return og_name
-    
+
     def get_default_url(self):
         return self.product.get_absolute_url()
 
@@ -179,53 +186,9 @@ class ProductFile(models.Model):
 
 
 class ItemImage(models.Model):
-    upload_date = models.DateTimeField(
-        auto_now_add=True
-    )
-    image = models.ImageField(
-        upload_to='item-images/'
-    )
-    items = models.ManyToManyField(
-        Product
-    )
+    upload_date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='item-images/')
+    items = models.ManyToManyField(Product)
 
     def __str__(self):
         return str(self.upload_date)
-
-
-
-class ItemTagQuerySet(models.query.QuerySet): # class.objects.all().attribute
-    def  get_product_by_tag_name(self, tag_name):
-        qs = self.filter(name=tag_name)
-        return qs
-    
-    def public_tag(self):
-        return self.filter(public=True)
-
-
-class ItemTagManager(models.Manager):
-    #overriding get_queryset so we can use the queryset above
-    def get_queryset(self):
-        return ItemTagQuerySet(self.model, using=self._db)
-
-class ItemTag(models.Model):
-    name = models.CharField(
-        max_length=25,
-        unique=True
-    )
-    public = models.BooleanField(
-        default=False
-    )
-    products = models.ManyToManyField(
-        Product,
-        blank=True
-    )
-    blurb = models.CharField(
-        max_length = 500,
-        null = True
-    )
-
-    objects = ItemTagManager()
-
-    def __str__(self):
-        return self.name

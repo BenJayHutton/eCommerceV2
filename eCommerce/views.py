@@ -6,13 +6,16 @@ from django.views.generic.edit import FormView
 
 import os
 from carts.models import Cart, CartItem
-from products.models import Product, ItemTag
+from products.models import Product, Tag
 from .forms import ContactForm
 
 class DefaultHomePage(TemplateView):
     display_name="home"
     featured = Product.objects.all().featured()
-    tag_item_books_obj = ItemTag.objects.all().get_product_by_tag_name("Books")
+    products_books_obj = Product.objects.filter(tags__name="Books")
+    products_fantasy_obj = Product.objects.filter(tags__name="Fantasy")
+    products_apparel_obj = Product.objects.filter(tags__name="Apparel")
+    products_digital_obj = Product.objects.filter(tags__name="Digital")
 
     def get(self, request):
         context = {}
@@ -22,6 +25,7 @@ class DefaultHomePage(TemplateView):
         cart_item_id = {}
         context['cart_item_id'] = cart_item_id
         cart_item_obj = []
+        print("products_books_obj", self.products_books_obj)
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
@@ -31,7 +35,9 @@ class DefaultHomePage(TemplateView):
                 "title": "Home Page",
                 "content": "Welcome to the home page",
                 "featured": self.featured,
-                "tag_item_books_obj": self.tag_item_books_obj,
+                "products_books_obj": self.products_books_obj,
+                "products_apparel_obj": self.products_apparel_obj,
+                "products_digital_obj": self.products_digital_obj,
                 'cart_item_obj': cart_item_obj,
                 'cart_item_id': cart_item_id,
                 }
