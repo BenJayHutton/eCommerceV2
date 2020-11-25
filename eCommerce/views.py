@@ -1,7 +1,8 @@
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 
 import os
@@ -9,13 +10,14 @@ from carts.models import Cart, CartItem
 from products.models import Product, Tag
 from .forms import ContactForm
 
-class DefaultHomePage(TemplateView):
+class DefaultHomePage(ListView):
     display_name="home"
-    featured = Product.objects.all().featured()
-    products_books_obj = Product.objects.filter(tags__name="Books")
-    products_fantasy_obj = Product.objects.filter(tags__name="Fantasy")
-    products_apparel_obj = Product.objects.filter(tags__name="Apparel")
-    products_digital_obj = Product.objects.filter(tags__name="Digital")
+    model = Product
+
+    products_books_obj = model.objects.filter(tags__name="Books")
+    products_fantasy_obj = model.objects.filter(tags__name="Fantasy")
+    products_apparel_obj = model.objects.filter(tags__name="Apparel")
+    products_digital_obj = model.objects.filter(tags__name="Digital")
 
     def get(self, request):
         context = {}
@@ -25,7 +27,6 @@ class DefaultHomePage(TemplateView):
         cart_item_id = {}
         context['cart_item_id'] = cart_item_id
         cart_item_obj = []
-        print("products_books_obj", self.products_books_obj)
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
@@ -34,7 +35,6 @@ class DefaultHomePage(TemplateView):
             context = {
                 "title": "Home Page",
                 "content": "Welcome to the home page",
-                "featured": self.featured,
                 "products_books_obj": self.products_books_obj,
                 "products_apparel_obj": self.products_apparel_obj,
                 "products_digital_obj": self.products_digital_obj,
