@@ -12,7 +12,8 @@ from .models import Product, ProductFile
 
 class ProductListView(ListView):
     template_name = "products/list.html"
-
+    paginate_by = 3
+    model = Product
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductListView, self).get_context_data(*args, **kwargs)

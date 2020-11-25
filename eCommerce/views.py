@@ -10,7 +10,7 @@ from carts.models import Cart, CartItem
 from products.models import Product, Tag
 from .forms import ContactForm
 
-class DefaultHomePage(ListView):
+class DefaultHomePage(TemplateView):
     display_name="home"
     model = Product
 
