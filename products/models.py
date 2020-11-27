@@ -12,6 +12,28 @@ from eCommerce.aws.utils import ProtectedS3Storage
 from eCommerce.utils import unique_slug_generator, get_filename
 from uuid import uuid4
 
+
+class TagQuerySet(models.query.QuerySet):
+    def public(self):
+        return self.filter(public=True)
+
+class TagManager(models.Manager):
+    def get_queryset(self):
+        return TagQuerySet(self.model, using=self._db)
+
+    def public(self):
+        return self.get_queryset().public()
+
+class Tag(models.Model):
+    name = models.CharField(max_length=128,unique=True)
+    public = models.BooleanField(default=False)
+    blurb = models.CharField(max_length = 500, null = True)
+
+    objects = TagManager()
+
+    def __str__(self):
+        return self.name
+
 class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
     def active(self):
         return self.filter(active=True)
@@ -74,14 +96,6 @@ class ProductManager(models.Manager):
                 product.save()
             else:
                 product.save()
-
-class Tag(models.Model):
-    name = models.CharField(max_length=128,unique=True)
-    public = models.BooleanField(default=False)
-    blurb = models.CharField(max_length = 500, null = True)
-
-    def __str__(self):
-        return self.name
 
 
 class Product(models.Model):
@@ -183,7 +197,6 @@ class ProductFile(models.Model):
 
     def get_download_url(self):
         return reverse("products:download", kwargs={"slug": self.product.slug, "pk": self.pk})
-
 
 class ItemImage(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)

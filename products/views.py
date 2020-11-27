@@ -1,14 +1,20 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_list_or_404, redirect
 from django.views.generic import TemplateView, DetailView, ListView, View
+from mimetypes import guess_type
+from wsgiref.util import FileWrapper
 
 from analytics.mixins import ObjectViewedMixin
-from orders.models import ProductPurchase
 from carts.models import Cart, CartItem
+from orders.models import ProductPurchase
 
-from .models import Product, ProductFile
+from .models import Product, ProductFile, Tag
+
+import os
+
 
 class ProductListView(ListView):
     template_name = "products/list.html"
@@ -57,10 +63,7 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
         request = self.request
         views = request.user.objectviewed_set.by_model(Product, model_queryset=False)
         return views
-import os
-from wsgiref.util import FileWrapper
-from django.conf import settings
-from mimetypes import guess_type
+
 
 class ProductDownloadView(View):
         def get (self, request, *args, **kwargs):
@@ -118,6 +121,8 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
         for items in cart_obj.cart_items.all():
             cart_item_id[items.product] = int(items.id)
         context = {
+            "title": product_obj.title,
+            "description": product_obj.description,
             'cart_obj': cart_obj,
             'product_obj': product_obj,
             'cart_item_id': cart_item_id,
