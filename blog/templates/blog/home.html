@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>This is a Blog</h1>
+<hr>
+
+{% for blog in blog_list %}
+<div class='col-sm-6 col-md-4 col-lg-4 my-3'>
+  Title: {{blog.title}} <br>
+  Author: {{blog.user.full_name}} <br>
+  <hr>
+  <div>
+    {{blog.blog_post}}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

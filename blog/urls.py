@@ -1,3 +1,7 @@
-from django.conf.urls import url, path
+from django.conf.urls import url
 
-urlpatterns = []
+from .views import BlogListView
+
+urlpatterns = [
+    url(r'^$', BlogListView.as_view(), name='home'),
+]
