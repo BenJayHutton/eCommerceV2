@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12 col-md-4">
+    <img src="{{product_obj.image.url}}" height="150" width="auto" alt="{{ product_obj.title}} logo">
+    <p>
+      {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_item_obj=cart_item_obj cart_obj=cart_obj %}
+    </p>
+  </div>
+  <div class="col-12 col-md-8">
     <h1>{{ product_obj.title }}</h1>
     Added: {{ product_obj.timestamp|timesince }} ago<br/>
     {% if product_obj.quantity > 0 %}
       Quantity: {{ product_obj.quantity }}<br/>
     {% else %}
-      <div class="text-danger">
+      <div class="text-danger col-12 col-md-8">
         <em>Product not available</em>
       </div>
     {% endif %}
     Description: <br>
     {{product_obj.description}} <br>
-    Tags:<br>
+    <hr>
     {% for tag in product_obj.tags.all %}
     #{{tag.name}}<br>
     {% endfor %}
-  </div>
-  <div class="col-12 col-md-6">
-    {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_item_obj=cart_item_obj cart_obj=cart_obj %}
   </div>
 </div>
 {% endblock %}
