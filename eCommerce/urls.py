@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^accounts/', include("accounts.password.urls")),
     url(r'^analytics/', include(("analytics.urls", "analytics"), namespace='analytics')),
     url(r'^billing/', include(("billing.urls", "billing"), namespace='billing')),
+    url(r'^blog/', include(("blog.urls", "blog"), namespace='blog')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
     url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),

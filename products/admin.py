@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, ItemImage, ItemTag, ProductFile
+from .models import Product, ItemImage, Tag, ProductFile
 
 class ProductFileInline(admin.TabularInline):
     model= ProductFile
@@ -14,4 +14,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product,ProductAdmin,)
 admin.site.register(ItemImage)
-admin.site.register(ItemTag)
+admin.site.register(Tag)

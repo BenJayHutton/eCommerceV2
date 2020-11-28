@@ -1,20 +1,27 @@
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 
 import os
 from carts.models import Cart, CartItem
-from products.models import Product, ItemTag
+from products.models import Product, Tag
 from .forms import ContactForm
 
 class DefaultHomePage(TemplateView):
     display_name="home"
-    featured = Product.objects.all().featured()
-    tag_item_books_obj = ItemTag.objects.all().get_product_by_tag_name("Books")
+    model = Product
+    tags_obj = Tag
+
+    products_books_obj = model.objects.filter(tags__name="Books", tags__public=True)
+    products_fantasy_obj = model.objects.filter(tags__name="Fantasy", tags__public=True)
+    products_apparel_obj = model.objects.filter(tags__name="Apparel", tags__public=True)
+    products_digital_obj = model.objects.filter(tags__name="Digital", tags__public=True)
 
     def get(self, request):
+        print(self.tags_obj.objects.all().public())
         context = {}
         visitor_name = request.session.get("first_name")
         cart_obj, new_obj = Cart.objects.new_or_get(request)
@@ -30,10 +37,12 @@ class DefaultHomePage(TemplateView):
             context = {
                 "title": "Home Page",
                 "content": "Welcome to the home page",
-                "featured": self.featured,
-                "tag_item_books_obj": self.tag_item_books_obj,
+                "description": "Buy high-quality products ranging from books to apparel",
+                "products_books_obj": self.products_books_obj,
+                "products_apparel_obj": self.products_apparel_obj,
+                "products_digital_obj": self.products_digital_obj,
                 'cart_item_obj': cart_item_obj,
-                'cart_item_id': cart_item_id
+                'cart_item_id': cart_item_id,
                 }
         elif self.display_name == "about":
             context = {
@@ -53,6 +62,7 @@ class DefaultHomePage(TemplateView):
 def contact_page(request):
     contact_form = ContactForm(request.POST or None)
     context = {
+        "description": "Contat Page",
         "title": "Contact Page",
         "form": contact_form,
         }
@@ -64,6 +74,7 @@ def contact_page(request):
 
 def about_page(request):
     context = {
+        "description": "About page",
         "title": "About Page",
         }
     return render(request, "about.html", context)

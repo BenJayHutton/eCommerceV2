@@ -4,32 +4,36 @@
   <link rel='stylesheet' href='{% static "css/main.css" %}'/>
 {% endblock %}
 {% block content%}
-
-    {% if tag_item_books_obj %}
-        <div class="row">
-            <h3>Books</h3>
-            {% for book_item in tag_item_books_obj.products.all %}
-            <div class="col-3 my-3">
-                Product: {{book_item}} <br>
+    {% if products_books_obj %}
+        <div class="row my-3">
+            <h3 class="col-12">Books</h3>
+            {% for book_item in products_books_obj.all %}
+            <div class="col-sm-12 col-md-4 col-lg-4 my-2">
+                {% include 'products/snippets/card.html' with product_obj=book_item cart_item_obj=cart_item_obj %}
             </div>
             {% endfor %}
         </div>
     {% endif %}
 
-    {% if featured %}
-    <div class='row'>    
-        {% for featured_items in featured %}
-        <div class='col-4 my-3'>
-            {% include 'products/snippets/card.html' with product_obj=featured_items cart_item_obj=cart_item_obj %}
-        </div>
-        {% endfor %}
-    </div>
-  {% endif %}
-
-  {% if request.user.is_authenticated %}
-    <div class='row'>
-      <div class='col-8'>
-        <h1>Premium</h1>
-        {% lorem 2 p %}
+    {% if products_apparel_obj %}
+      <div class='row my-3'>
+        <h3 class="col-12">Apparel</h3>
+          {% for apparel in products_apparel_obj %}
+          <div class='col-sm-12 col-md-4 col-lg-4 my-2'>
+              {% include 'products/snippets/card.html' with product_obj=apparel cart_item_obj=cart_item_obj %}
+          </div>
+          {% endfor %}
       </div>
-    </div>{% endif %}{% endblock %}
+    {% endif %}
+
+    {% if products_digital_obj %}
+      <div class='row my-3'>
+        <h3 class="col-12">Digital</h3>
+          {% for digital in products_digital_obj %}
+          <div class='col-sm-12 col-md-4 col-lg-4 my-2'>
+              {% include 'products/snippets/card.html' with product_obj=digital cart_item_obj=cart_item_obj %}
+          </div>
+          {% endfor %}
+      </div>
+    {% endif %}
+{% endblock %}
