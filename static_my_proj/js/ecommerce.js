@@ -38,7 +38,7 @@ $(document).ready(function(){
             var isOwned = getOwnedProduct(productId, submitSpan);
         }
     })
-    
+
     formData.on('submit', function(event) {
         event.preventDefault();
         var thisForm = $(this)
@@ -65,13 +65,17 @@ $(document).ready(function(){
             method: method,
             data:formData,
             success: function(data){
+                console.log(data)
                 var submitSpan = thisForm.find(".submit-span")
                 var cartItemRow = $("#"+data.cart_item_id)
                 var cartItemPrice = $("#"+data.cart_item_id+" #cart_item_price")
+                var cartUpdateSpanTotal = $(".cart-total")
+                var cartUpdateSpanVatTotal = $(".cart-vattotal")
+                var cartUpdateSpanSubtotal = $(".cart-subtotal")
                 if(data.updated){
-                    var cartUpdateSpanTotal = $(".cart-total")
-                    var cartUpdateSpanVatTotal = $(".cart-vattotal")
-                    var cartUpdateSpanSubtotal = $(".cart-subtotal")
+                    // var cartUpdateSpanTotal = $(".cart-total")
+                    // var cartUpdateSpanVatTotal = $(".cart-vattotal")
+                    // var cartUpdateSpanSubtotal = $(".cart-subtotal")
                     cartItemPrice.html(data.price_of_item);
                     cartUpdateSpanTotal.html(data.cart_total)
                     cartUpdateSpanVatTotal.html(data.cart_vat)
@@ -81,8 +85,12 @@ $(document).ready(function(){
                     submitSpan.html('<input type="hidden" id="cart_item_id" name="cart_item_id" value="'+data.cart_item_id+'"><div class="btn-group"><a class="btn btn-link" href="/cart/">In cart</a> <button onclick="this.form.submitted=this.value;" type="submit" id="product_item_remove" name="product_item_remove" value="true" class="btn btn-danger">Remove</button></div>')
                 }
                 if(data.removed){
+                    console.log("cartUpdateSpanTotal",cartUpdateSpanTotal)
                     submitSpan.html('<input id="product_quantity" name="product_quantity" type="number" min="1" max="'+data.productQty+'" value="1" /><button onclick="this.form.submitted=this.value;" type="submit" id="cart_item_add" name="cart_item_add" value="true" class="btn btn-success btn-add">Add to cart</button>')
                     cartItemRow.html("<td class='.text-muted'>Removed</td>")
+                    cartUpdateSpanTotal.html(data.cart_total)
+                    cartUpdateSpanVatTotal.html(data.cart_vat)
+                    cartUpdateSpanSubtotal.html(data.cart_subtotal)
                 }
 
                 if(data.cartItemCount < 1){

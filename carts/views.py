@@ -58,7 +58,7 @@ def cart_update(request, *args, **kwargs):
 
     if product_obj:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        
+
         if product_item_remove or cart_item_remove:
             cart_item_obj = CartItem.objects.get(id=cart_item_id)
             cart_obj.cart_items.remove(cart_item_obj)
@@ -72,7 +72,7 @@ def cart_update(request, *args, **kwargs):
             request.session['cart_item_count'] = cart_obj.cart_items.count()
 
         if cart_item_update:
-            cart_item_obj = CartItem.objects.get(id=cart_item_id)            
+            cart_item_obj = CartItem.objects.get(id=cart_item_id)
 
             if int(product_quantity) != int(cart_item_obj.quantity):
                 cart_item_obj.quantity = product_quantity
@@ -119,7 +119,7 @@ def cart_update(request, *args, **kwargs):
                 json_data.update({
                     "inCartUrl": reverse("cart:home")
                 })
-            if item_updated:
+            if item_updated or item_removed:
                 json_data.update({
                     "cart_total": round(cart_obj.total, 2),
                     "cart_vat": round(cart_obj.vat_total, 2),
