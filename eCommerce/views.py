@@ -31,8 +31,6 @@ class DefaultHomePage(TemplateView):
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
-        print("products_digital_obj", self.products_digital_obj)
-        print("products_books_obj", self.products_books_obj)
         if self.display_name == "home":
             context = {
                 "title": "Home Page",
