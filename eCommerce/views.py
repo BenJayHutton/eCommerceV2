@@ -21,7 +21,6 @@ class DefaultHomePage(TemplateView):
     products_digital_obj = model.objects.filter(tags__name="Digital", tags__public=True)
 
     def get(self, request):
-        print(self.tags_obj.objects.all().public())
         context = {}
         visitor_name = request.session.get("first_name")
         cart_obj, new_obj = Cart.objects.new_or_get(request)
@@ -32,7 +31,7 @@ class DefaultHomePage(TemplateView):
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
-
+        print("products_digital_obj", self.products_digital_obj)
         if self.display_name == "home":
             context = {
                 "title": "Home Page",
