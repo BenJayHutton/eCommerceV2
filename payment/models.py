@@ -6,7 +6,7 @@ from orders.models import Order
 User = settings.AUTH_USER_MODEL
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User,default=None, blank=True, null=True, on_delete=models.SET_NULL)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     paymentMethod = models.CharField(max_length=128)
     paypalOrderID = models.CharField(max_length=128)
@@ -20,7 +20,7 @@ class Payment(models.Model):
     def __str__(self):
         return  "Order: " +self.order.order_id
 
-        
+
         total = body["total"]
         vat = body["vat"]
         shipping = body["shipping"]
