@@ -7,9 +7,11 @@ from products.models import Product
 
 User = settings.AUTH_USER_MODEL
 
+
 class CartItemManagerQuerySet(models.query.QuerySet):
     def update_total(self):
         return self.aggregate(Sum("total"))
+
 
 class CartItemManager(models.Manager):
     def get_queryset(self):
@@ -54,6 +56,7 @@ class CartItem(models.Model):
     def __str__(self):
         return str(self.id)
 
+
 class CartManager(models.Manager):
     def new_or_get(self, request):
         cart_id = request.session.get("cart_id", None)
@@ -87,6 +90,7 @@ class CartManager(models.Manager):
         vat_total = total * Decimal(0.2)
         sub_total = total + vat_total
         return total, vat_total, sub_total
+
 
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
@@ -124,6 +128,7 @@ def cart_item_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.price_of_item = price_of_item
     instance.total = quantity * price_of_item
 
+
 pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
 
 
@@ -139,6 +144,7 @@ def cart_post_save_reciever(sender, instance, *args, **kwargs):
     instance.total = cart_item_total
     instance.vat_total = vat_total
     instance.subtotal = sub_total
+
 
 post_save.connect(cart_post_save_reciever, sender=Cart)
     
@@ -157,5 +163,6 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
         instance.vat_total = vat_total
         instance.subtotal = sub_total
         instance.save()
+
 
 m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.cart_items.through)

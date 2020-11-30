@@ -1,14 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Sum, Avg
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView, View
 from django.shortcuts import render
 from django.utils import timezone
 
-import random
 import datetime
 
 from orders.models import Order
+
 
 class OrderView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/orders.html'
@@ -64,6 +63,7 @@ class SalesAjaxView(View):
                     data['data'].append(sales_total)
                     current -= 1
         return JsonResponse(data)
+
 
 class SalesView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/sales.html'

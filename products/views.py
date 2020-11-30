@@ -1,25 +1,21 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_list_or_404, redirect
 from django.views.generic import TemplateView, DetailView, ListView, View
-from mimetypes import guess_type
-from wsgiref.util import FileWrapper
 
 from analytics.mixins import ObjectViewedMixin
 from carts.models import Cart, CartItem
 from orders.models import ProductPurchase
 
-from .models import Product, ProductFile, Tag
-
-import os
+from .models import Product, ProductFile
 
 
 class ProductListView(ListView):
     template_name = "products/list.html"
     paginate_by = 3
     model = Product
+
     def get_context_data(self, *args, **kwargs):
         request = self.request
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
@@ -41,6 +37,7 @@ class ProductListView(ListView):
         request = self.request
         return Product.objects.all().active()
 
+
 class UserProductHistoryView(LoginRequiredMixin, ListView):
     template_name = "products/user-history.html"
 
@@ -57,7 +54,6 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
             cart_item_id[items.product] = int(items.id)
         context['cart_item_obj'] = cart_item_obj
         return context
-
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
@@ -100,6 +96,7 @@ class ProductDownloadView(View):
             print(aws_filepath)
             return HttpResponseRedirect(aws_filepath)
 
+
 class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
     template_name="products/detail.html"
@@ -129,7 +126,6 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
             'cart_item_obj': cart_item_obj,
             }
         return context
-
 
     def get_object(self, *args, **kwargs):
         request = self.request

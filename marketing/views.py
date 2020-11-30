@@ -11,6 +11,7 @@ from .utils import Mailchimp
 
 MAILCHIMP_EMAIL_LIST_ID = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None)
 
+
 class MarketingPreferenceUpdateView(SuccessMessageMixin, UpdateView):
     form_class = MarketingPreferenceForm
     template_name = 'base/forms.html'
@@ -23,12 +24,10 @@ class MarketingPreferenceUpdateView(SuccessMessageMixin, UpdateView):
             return redirect("/account/login/?next=/marketing/settings/email/")
         return super(MarketingPreferenceUpdateView, self).dispatch(*args, **kwargs)
 
-
     def get_context_data(self, *args, **kwargs):
         context = super(MarketingPreferenceUpdateView, self).get_context_data(*args, **kwargs)
         context['title'] = 'Update Email Preference'
         return context
-
 
     def get_object(self):
         user = self.request.user        
@@ -47,9 +46,9 @@ class MailchimpWebhookView(CsrfExemptMixin, View):
             sub_status = response['status']
             is_subbed = None
             mailchimp_subbed = None
-            if sub_status =="subscribed":
+            if sub_status == "subscribed":
                 is_subbed, mailchimp_subbed(True,True)
-            elif sub_status =="unsubscribed":
+            elif sub_status == "unsubscribed":
                 is_subbed, mailchimp_subbed(False,False)
             if is_subbed is not None and mailchimp_subbed is not None:
                 qs = MarketingPreference.objects.filter(user__email__iexact=email)

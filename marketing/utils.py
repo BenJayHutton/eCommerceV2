@@ -11,7 +11,6 @@ MAILCHIMP_DATA_CENTER = os.environ.get("MAILCHIMP_DATA_CENTER", None)
 MAILCHIMP_EMAIL_LIST_ID = os.environ.get("MAILCHIMP_EMAIL_LIST_ID", None)
 
 
-
 def check_email(email):
     if not re.match(r".+@.+\..+", email):
         raise ValueError('String passed is not a valid email address')
@@ -40,7 +39,6 @@ class Mailchimp(object):
                                     api_url = self.api_url,
                                     list_id=self.list_id
                         )
-
 
     def get_members_endpoint(self):
         endpoint = '{list_endpoint}/members'.format(
@@ -84,10 +82,8 @@ class Mailchimp(object):
     def add_email(self, email):
         return self.change_subscription_status(email, status='subscribed')
 
-        
     def unsubscribe(self, email):
         return self.change_subscription_status(email, status='unsubscribed') 
-
 
     def subscribe(self, email):
         return self.change_subscription_status(email, status='subscribed')

@@ -1,6 +1,5 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
 from django.conf import settings
 from django.utils.http import is_safe_url
 
@@ -12,12 +11,12 @@ STRIPE_PUB_KEY = getattr(settings,"STRIPE_PUB_KEY",None)
 STRIPE_SECRET_API_KEY = getattr(settings, "STRIPE_SECRET_API_KEY", None)
 stripe.api_key = STRIPE_SECRET_API_KEY
 
+
 def pay_method_view(request):
     if request.user.is_authenticated:
         billing_profile = request.user.billingprofile
         my_customer_id = billing_profile.customer_id
-    
-    
+
     billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
 
     if not billing_profile:

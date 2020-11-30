@@ -12,6 +12,7 @@ from .utils import get_client_ip
 
 User = settings.AUTH_USER_MODEL
 
+
 class ObjectViewedQuerySet(models.query.QuerySet):
     def by_model(self, model_class, model_queryset=False):
         c_type = ContentType.objects.get_for_model(model_class)
@@ -40,7 +41,6 @@ class ObjectViewed(models.Model):
 
     objects = ObjectViewedManager()
 
-
     def __str__(self):
         return"%s viewed %s" %(self.content_object, self.timestamp)
 
@@ -48,6 +48,7 @@ class ObjectViewed(models.Model):
         ordering = ['-timestamp'] # ascending order
         verbose_name = 'Object viewed'
         verbose_name_plural = 'Objects viewed'
+
 
 def object_viewed_receiver(sender, instance, request, *args, **kwargs):
     c_type = ContentType.objects.get_for_model(sender) # same as instance.__class__
@@ -60,6 +61,8 @@ def object_viewed_receiver(sender, instance, request, *args, **kwargs):
         object_id=instance.id,
         ip_address= get_client_ip(request),
     )
+
+
 object_viewed_signal.connect(object_viewed_receiver)
 
 
@@ -83,6 +86,7 @@ class UserSession(models.Model):
             pass
         return self.ended
 
+
 def post_save_session_receiver(sender, instance, created, *args, **kwargs):
     if created:
         qs = UserSession.objects.filter(user=instance.user, ended=False, active=False).exclude(id=instance.id)
@@ -94,6 +98,7 @@ def post_save_session_receiver(sender, instance, created, *args, **kwargs):
 
 post_save.connect(post_save_session_receiver, sender=UserSession)
 
+
 def user_logged_in_receiver(sender, instance, request, *args, **kwargs):
     user = instance
     ip_address = get_client_ip(request)
@@ -103,5 +108,6 @@ def user_logged_in_receiver(sender, instance, request, *args, **kwargs):
         ip_address=ip_address,
         session_key=session_key,
     )
+
 
 user_logged_in.connect(user_logged_in_receiver)

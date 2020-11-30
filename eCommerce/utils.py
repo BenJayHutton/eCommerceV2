@@ -51,7 +51,7 @@ def get_month_data_range(months_ago=1, include_this_month=False):
             "year": start.year,
             "month": str(start.strftime("%B"))
         })
-    #dates_.reverse()
+    # dates_.reverse()
     return dates_ 
 
 
@@ -64,8 +64,9 @@ json_ready_month_starts = [x['start_json'] for x in date_data]
 large_date_data = get_month_data_range(months_ago=324, include_this_month=True)
 
 
-def get_filename(path): #/abc/filename.xxx
+def get_filename(path): # /abc/filename.xxx
     return os.path.basename(path)
+
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))

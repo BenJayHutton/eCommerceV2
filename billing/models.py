@@ -1,3 +1,4 @@
+import stripe
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save, pre_save
@@ -6,7 +7,6 @@ from django.urls import reverse
 from accounts.models import GuestEmail
 User = settings.AUTH_USER_MODEL
 
-import stripe
 
 STRIPE_SECRET_API_KEY = getattr(settings, "STRIPE_SECRET_API_KEY", None)
 stripe.api_key = STRIPE_SECRET_API_KEY
@@ -26,7 +26,8 @@ class BillingProfileManager(models.Manager):
         else:
             pass
         return obj, created
-    
+
+
 class BillingProfile(models.Model):
     user        = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL)
     email       = models.EmailField()
@@ -66,6 +67,7 @@ class BillingProfile(models.Model):
         card_qs.update(active=False)
         return card_qs.filter(active=True).count()
 
+
 def billing_profile_created_reciever(sender, instance, *args, **kwargs):
     if not instance.customer_id and instance.email:
         customer = stripe.Customer.create(
@@ -76,11 +78,14 @@ def billing_profile_created_reciever(sender, instance, *args, **kwargs):
         
 pre_save.connect(billing_profile_created_reciever, sender=BillingProfile)
 
+
 def user_created_reciever(sender, instance, created, *args, **kwargs):
     if created and instance.email:
         BillingProfile.objects.get_or_create(user=instance, email=instance.email)
 
+
 post_save.connect(user_created_reciever, sender=User)
+
 
 class CardManager(models.Manager):
     def all(self, *args, **kwargs):
@@ -90,7 +95,7 @@ class CardManager(models.Manager):
         if token:
             customer = stripe.Customer.retrieve(billing_profile.customer_id)
             stripe_card_response = customer.sources.create(source=token)
-        if str(stripe_card_response.object) =="card":
+        if str(stripe_card_response.object) == "card":
             new_card_obj = self.model(
                 billing_profile=billing_profile,
                 stripe_id = stripe_card_response.id,
@@ -122,6 +127,7 @@ class Card(models.Model):
     def __str__(self):
         return "{} {}".format(self.brand, self.last4)
 
+
 class ChargeManager(models.Manager):
     def do(self, billing_profile, order_obj, card=None):
         card_obj = card
@@ -133,10 +139,10 @@ class ChargeManager(models.Manager):
             return False, "No cards available"
 
         c = stripe.Charge.create(
-            amount = int(order_obj.total * 100),
-            currency = "gbp",
-            customer = billing_profile.customer_id,
-            source = card_obj.stripe_id,
+            amount=int(order_obj.total * 100),
+            currency="gbp",
+            customer=billing_profile.customer_id,
+            source=card_obj.stripe_id,
             metadata={"Order_id: ": order_obj.order_id},
         )
         new_charge_obj = self.model(
@@ -152,13 +158,16 @@ class ChargeManager(models.Manager):
         new_charge_obj.save()
         return new_charge_obj.paid, new_charge_obj.seller_message
 
+
 def new_card_post_save_receiver(sender, instance, created, *args, **kwargs):
     if instance.default:
         billing_profile = instance.billing_profile
         qs = Card.objects.filter(billing_profile=billing_profile).exclude(pk=instance.pk)
         qs.update(default=False)
 
+
 post_save.connect(new_card_post_save_receiver, sender=Card)
+
 
 class Charge(models.Model):
     billing_profile = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)

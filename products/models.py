@@ -1,21 +1,19 @@
 from django.conf import settings
 import decimal
-from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.shortcuts import reverse
-from django.template.defaultfilters import slugify
 
 from eCommerce.aws.download.utils import AWSDownload
 from eCommerce.aws.utils import ProtectedS3Storage
 from eCommerce.utils import unique_slug_generator, get_filename
-from uuid import uuid4
 
 
 class TagQuerySet(models.query.QuerySet):
     def public(self):
         return self.filter(public=True)
+
 
 class TagManager(models.Manager):
     def get_queryset(self):
@@ -23,6 +21,7 @@ class TagManager(models.Manager):
 
     def public(self):
         return self.get_queryset().public()
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=128,unique=True)
@@ -34,6 +33,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+
 class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
     def active(self):
         return self.filter(active=True)
@@ -43,14 +43,15 @@ class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
 
     def search(self, query):
         lookups = (Q(title__icontains=query) |
-                   Q(description__icontains=query)|
+                   Q(description__icontains=query) |
                    Q(price__icontains=query)
-                   #Q(tag__title__icontains=query)
+                   # Q(tag__title__icontains=query)
                    )
         return self.filter(lookups)
 
+
 class ProductManager(models.Manager):
-    #overriding get_queryset so we can use the queryset above
+    # overriding get_queryset so we can use the queryset above
     def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
@@ -135,6 +136,7 @@ class Product(models.Model):
         qs = self.productfile_set.all()
         return qs
 
+
 def product_pre_save_reciever(sender, instance, *args, **kwargs):
     instance.vat = instance.price * decimal.Decimal(0.2)
     if not instance.slug:
@@ -146,7 +148,6 @@ pre_save.connect(product_pre_save_reciever, sender=Product)
 
 def upload_product_file_loc(instance, filename):
     slug = instance.product.slug
-    #id_ = 0
     id_ = instance.id
     if id_ is None:
         Klass = instance.__class__
@@ -164,7 +165,7 @@ def upload_product_file_loc(instance, filename):
 class ProductFile(models.Model):
     product         = models.ForeignKey(Product, blank=True, null=True, on_delete=models.SET_NULL)
     name            = models.CharField(max_length=120, null=True, blank=True)
-    file            = models.FileField(upload_to=upload_product_file_loc, storage=ProtectedS3Storage()) #FileSystemStorage(location=settings.PROTECTED_ROOT))
+    file            = models.FileField(upload_to=upload_product_file_loc, storage=ProtectedS3Storage())
     free            = models.BooleanField(default=False)
     user_required   = models.BooleanField(default=False)
 
@@ -197,6 +198,7 @@ class ProductFile(models.Model):
 
     def get_download_url(self):
         return reverse("products:download", kwargs={"slug": self.product.slug, "pk": self.pk})
+
 
 class ItemImage(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)

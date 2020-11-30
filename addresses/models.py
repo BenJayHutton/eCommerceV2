@@ -12,6 +12,7 @@ LIST_OF_COUNTRIES = (
     ('usa', 'United States of America')
 )
 
+
 class Address(models.Model):
     billing_profile  = models.ForeignKey(BillingProfile, null=True, on_delete=models.SET_NULL)
     address_type   = models.CharField(max_length=12, choices=ADDRESS_TYPE)

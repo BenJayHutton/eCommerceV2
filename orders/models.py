@@ -1,16 +1,12 @@
-from decimal import Decimal
 import datetime
-from django.conf import settings
-from django.contrib.sessions.backends.db import SessionStore
+from decimal import Decimal
 from django.db import models
 from django.db.models import Count, Sum, Avg
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from django.utils import timezone
-from django.http import HttpResponse
 
 from eCommerce.utils import unique_order_id_generator
-
 from addresses.models import Address
 from billing.models import BillingProfile
 from carts.models import Cart
@@ -23,6 +19,7 @@ ORDER_STATUS_CHOICES = (
     ('shipped', 'Shipped'),
     ('refunded', 'Refunded'),
 )
+
 
 class OrderManagerQuerySet(models.query.QuerySet):
     def recent(self):
@@ -56,7 +53,6 @@ class OrderManagerQuerySet(models.query.QuerySet):
         end_date = timezone.now() - datetime.timedelta(days=days_ago_end)
         return self.by_range(start_date=start_date, end_date=end_date)
 
-
     def by_range(self, start_date, end_date=None):
         if end_date is None:
             return self.filter(updated__gte=start_date)
@@ -72,7 +68,6 @@ class OrderManagerQuerySet(models.query.QuerySet):
     def cart_data(self):
         return self.aggregate(Sum("cart__cart_items__total"), Avg("cart__cart_items__total"), Count("cart__cart_items__quantity"))
 
-
     def by_status(self, status='shipped'):
         return self.filter(status=status)
 
@@ -85,6 +80,7 @@ class OrderManagerQuerySet(models.query.QuerySet):
     
     def not_created(self):
         return self.exclude(status='created')
+
 
 class OrderManager(models.Manager):
     def get_queryset(self):
@@ -118,7 +114,6 @@ class Order(models.Model):
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
 
-
     objects = OrderManager()
 
     class Meta:
@@ -134,7 +129,6 @@ class Order(models.Model):
             return "Shipped"
         return "Shipping Soon"
 
-
     def __str__(self):
         return self.order_id
 
@@ -148,7 +142,6 @@ class Order(models.Model):
         except Exception as e:
             print(e)
         return new_total
-
 
     def new_or_get_order(self, *args, **kwargs):
         product_id = kwargs['product_id']
@@ -200,7 +193,9 @@ def pre_save_create_order_id(sender, instance, *args, **kwargs):
     if qs.exists():
         qs.update(active=False)
 
+
 pre_save.connect(pre_save_create_order_id, sender=Order)
+
 
 def post_save_cart_total(sender, instance, created, *args, **kwargs):
     if not created:
@@ -212,6 +207,7 @@ def post_save_cart_total(sender, instance, created, *args, **kwargs):
             order_obj = qs.first()
             order_obj.update_total()
 
+
 post_save.connect(post_save_cart_total, sender=Cart)
 
 
@@ -219,7 +215,9 @@ def post_save_order(sender, instance, created, *args, **kwargs):
     if created:
         instance.update_total()
 
+
 post_save.connect(post_save_order, sender=Order)
+
 
 class ProductPurchaseQuerySet(models.query.QuerySet):
     def active(self):
@@ -231,6 +229,7 @@ class ProductPurchaseQuerySet(models.query.QuerySet):
 
     def digital(self):
         return self.filter(product__is_digital=True)
+
 
 class ProductPurchaseManager(models.Manager):
     def get_queryset(self):

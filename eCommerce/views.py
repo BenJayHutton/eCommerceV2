@@ -1,14 +1,11 @@
-from django.core.mail import send_mail
-from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import FormView
 
-import os
 from carts.models import Cart, CartItem
 from products.models import Product, Tag
 from .forms import ContactForm
+
 
 class DefaultHomePage(TemplateView):
     display_name="home"
