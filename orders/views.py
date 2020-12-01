@@ -7,11 +7,23 @@ from .models import Order, ProductPurchase
 
 class OrderListView(LoginRequiredMixin, ListView):
 
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(OrderListView, self).get_context_data(*args, **kwargs)
+        context['title'] = "Orders"
+        return context
+
     def get_queryset(self):
         return Order.objects.by_request(self.request).not_created()
 
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
+
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(OrderDetailView, self).get_context_data(*args, **kwargs)
+        context['title'] = "Order Details"
+        return context
 
     def get_object(self):
         qs = Order.objects.by_request(self.request).filter(order_id=self.kwargs.get('order_id'))
@@ -22,6 +34,12 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
 class LibraryView(LoginRequiredMixin, ListView):
     template_name = 'orders/library.html'
+
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(LibraryView, self).get_context_data(*args, **kwargs)
+        context['title'] = "Library View"
+        return context
 
     def get_queryset(self):
         return ProductPurchase.objects.products_by_request(self.request) #by_request(self.request).digital()

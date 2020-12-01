@@ -21,6 +21,8 @@ class ProductListView(ListView):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         cart_item_id = {}
+        context['title'] = "Products"
+        context['description'] = "Products for sale"
 
         context['cart_obj'] = cart_obj
         context['cart_item_id'] = cart_item_id

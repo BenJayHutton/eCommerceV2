@@ -24,6 +24,8 @@ class CartHome(ListView):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         context = {
             "cart_obj": cart_obj,
+            "title": "Cart",
+            "description": "Checkout home",
         }
         return render(request,"carts/home.html", context)
 
@@ -130,8 +132,6 @@ def cart_update(request, *args, **kwargs):
     return redirect("cart:home")
 
 def checkout_home(request, *args, **kwargs):
-    print(args)
-    print(kwargs)
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
     did_charge = False
@@ -177,6 +177,8 @@ def checkout_home(request, *args, **kwargs):
             else:
                 return redirect("cart:checkout")
     context = {
+        "title": "Cart",
+        "description": "",
         "object": order_obj,
         "billing_profile": billing_profile,
         "login_form": login_form,

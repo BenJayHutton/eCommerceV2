@@ -17,6 +17,14 @@ from .signals import user_logged_in
 
 class Accounts(LoginRequiredMixin, DetailView):
     template_name = 'accounts/home.html'
+
+    def get_context_data(self, *args, **kwargs):
+        request = self.request
+        context = super(Accounts, self).get_context_data(*args, **kwargs)
+        context['title'] = "Account Home"
+        context['description'] = "Account Home"
+        return context
+
     def get_object(self):
         return self.request.user
 
@@ -92,7 +100,7 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     success_url = '/'
     template_name = 'accounts/login.html'
     default_next = "/"
-    
+
     def form_valid(self, form):
         next_path = self.get_next_url()
         return redirect(next_path)
@@ -115,7 +123,7 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
         context = super(UserDetailUpdateView, self).get_context_data(*args, **kwargs)
         context['title'] = 'Change your Account Details'
         return context
-    
+
     def get_success_url(self):
         return reverse("account:home")
 
