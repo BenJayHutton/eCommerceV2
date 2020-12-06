@@ -9,6 +9,9 @@
             <h3 class="col-12">Books</h3>
             {% for book_item in products_books_obj.all %}
             <div class="col-sm-12 col-md-4 col-lg-4 my-2">
+            
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 my-2">
                 {% include 'products/snippets/card.html' with product_obj=book_item cart_item_obj=cart_item_obj %}
             </div>
             {% endfor %}
@@ -17,8 +20,10 @@
 
     {% if products_apparel_obj %}
       <div class='row my-3'>
+        <div class="col-sm-12 col-md-4 col-lg-4 my-2">
+        </div>
         <h3 class="col-12">Apparel</h3>
-          {% for apparel in products_apparel_obj %}
+        {% for apparel in products_apparel_obj %}
           <div class='col-sm-12 col-md-4 col-lg-4 my-2'>
               {% include 'products/snippets/card.html' with product_obj=apparel cart_item_obj=cart_item_obj %}
           </div>
