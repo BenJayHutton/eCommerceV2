@@ -9,9 +9,6 @@
             <h3 class="col-12">Books</h3>
             {% for book_item in products_books_obj.all %}
             <div class="col-sm-12 col-md-4 col-lg-4 my-2">
-            
-            </div>
-            <div class="col-sm-12 col-md-4 col-lg-4 my-2">
                 {% include 'products/snippets/card.html' with product_obj=book_item cart_item_obj=cart_item_obj %}
             </div>
             {% endfor %}
