@@ -25,7 +25,7 @@ class DefaultHomePage(TemplateView):
         cart_item_id = {}
         context['cart_item_id'] = cart_item_id
         cart_item_obj = []
-        print("products_digital_obj ", self.products_digital_obj.count())
+        # print("products_digital_obj ", self.products_digital_obj.count())
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
@@ -52,6 +52,7 @@ class DefaultHomePage(TemplateView):
             context["first_name"] = visitor_name
         else:
             context["first_name"] = "New visitor"
+        #print(context)
         return render(request, "home_page.html", context)
 
 
