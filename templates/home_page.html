@@ -13,14 +13,17 @@
     {% for book_item in products_apparel_obj.all %}
         {% if forloop.first %}
         <div class="carousel-item active">
-            <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left;">           
-            <h4>{{book_item.title}}</h4>
-            {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj  %} <a href="{{ book_item.get_absolute_url }}" class="btn btn-primary my-2">View Details</a>
+            <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;"><br>
+            <h4 class="carousel">{{book_item.title}}</h4>
+            {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
+            {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj  %} <br>
+            <a href="{{ book_item.get_absolute_url }}" class="my-2"><button class="btn btn-primary">View Details</button></a>
         </div>            
         {% else %}
         <div class="carousel-item">
-            <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left;"><br>
-            <h4>{{book_item.title}}</h4>
+            <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;"><br>
+            <h4 class="carousel">{{book_item.title}}</h4>
+            {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
             {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj  %} <a href="{{ book_item.get_absolute_url }}" class="my-2"><button class="btn btn-primary">View Details</button></a>
         </div>
         {% endif %}
@@ -29,10 +32,12 @@
 
 <!-- Left and right controls -->
 <a class="carousel-control-prev" href="#demo" data-slide="prev">
-  <span class="carousel-control-prev-icon"></span>
+    <i style="font-size: 40px; color: black;" class="fa fa-angle-double-left" aria-hidden="true"></i>
+  
 </a>
 <a class="carousel-control-next" href="#demo" data-slide="next">
-  <span class="carousel-control-next-icon"></span>
+    <i style="font-size: 40px; color: black;" class="fa fa-angle-double-right" aria-hidden="true"></i>
+  
 </a>
 </div>
 {% endblock %}
