@@ -8,11 +8,11 @@
   {% endif %}
   <div class="card-body">
     <h5 class="card-title">{{ product_obj.title }}</h5>
-    Quantity: {{ product_obj.quantity }} <br>
-    <p class="card-text"> {{ product_obj.description|linebreaks|truncatewords:12 }}</p>
-    <div class="text-center">
+    Quantity: {% if product_obj.quantity > 10 %} 10+ {% else %} {{product_obj.quantity}} {% endif %} <br>
+    <div class="card-text height"> {{ product_obj.description|linebreaks|truncatewords:7 }}</div>
+    <p class="text-center">
       {% include 'products/snippets/update-cart.html' with product_obj=product_obj cart_item_obj=cart_item_obj cart_obj=cart_obj  %}
       <br><a href="{{ product_obj.get_absolute_url }}" class="btn btn-primary my-2">View</a>
-    </div>
+    </p>
   </div>
 </div>

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, re_path
 from .views import (
     CartHome, 
     cart_update, 

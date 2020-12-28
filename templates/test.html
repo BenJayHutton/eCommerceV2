@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home Page</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href='https://benjay-ecommerce.s3.amazonaws.com/static/img/favicon.ico'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Buy high-quality products ranging from books to apparel">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark mb-3">
+    <div class="container">
+        <a class="navbar-brand" href="/"> #SweetSweetSwag </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products/">Products</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/account/">Profile</a>
+                        <a class="dropdown-item" href="#">Billing</a>
+                        <a class="dropdown-item" href="/account/history/products/">History</a>
+                        <a class="dropdown-item" href="/library/">Library</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/account/logout/"><i class="fa fa-sign-out"
+                                                                            aria-hidden="true"></i></a>
+                    </div>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact/">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/blog/">Blog</a>
+                </li>
+                <li class="nav-item ">
+                    <a href=""><span class='navbar-cart-count'>1</span><i class="fa fa-shopping-cart"
+                                                                          aria-hidden="true"></i></a>
+                </li>
+            </ul>
+            <form method='GET' action='/search/' class="form my-2 my-lg-0 search-form">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Search" name="q" aria-label="Search"
+                           value="">
+                    <span class="input-group-btn">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h3 class="col-12">Apparel</h3>
+    <div id="myCarousel" class='carousel slide' data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class='item active'>
+                <div class="card" style="width: 15rem;">
+                    <a href='/products/tshirt/'>
+                        <img src="https://benjay-ecommerce.s3.amazonaws.com/media/products/P1030247.JPG" height="150"
+                             width="auto" alt="T-shirt logo"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">T-shirt</h5>
+                        Quantity: 100 <br>
+                        <p class="card-text">
+                        <p>awesome tshirt</p></p>
+                        <div class="text-center">
+                            <form class='form-product-ajax' method='POST' action='/cart/update/' data-endpoint='#'
+                                  data-user='abc'>
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="jdvmlQCXhMRSzwc5WOii495MGPBYg9oN3ogA4cXJe2dwJfQzWAXjXYezp932x1Sc">
+                                <input type='hidden' id="product_id" name='product_id' value='2'/>
+                                <span class='submit-span'>
+              <input id="product_quantity" name='product_quantity' type='number' min='1' max='100' value='1'/><button
+                                        onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add"
+                                        name='cart_item_add' value='true'
+                                        class='btn btn-success btn-add'>Add to cart</button>
+          </span>
+                            </form>
+                            <br><a href="/products/tshirt/" class="btn btn-primary my-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='item'>
+                <div class="card" style="width: 15rem;">
+                    <a href='/products/Hat/'>
+                        <img src="https://benjay-ecommerce.s3.amazonaws.com/media/products/P1030247.JPG" height="150"
+                             width="auto" alt="Hat logo"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">Hat</h5>
+                        Quantity: 100 <br>
+                        <p class="card-text">
+                        <p>Cat in a hat</p></p>
+                        <div class="text-center">
+                            <form class='form-product-ajax' method='POST' action='/cart/update/' data-endpoint='#'
+                                  data-user='abc'>
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="jdvmlQCXhMRSzwc5WOii495MGPBYg9oN3ogA4cXJe2dwJfQzWAXjXYezp932x1Sc">
+                                <input type='hidden' id="product_id" name='product_id' value='1'/>
+                                <span class='submit-span'>
+              <input id="product_quantity" name='product_quantity' type='number' min='1' max='100' value='1'/><button
+                                        onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add"
+                                        name='cart_item_add' value='true'
+                                        class='btn btn-success btn-add'>Add to cart</button>
+          </span>
+                            </form>
+                            <br><a href="/products/Hat/" class="btn btn-primary my-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='item'>
+                <div class="card" style="width: 15rem;">
+                    <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg'
+                         height="100" width="100" alt=" logo"/> <br/>
+                    <div class="card-body">
+                        <h5 class="card-title">Trousers</h5>
+                        Quantity: 10 <br>
+                        <p class="card-text">
+                        <p>Trousers</p></p>
+                        <div class="text-center">
+                            <form class='form-product-ajax' method='POST' action='/cart/update/' data-endpoint='#'
+                                  data-user='abc'>
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="jdvmlQCXhMRSzwc5WOii495MGPBYg9oN3ogA4cXJe2dwJfQzWAXjXYezp932x1Sc">
+                                <input type='hidden' id="product_id" name='product_id' value='7'/>
+                                <span class='submit-span'>
+              <input id="product_quantity" name='product_quantity' type='number' min='1' max='10' value='1'/><button
+                                        onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add"
+                                        name='cart_item_add' value='true'
+                                        class='btn btn-success btn-add'>Add to cart</button>
+          </span>
+                            </form>
+                            <br><a href="/products/trousers/" class="btn btn-primary my-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='item'>
+                <div class="card" style="width: 15rem;">
+                    <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg'
+                         height="100" width="100" alt=" logo"/> <br/>
+                    <div class="card-body">
+                        <h5 class="card-title">Head Scarf</h5>
+                        Quantity: 10 <br>
+                        <p class="card-text">
+                        <p>Head Scarf</p></p>
+                        <div class="text-center">
+                            <form class='form-product-ajax' method='POST' action='/cart/update/' data-endpoint='#'
+                                  data-user='abc'>
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="jdvmlQCXhMRSzwc5WOii495MGPBYg9oN3ogA4cXJe2dwJfQzWAXjXYezp932x1Sc">
+                                <input type='hidden' id="product_id" name='product_id' value='8'/>
+                                <span class='submit-span'>
+            <input id="product_quantity" name='product_quantity' type='number' min='1' max='10' value='1'/><button
+                                        onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add"
+                                        name='cart_item_add' value='true'
+                                        class='btn btn-success btn-add'>Add to cart</button>
+            
+        </span>
+                            </form>
+                            <br><a href="/products/head-scarf/" class="btn btn-primary my-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='item'>
+                <div class="card" style="width: 15rem;">
+                    <img src='https://i0.wp.com/www.plagiarismtoday.com/wp-content/uploads/2011/11/copyright-symbol-square.jpg'
+                         height="100" width="100" alt=" logo"/> <br/>
+                    <div class="card-body">
+                        <h5 class="card-title">Socks</h5>
+                        Quantity: 10 <br>
+                        <p class="card-text">
+                        <p>socks</p></p>
+                        <div class="text-center">
+                            <form class='form-product-ajax' method='POST' action='/cart/update/' data-endpoint='#'
+                                  data-user='abc'>
+                                <input type="hidden" name="csrfmiddlewaretoken"
+                                       value="jdvmlQCXhMRSzwc5WOii495MGPBYg9oN3ogA4cXJe2dwJfQzWAXjXYezp932x1Sc">
+                                <input type='hidden' id="product_id" name='product_id' value='9'/>
+                                <span class='submit-span'>
+            <input id="product_quantity" name='product_quantity' type='number' min='1' max='10' value='1'/><button
+                                        onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add"
+                                        name='cart_item_add' value='true'
+                                        class='btn btn-success btn-add'>Add to cart</button>
+        </span>
+                            </form>
+                            <br><a href="/products/socks/" class="btn btn-primary my-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+<!--  Fontawesome CSS-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+<!-- Jquery confirm CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<!-- Stripe Custom CSS -->
+<!-- <link rel="stylesheet" href="https://benjay-ecommerce.s3.amazonaws.com/static/css/stripe-custom-style.css"> -->
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
+<!-- Jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Stripe JS -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<!-- Bootstrap Js -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- jquery confirm js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+<!-- JS Render -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.5/jsrender.min.js"></script>
+
+<!-- Stripe template form -->
+<script id="stripeTemplate" type="text/x-jsrender">
+  <form class='payment-form' action="" method="post" id="payment-form" data-token='{{:publishKey}}' data-next-url='{{:nextUrl}}'>
+    <div class="form-row">
+      <div id="card-element" class="form-control">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+      <!-- Used to display form errors. -->
+      <div id="card-errors" role="alert"></div>
+    </div>
+    <button type="submit" class="btn btn-primary my-3 btn-load">{{:btnTitle}}</button>
+  </form>
+
+</script>
+
+
+<!-- Charts.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<!-- Django secure AJAX -->
+<script src="https://benjay-ecommerce.s3.amazonaws.com/static/js/csrf.ajax.js"></script>
+
+<!-- eCommerce Custom Sales Data JS -->
+<script src="https://benjay-ecommerce.s3.amazonaws.com/static/js/ecommerce.sales.js"></script>
+
+<!-- eCommerce Custom JS -->
+<script src="https://benjay-ecommerce.s3.amazonaws.com/static/js/ecommerce.js"></script>
+
+<!-- eCommerce main JS -->
+<script src="https://benjay-ecommerce.s3.amazonaws.com/static/js/ecommerce.main.js"></script>
+
+
+</body>
+</html>
