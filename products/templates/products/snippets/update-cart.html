@@ -9,11 +9,10 @@
         {% if product_obj.quantity > 0 %}
         <span class='submit-span'>
             {% if product_obj in cart_item_obj %}
-                <a id="in-cart" class='btn btn-link in-cart' href='{% url "cart:home" %}'>In cart</a><button onclick="this.form.submitted=this.value;" class='btn btn-danger btn-remove' type='submit' id="product_item_remove" name='product_item_remove' value='true'>Remove</button>
+                <a id="in-cart" class='btn btn-link in-cart' href='{% url "cart:home" %}'>In cart</a><br><button onclick="this.form.submitted=this.value;" class='btn btn-danger btn-remove' type='submit' id="product_item_remove" name='product_item_remove' value='true'>Remove</button>
             {% else %}
-                <input id="product_quantity" name='product_quantity' type='number' min='1' max='{% if product_obj.quantity > 10 %}10{% else %}{{product_obj.quantity}}{% endif %}' value='1' /><button onclick="this.form.submitted=this.value;" type='submit' id="cart_item_add" name='cart_item_add' value='true' class='btn btn-success btn-add'>Add to cart</button>
+                <input id="product_quantity" name='product_quantity' type='number' min='1' max='{% if product_obj.quantity > 10 %}10{% else %}{{product_obj.quantity}}{% endif %}' value='1' /><button onclick="this.form.submitted=this.value;" class='btn btn-success btn-add' type='submit' id="cart_item_add" name='cart_item_add' value='true' > Add </button>
             {% endif %}
         </span>
         {% endif %}    
 </form>
-

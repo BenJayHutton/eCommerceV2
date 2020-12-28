@@ -94,7 +94,8 @@
                     data:jsonData,
                     success: function(data){
                         if(data.cartSuccess){
-                            $(location).attr('href','success/');
+                            $(location).attr('href','{% url "cart:success" %}');
+                            console.log("order number: {{ object.order_id}}")
                         }
                     },
                     error: function(error){

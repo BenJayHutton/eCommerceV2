@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="col-6 mx-auto py-5 text-center">
-    <h1 class="display-1">Thank you for your order</h1>
+<div class="row">
+    <div class="col-12">
+        <h3 class="display-3">Thank you for your order</h3>
+    </div>
+    <div class="col-6">
+        order number : {{ request.session.order_obj }}
+    </div>
 </div>
 {% endblock %}
