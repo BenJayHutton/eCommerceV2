@@ -14,13 +14,13 @@
         <div class="carousel-item active">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
+                    <img src="{{book_item.image.url}}" height="auto" width="100" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
             {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
                 </div>
-                <div class="col-5 my-1">
+                <div class="col-6">
                     {{book_item.description | linebreaks}}
                     <hr>
                 </div>
@@ -30,7 +30,7 @@
         <div class="carousel-item">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{book_item.image.url}}" height="150" width="auto" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
+                    <img src="{{book_item.image.url}}" height="auto" width="100" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
                 </div>
                 <div class="col-3">
                     {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
