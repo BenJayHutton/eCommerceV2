@@ -155,7 +155,6 @@ def checkout_home(request, *args, **kwargs):
         if request.user.is_authenticated:
             address_qs = Address.objects.filter(billing_profile=billing_profile)
         order_obj = Order.objects.new_or_get(billing_profile, cart_obj)
-        print(order_obj.order_id)
         request.session['order_obj']=order_obj.order_id
         if shipping_address_id:
             order_obj.shipping_address = Address.objects.get(id=shipping_address_id)
