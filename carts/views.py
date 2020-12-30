@@ -4,7 +4,6 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import DetailView, ListView
-import traceback
 
 from accounts.forms import LoginForm, GuestForm
 from accounts.models import GuestEmail
@@ -17,6 +16,7 @@ from .models import Cart, CartItem
 
 STRIPE_PUB_KEY = getattr(settings,"STRIPE_PUB_KEY",None)
 
+
 class CartHome(ListView):
     template_name = "carts/home.html"
 
@@ -28,6 +28,7 @@ class CartHome(ListView):
             "description": "Checkout home",
         }
         return render(request,"carts/home.html", context)
+
 
 def cart_update(request, *args, **kwargs):
     item_added = False
@@ -131,6 +132,7 @@ def cart_update(request, *args, **kwargs):
             return JsonResponse(json_data)
     return redirect("cart:home")
 
+
 def checkout_home(request, *args, **kwargs):
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
@@ -193,8 +195,9 @@ def checkout_home(request, *args, **kwargs):
     }
     return render(request, "carts/checkout.html",context)
 
+
 def checkout_done_view(request):
     for key, value in request.session.items():
-        print('{} => {}'.format(key, value))
+        if key == 'order_obj':
+            order_id = Order.objects.email_order(value)
     return render(request, "carts/checkout-done.html", {})
-    

@@ -175,10 +175,12 @@ class Order(models.Model):
         return self.order_id
 
     def update_total(self):
+        vat_total = self.cart.vat_total
         cart_total = self.cart.subtotal
         shipping_total = self.shipping_total
         try:
             new_total = Decimal(cart_total) + Decimal(shipping_total)
+            self.tax = vat_total
             self.total = new_total
             self.save()
         except Exception as e:

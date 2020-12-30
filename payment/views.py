@@ -9,7 +9,6 @@ import json
 class Paypal(View):
     def post(self, request, *args, **kwargs):        
         body = json.loads(request.body.decode("utf-8"))
-        print("body",body)
         user = None
         if request.user.is_authenticated:
             user = request.user
