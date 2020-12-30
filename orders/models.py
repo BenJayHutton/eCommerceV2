@@ -1,5 +1,7 @@
 import datetime
 from decimal import Decimal
+from django.core.mail import send_mail
+from django.template.loader import get_template
 from django.db import models
 from django.db.models import Count, Sum, Avg
 from django.db.models.signals import pre_save, post_save
@@ -98,6 +100,46 @@ class OrderManager(models.Manager):
             obj  = self.model.objects.create(billing_profile=billing_profile, cart=cart_obj)
             created = True
         return obj
+
+    def email_order(self, order_id):
+        qs = self.get_queryset().filter(order_id=order_id)
+        for order in qs:
+            subject = "SweetSweetSwag.com, order confirmation: " + order.order_id
+            try:
+                cus_name = order.billing_profile.user.full_name
+            except:
+                cus_name = ""
+            order_id = order.order_id
+            cus_email = order.billing_profile.email
+            cus_items = ""
+            for cart_items in order.cart.cart_items.all():
+                cus_items = cus_items + str(cart_items.quantity) + "* " + cart_items.product.title + "\n"
+            order_tax = order.tax
+            order_shipping = order.shipping_total
+            order_total = order.total
+
+        context = {
+            'name': cus_name,
+            'order_id': order_id,
+            'cus_items': cus_items,
+            'order_tax': order_tax,
+            'order_shipping': order_shipping,
+            'order_total': order_total,
+        }
+        txt_ = get_template("order_email/emails/order_confirmation.txt").render(context)
+        html_ = get_template("order_email/emails/order_confirmation.html").render(context)
+        recipient_list = [cus_email]
+
+        sent_mail = send_mail(
+            subject,
+            txt_,
+            'from@example.com',
+            recipient_list,
+            html_message=html_,
+            fail_silently=False,
+        )
+        print(sent_mail)
+        return True  # sent_mail
 
 
 class Order(models.Model):

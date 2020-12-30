@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView
 
 from carts.models import Cart, CartItem
+from orders.models import Order
 from products.models import Product, Tag
 from .forms import ContactForm
 
