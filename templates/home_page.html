@@ -6,22 +6,22 @@
 {% block content%}
 
 <div id="demo" class="carousel slide" data-ride="carousel">
-    <h4>Apparel</h4>
+    <h4>Featured</h4>
     <!-- The slideshow -->
     <div class="carousel-inner">
-        {% for book_item in products_apparel_obj.all %}
+        {% for featured_item in products_featured_obj.all %}
         {% if forloop.first %}
         <div class="carousel-item active">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{book_item.image.url}}" height="auto" width="100" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
+                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
                 </div>
                 <div class="col-3">
-                    {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
-            {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
+                    {% if featured_item.quantity > 10 %} 10 + available {% else %} {{featured_item.quantity}} available {% endif %}
+            {% include 'products/snippets/update-cart.html' with product_obj=featured_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
                 </div>
                 <div class="col-6">
-                    {{book_item.description | linebreaks}}
+                    {{featured_item.description | linebreaks}}
                     <hr>
                 </div>
             </div>
@@ -30,14 +30,14 @@
         <div class="carousel-item">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{book_item.image.url}}" height="auto" width="100" alt="{{ book_item.title}} logo" style="float:left; margin-right: 20px;">
+                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
                 </div>
                 <div class="col-3">
-                    {% if book_item.quantity > 10 %} 10 + available {% else %} {{book_item.quantity}} available {% endif %}
-            {% include 'products/snippets/update-cart.html' with product_obj=book_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
+                    {% if featured_item.quantity > 10 %} 10 + available {% else %} {{featured_item.quantity}} available {% endif %}
+            {% include 'products/snippets/update-cart.html' with product_obj=featured_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
                 </div>
                 <div class="col-6 my-1">
-                    {{book_item.description | linebreaks}}
+                    {{featured_item.description | linebreaks}}
                     <hr>
                 </div>
             </div>

@@ -16,6 +16,7 @@ class DefaultHomePage(TemplateView):
     products_fantasy_obj = model.objects.filter(tags__name="Fantasy", tags__public=True)
     products_apparel_obj = model.objects.filter(tags__name="Apparel", tags__public=True)
     products_digital_obj = model.objects.filter(tags__name="Digital", tags__public=True)
+    products_featured_obj = model.objects.filter(featured=True)
 
     def get(self, request):
         context = {}
@@ -25,7 +26,6 @@ class DefaultHomePage(TemplateView):
         cart_item_id = {}
         context['cart_item_id'] = cart_item_id
         cart_item_obj = []
-        # print("products_digital_obj ", self.products_digital_obj.count())
         for items in cart_obj.cart_items.all():
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
@@ -39,6 +39,7 @@ class DefaultHomePage(TemplateView):
                 "products_digital_obj": self.products_digital_obj,
                 'cart_item_obj': cart_item_obj,
                 'cart_item_id': cart_item_id,
+                'products_featured_obj': self.products_featured_obj,
                 }
         elif self.display_name == "about":
             context = {
@@ -52,7 +53,6 @@ class DefaultHomePage(TemplateView):
             context["first_name"] = visitor_name
         else:
             context["first_name"] = "New visitor"
-        #print(context)
         return render(request, "home_page.html", context)
 
 
