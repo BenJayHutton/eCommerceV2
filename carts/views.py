@@ -196,9 +196,12 @@ def checkout_home(request, *args, **kwargs):
 
 
 def checkout_done_view(request):
+    context = {
+        "title": "Thank you"
+    }
     for key, value in request.session.items():
         if key == 'order_obj':
             order_complete = Order.objects.email_order(value)
     if 'order_obj' in request.session:
         del request.session['order_obj']
-    return render(request, "carts/checkout-done.html", {})
+    return render(request, "carts/checkout-done.html", context)
