@@ -196,10 +196,8 @@ def checkout_home(request, *args, **kwargs):
 
 
 def checkout_done_view(request):
-    order_id = Order.objects.email_order("f7cv86sjje")
-    print(order_id)
     for key, value in request.session.items():
         if key == 'order_obj':
-            order_id = Order.objects.email_order("f7cv86sjje")
+            order_id = Order.objects.email_order(value)
             print(order_id)
     return render(request, "carts/checkout-done.html", {})
