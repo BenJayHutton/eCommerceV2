@@ -15,6 +15,7 @@ from .forms import LoginForm, RegisterForm, GuestForm, ReactivateEmailForm, User
 from .models import GuestEmail, EmailActivation
 from .signals import user_logged_in
 
+
 class Accounts(LoginRequiredMixin, DetailView):
     template_name = 'accounts/home.html'
 
@@ -33,6 +34,7 @@ class AccountEmailActivateView(FormMixin, View):
     success_url = '/'
     form_class = ReactivateEmailForm
     key = None
+
     def get(self, request, key=None, *args, **kwargs):
         self.key = key
         if key is not None:

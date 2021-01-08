@@ -55,6 +55,7 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
             cart_item_obj.append(items.product)
             cart_item_id[items.product] = int(items.id)
         context['cart_item_obj'] = cart_item_obj
+        context['title'] = 'History'
         return context
 
     def get_queryset(self, *args, **kwargs):
