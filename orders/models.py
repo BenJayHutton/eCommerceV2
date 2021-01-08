@@ -7,6 +7,8 @@ from django.db.models import Count, Sum, Avg
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from django.utils import timezone
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 from eCommerce.utils import unique_order_id_generator
 from addresses.models import Address
@@ -14,6 +16,7 @@ from billing.models import BillingProfile
 from carts.models import Cart
 from products.models import Product
 
+import os
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -117,7 +120,6 @@ class OrderManager(models.Manager):
             order_tax = order.tax
             order_shipping = order.shipping_total
             order_total = order.total
-
         context = {
             'name': cus_name,
             'order_id': order_id,
@@ -130,16 +132,20 @@ class OrderManager(models.Manager):
         html_ = get_template("order_email/emails/order_confirmation.html").render(context)
         recipient_list = [cus_email]
 
-        sent_mail = send_mail(
-            subject,
-            txt_,
-            'from@example.com',
-            recipient_list,
-            html_message=html_,
-            fail_silently=False,
-        )
-        print(sent_mail)
-        return True  # sent_mail
+        message = Mail(
+            from_email='no-reply@sweetsweetswag.com',
+            to_emails=cus_email,
+            subject=subject,
+            html_content=html_)
+        try:
+            sg = SendGridAPIClient(os.environ.get('EMAIL_HOST_PASSWORD'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e)
+        return True
 
 
 class Order(models.Model):
