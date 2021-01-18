@@ -58,3 +58,15 @@ class VerifyOwnership(View):
                     return JsonResponse({'owner': True})
                 return JsonResponse({'owner': False})
         raise Http404
+
+
+class OrderConfirmation(View):
+    def post(self, request):
+        order_id = request.POST.get('order_id', None)
+        if order_id is not None:
+            Order.objects.email_order(order_id)
+            #print success to messages
+        else:
+            #print order not found to messages
+            raise Http404
+        raise Http404

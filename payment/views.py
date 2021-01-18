@@ -6,6 +6,7 @@ from orders.models import Order
 from .models import Payment
 import json
 
+
 class Paypal(View):
     def post(self, request, *args, **kwargs):        
         body = json.loads(request.body.decode("utf-8"))
@@ -46,10 +47,11 @@ class Paypal(View):
                 return JsonResponse({"cartSuccess":False})
         return JsonResponse({"cartSuccess":False})
 
+
 class PaymentHome(TemplateView):
     template_name = 'payment/home.html'
 
-    def dispatch(self,*args, **kwargs):
+    def dispatch(self, *args, **kwargs):
         user = self.request.user
         if not user.is_staff:
             return render(self.request, "400.html", {})

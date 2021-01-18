@@ -16,6 +16,12 @@
         <p>Shipping Total: £{{ object.shipping_total}}</p>
         <p>Order Total: £{{ object.total}}</p>
         <p>Order Status: {{ object.get_status}}</p>
+        <p>
+        <form method="post" action="{% url 'orders:confirmation' %}">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ object.order_id }}">
+        <input class="btn-success" type="submit" value="Email receipt">
+    </form>
     </div>
 </div>
 

@@ -131,6 +131,10 @@ class OrderManager(models.Manager):
         txt_ = get_template("order_email/emails/order_confirmation.txt").render(context)
         html_ = get_template("order_email/emails/order_confirmation.html").render(context)
         recipient_list = [cus_email]
+        print("cus_name", cus_name)
+        print("order_id", order_id)
+        print("cus_items", cus_items)
+        print("cus_email", cus_email)
 
         message = Mail(
             from_email='no-reply@sweetsweetswag.com',
