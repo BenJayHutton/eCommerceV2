@@ -1,5 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, View
 
 from .models import Order, ProductPurchase
@@ -63,10 +66,15 @@ class VerifyOwnership(View):
 class OrderConfirmation(View):
     def post(self, request):
         order_id = request.POST.get('order_id', None)
+        order_qs = Order.objects.filter(order_id=order_id)
+        for order in order_qs:
+            email = order.billing_profile.email
+            print(order.get_absolute_url)
+            print("/orders/" + order_id)
         if order_id is not None:
             Order.objects.email_order(order_id)
-            #print success to messages
+            messages.success(request, "An email has been sent to: "+email)
+            url_redirect = (reverse("orders:detail", kwargs={"order_id": order_id}))
+            return redirect(url_redirect)
         else:
-            #print order not found to messages
             raise Http404
-        raise Http404
