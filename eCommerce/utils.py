@@ -59,12 +59,12 @@ get_month_data_range(months_ago=5, include_this_month=True)
 
 
 date_data = get_month_data_range(months_ago=24, include_this_month=True)
-month_labels = ["%s - %s" %(x['month'], x['year']) for x in date_data]
+month_labels = ["%s - %s" % (x['month'], x['year']) for x in date_data]
 json_ready_month_starts = [x['start_json'] for x in date_data]
 large_date_data = get_month_data_range(months_ago=324, include_this_month=True)
 
 
-def get_filename(path): # /abc/filename.xxx
+def get_filename(path):  # /abc/filename.xxx
     return os.path.basename(path)
 
 

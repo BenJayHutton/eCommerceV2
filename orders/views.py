@@ -45,7 +45,7 @@ class LibraryView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return ProductPurchase.objects.products_by_request(self.request) #by_request(self.request).digital()
+        return ProductPurchase.objects.products_by_request(self.request)  #by_request(self.request).digital()
 
 
 class VerifyOwnership(View):

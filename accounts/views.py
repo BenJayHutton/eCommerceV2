@@ -1,19 +1,16 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.http import is_safe_url
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, FormView, DetailView, View, UpdateView
 from django.views.generic.edit import FormMixin
 
-
 from eCommerce.mixins import NextUrlMixin, RequestFormAttachMixin
+
 from .forms import LoginForm, RegisterForm, GuestForm, ReactivateEmailForm, UserDetailChangeForm
-from .models import GuestEmail, EmailActivation
-from .signals import user_logged_in
+from .models import EmailActivation
 
 
 class Accounts(LoginRequiredMixin, DetailView):

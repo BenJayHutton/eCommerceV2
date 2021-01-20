@@ -32,13 +32,13 @@ def marketing_pref_update_receiver(sender, instance, *args, **kwargs):
         else:
             status_code, response_data = Mailchimp().unsubscribe(instance.user.email)
         
-        if response_data['status'] =='subscribed':
-            instance.subscribed= True
-            instance.mailchimp_subscribed= True
+        if response_data['status'] == 'subscribed':
+            instance.subscribed = True
+            instance.mailchimp_subscribed = True
             instance.mailchimp_msg = response_data
         else:
-            instance.subscribed= False
-            instance.mailchimp_subscribed= False
+            instance.subscribed = False
+            instance.mailchimp_subscribed = False
             instance.mailchimp_msg = response_data
     
 

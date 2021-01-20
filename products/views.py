@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_list_or_404, redirect
-from django.views.generic import TemplateView, DetailView, ListView, View
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.views.generic import DetailView, ListView, View
 
 from analytics.mixins import ObjectViewedMixin
 from carts.models import Cart, CartItem
@@ -65,44 +65,44 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
 
 
 class ProductDownloadView(View):
-        def get (self, request, *args, **kwargs):
-            slug = kwargs.get('slug')
-            pk = kwargs.get('pk')
-            downloads_qs = ProductFile.objects.filter(pk=pk, product__slug=slug)
-            if downloads_qs.count() !=1:
-                raise Http404("Download not found")
-            download_obj = downloads_qs.first()
-            # permission check
-            can_download = False
-            user_ready = True
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        pk = kwargs.get('pk')
+        downloads_qs = ProductFile.objects.filter(pk=pk, product__slug=slug)
+        if downloads_qs.count() != 1:
+            raise Http404("Download not found")
+        download_obj = downloads_qs.first()
+        # permission check
+        can_download = False
+        user_ready = True
 
-            if download_obj.user_required:
-                if not request.user.is_authenticated:
-                    user_ready = False
-                else:
-                    can_download = False
-
-            purchased_products = Product.objects.none()
-            if download_obj.free:
-                can_download = True
-                user_ready = True
+        if download_obj.user_required:
+            if not request.user.is_authenticated:
+                user_ready = False
             else:
-                purchased_products = ProductPurchase.objects.products_by_request(request)
-                if download_obj.product in purchased_products:
-                    can_download = True
+                can_download = False
 
-            if not can_download or not user_ready:
-                messages.error(request, "You don't have access to download media")
-                return redirect(download_obj.get_default_url())
+        purchased_products = Product.objects.none()
+        if download_obj.free:
+            can_download = True
+            user_ready = True
+        else:
+            purchased_products = ProductPurchase.objects.products_by_request(request)
+            if download_obj.product in purchased_products:
+                can_download = True
 
-            aws_filepath = download_obj.generate_download_url()
-            print(aws_filepath)
-            return HttpResponseRedirect(aws_filepath)
+        if not can_download or not user_ready:
+            messages.error(request, "You don't have access to download media")
+            return redirect(download_obj.get_default_url())
+
+        aws_filepath = download_obj.generate_download_url()
+        print(aws_filepath)
+        return HttpResponseRedirect(aws_filepath)
 
 
 class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
-    template_name="products/detail.html"
+    template_name = "products/detail.html"
 
     def get_context_data(self, *args, **kwargs):
         request = self.request

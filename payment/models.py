@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from accounts.models import User
 from orders.models import Order
 
 User = settings.AUTH_USER_MODEL
@@ -19,4 +18,4 @@ class Payment(models.Model):
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return  "Order: " +self.order.order_id
+        return  "Order: " + self.order.order_id

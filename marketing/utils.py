@@ -46,7 +46,7 @@ class Mailchimp(object):
         return endpoint
 
     def check_valid_status(self, status):
-        choices = ['subscribed','unsubscribed', 'cleaned', 'pending']
+        choices = ['subscribed', 'unsubscribed', 'cleaned', 'pending']
         if status not in choices:
             raise ValueError("Not a valid choice")
         return status

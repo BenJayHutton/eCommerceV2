@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate
 
 User = get_user_model()
 
+
 class Blog(models.Model):
     user        = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     title       = models.CharField(max_length=120)

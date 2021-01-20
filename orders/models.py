@@ -1,6 +1,5 @@
 import datetime
 from decimal import Decimal
-from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.db import models
 from django.db.models import Count, Sum, Avg
@@ -39,13 +38,13 @@ class OrderManagerQuerySet(models.query.QuerySet):
         paid = recent.by_status(status='paid')
         paid_data = paid.totals_data()
         data = {
-            'recent':recent,
-            'recent_data':recent_data,
-            'recent_cart_data':recent_cart_data,
-            'shipped':shipped,
-            'shipped_data':shipped_data,
-            'paid':paid,
-            'paid_data':paid_data,
+            'recent': recent,
+            'recent_data': recent_data,
+            'recent_cart_data': recent_cart_data,
+            'shipped': shipped,
+            'shipped_data': shipped_data,
+            'paid': paid,
+            'paid_data': paid_data,
         }
         return data
 
@@ -96,7 +95,7 @@ class OrderManager(models.Manager):
 
     def new_or_get(self, billing_profile, cart_obj):
         created = False
-        qs = self.get_queryset().filter(billing_profile=billing_profile, cart=cart_obj, active = True, status='created')
+        qs = self.get_queryset().filter(billing_profile=billing_profile, cart=cart_obj, active=True, status='created')
         if qs.count() == 1:
             obj = qs.first()
         else:
@@ -152,7 +151,7 @@ class Order(models.Model):
     billing_profile     = models.ForeignKey(BillingProfile, null=True, blank=True, on_delete=models.SET_NULL)
     order_id            = models.CharField(max_length=120, unique=True, blank=True, null=True)
     shipping_address    = models.ForeignKey(Address, related_name='shipping_address', null=True, blank=True, on_delete=models.SET_NULL)
-    billing_address     = models.ForeignKey(Address, related_name= 'billing_address', null=True, blank=True, on_delete=models.SET_NULL)
+    billing_address     = models.ForeignKey(Address, related_name='billing_address', null=True, blank=True, on_delete=models.SET_NULL)
     cart                = models.ForeignKey(Cart, default=None, null=True, blank=True, on_delete=models.SET_NULL)    
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total      = models.DecimalField(default=5.99, max_digits=10, decimal_places=2)
@@ -168,10 +167,10 @@ class Order(models.Model):
         ordering = ['-timestamp', '-updated']
 
     def get_absolute_url(self):
-        return reverse("orders:detail", kwargs={'order_id':self.order_id})
+        return reverse("orders:detail", kwargs={'order_id': self.order_id})
 
     def get_status(self):
-        if self.status =="refunded":
+        if self.status == "refunded":
             return "Refunded Order"
         elif self.status == "shipped":
             return "Shipped"
@@ -197,7 +196,7 @@ class Order(models.Model):
         product_id = kwargs['product_id']
         product_qty = kwargs['product_qty']
         session_order_id = kwargs['session_order_id']
-        test_obj = Order(order_id = session_order_id)
+        test_obj = Order(order_id=session_order_id)
         test_obj.save()
         obj = Order.objects.filter(order_id__exact=1)
 
@@ -213,21 +212,21 @@ class Order(models.Model):
         billing_profile = self.billing_profile
         billing_address = self.billing_address
         total = self.total
-        if billing_profile and shipping_done and billing_address and total >=0:
+        if billing_profile and shipping_done and billing_address and total >= 0:
             return True
         return False
 
     def update_purchases(self):
         for p in self.cart.cart_items.all():
             obj, create = ProductPurchase.objects.get_or_create(
-                order_id = self.order_id,
-                product = p.product,
-                billing_profile= self.billing_profile,
+                order_id=self.order_id,
+                product=p.product,
+                billing_profile=self.billing_profile,
             )
-        return ProductPurchase.objects.filter(order_id = self.order_id).count()
+        return ProductPurchase.objects.filter(order_id=self.order_id).count()
 
     def mark_paid(self):
-        if self.status !='paid':
+        if self.status != 'paid':
             if self.status != 'paid':
                 if self.check_done():
                     self.status = "paid"
@@ -250,7 +249,7 @@ pre_save.connect(pre_save_create_order_id, sender=Order)
 def post_save_cart_total(sender, instance, created, *args, **kwargs):
     if not created:
         cart_obj = instance
-        cart_total  = cart_obj.total
+        cart_total = cart_obj.total
         cart_id = cart_obj.id
         qs = Order.objects.filter(cart__id=cart_id)
         if qs.count() == 1:

@@ -4,7 +4,7 @@ from carts.models import Cart
 
 
 class SearchProductView(ListView):
-    template_name="search/view.html"
+    template_name = "search/view.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(SearchProductView, self).get_context_data(*args, **kwargs)
@@ -20,7 +20,7 @@ class SearchProductView(ListView):
         request = self.request
         
         method_dict = request.GET
-        query = method_dict.get('q', None) # method_dict['q']
+        query = method_dict.get('q', None)  # method_dict['q']
         
         if query is not None:
             return Product.objects.search(query)

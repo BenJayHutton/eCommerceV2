@@ -2,7 +2,7 @@ from django.conf import settings
 import decimal
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from django.shortcuts import reverse
 
 from eCommerce.aws.download.utils import AWSDownload
@@ -24,9 +24,9 @@ class TagManager(models.Manager):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=128,unique=True)
+    name = models.CharField(max_length=128, unique=True)
     public = models.BooleanField(default=False)
-    blurb = models.CharField(max_length = 500, null = True)
+    blurb = models.CharField(max_length=500, null=True)
 
     objects = TagManager()
 
@@ -34,7 +34,7 @@ class Tag(models.Model):
         return self.name
 
 
-class ProductQuerySet(models.query.QuerySet): # class.objects.all().attribute
+class ProductQuerySet(models.query.QuerySet):  # class.objects.all().attribute
     def active(self):
         return self.filter(active=True)
 
@@ -126,7 +126,7 @@ class Product(models.Model):
         return qs
 
     def __str__(self):
-        return  self.title
+        return self.title
 
     @property
     def name(self):
@@ -192,7 +192,7 @@ class ProductFile(models.Model):
         PROTECTED_DIR_NAME = getattr(settings, 'PROTECTED_DIR_NAME', 'protected')
         path = "{base}/{file_path}".format(base=PROTECTED_DIR_NAME, file_path=str(self.file))
         print(path)
-        aws_dl_object =  AWSDownload(access_key, secret_key, bucket, region)
+        aws_dl_object = AWSDownload(access_key, secret_key, bucket, region)
         file_url = aws_dl_object.generate_url(path, new_filename=self.display_name)
         return file_url
 

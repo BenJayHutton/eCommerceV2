@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 from django.db import models
-from django.db.models import Count, Sum, Avg
+from django.db.models import Sum
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from products.models import Product
 
@@ -22,8 +22,8 @@ class CartItemManager(models.Manager):
             request.session.create()
         cart_item_id = request.session.get("cart_item_id", None)
         session_id = request.session.session_key
-        product_obj = kwargs.get("product_obj",None)
-        product_quantity = kwargs.get("product_quantity",None)
+        product_obj = kwargs.get("product_obj", None)
+        product_quantity = kwargs.get("product_quantity", None)
         qs = self.get_queryset().filter(id=cart_item_id, product=product_obj)
         if qs:
             cart_item_obj = qs.first()
@@ -35,7 +35,7 @@ class CartItemManager(models.Manager):
                 cart_item_obj.quantity = product_quantity
                 cart_item_obj.save()
         else:
-            cart_item_obj = CartItem.objects.create(session_id = session_id, quantity=product_quantity, product=product_obj)
+            cart_item_obj = CartItem.objects.create(session_id=session_id, quantity=product_quantity, product=product_obj)
             if product_obj and cart_item_obj.product is None:
                 cart_item_obj.product = product_obj
                 cart_item_obj.save()
@@ -81,7 +81,7 @@ class CartManager(models.Manager):
         return self.model.objects.create(user=user_obj)
 
     def calculate_cart_total(self, request, *args, **kwargs):
-        cart_obj = kwargs.get("cart_obj",None)
+        cart_obj = kwargs.get("cart_obj", None)
         total = Decimal()
         vat_total = Decimal()
         sub_total = Decimal()
@@ -150,7 +150,7 @@ post_save.connect(cart_post_save_reciever, sender=Cart)
     
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
-    if action =='post_add' or action=='post_remove' or action =='post_clear':
+    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
         vat_total = Decimal(0.0)
         sub_total = Decimal(0.0)
         cart_items = instance.cart_items.all()

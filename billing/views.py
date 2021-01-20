@@ -33,6 +33,7 @@ def pay_method_view(request):
 
     return render(request, 'billing/payment-method.html', context)
 
+
 def pay_method_createview(request):
     if request.method == "POST" and request.is_ajax():
         billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)

@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import TemplateView, View
-from django.http import Http404, JsonResponse, HttpResponse
-from carts.models import Cart
+from django.http import JsonResponse
 from orders.models import Order
 from .models import Payment
 import json
@@ -33,19 +32,19 @@ class Paypal(View):
                 request.session['cart_item_count'] = 0
                 del request.session['cart_id']
                 new_payment_obj = Payment.objects.get_or_create(
-                    user = user,
-                    order= order_obj,
-                    paymentMethod = paymentMethod,
-                    paypalOrderID = paypalOrderID,
-                    paypalPayerID = paypalPayerID,
-                    is_paid = True,
-                    summery = body,
-                    total = subTotal
+                    user=user,
+                    order=order_obj,
+                    paymentMethod=paymentMethod,
+                    paypalOrderID=paypalOrderID,
+                    paypalPayerID=paypalPayerID,
+                    is_paid=True,
+                    summery=body,
+                    total=subTotal
                 )
-                return JsonResponse({"cartSuccess":True})
+                return JsonResponse({"cartSuccess": True})
             else:
-                return JsonResponse({"cartSuccess":False})
-        return JsonResponse({"cartSuccess":False})
+                return JsonResponse({"cartSuccess": False})
+        return JsonResponse({"cartSuccess": False})
 
 
 class PaymentHome(TemplateView):

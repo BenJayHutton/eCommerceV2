@@ -220,5 +220,3 @@ class GuestEmail(models.Model):
 
     def __str__(self):
         return self.email
-
-# add marketing.utils as a signel so GuestEmail.email is subscribed on creation

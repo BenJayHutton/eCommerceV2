@@ -1,12 +1,10 @@
-from django.contrib.sessions.backends.db import SessionStore
 from django.conf import settings
-from django.http import HttpResponse, HttpRequest, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 
 from accounts.forms import LoginForm, GuestForm
-from accounts.models import GuestEmail
 from addresses.forms import AddressForm
 from addresses.models import Address
 from billing.models import BillingProfile
@@ -14,7 +12,7 @@ from orders.models import Order
 from products.models import Product
 from .models import Cart, CartItem
 
-STRIPE_PUB_KEY = getattr(settings,"STRIPE_PUB_KEY",None)
+STRIPE_PUB_KEY = getattr(settings, "STRIPE_PUB_KEY", None)
 
 
 class CartHome(ListView):
@@ -27,7 +25,7 @@ class CartHome(ListView):
             "title": "Cart",
             "description": "Checkout home",
         }
-        return render(request,"carts/home.html", context)
+        return render(request, "carts/home.html", context)
 
 
 def cart_update(request, *args, **kwargs):
@@ -104,7 +102,7 @@ def cart_update(request, *args, **kwargs):
         request.session['cart_item_count'] = cart_obj.cart_items.count()
 
         if request.is_ajax():
-            json_data= {
+            json_data = {
                 "added": item_added,
                 "removed": item_removed,
                 "updated": item_updated,
@@ -126,8 +124,8 @@ def cart_update(request, *args, **kwargs):
                 json_data.update({
                     "cart_total": round(cart_obj.total, 2),
                     "cart_vat": round(cart_obj.vat_total, 2),
-                    "cart_subtotal":round(cart_obj.subtotal, 2),
-                    "price_of_item":round(cart_item_obj.total, 2)
+                    "cart_subtotal": round(cart_obj.subtotal, 2),
+                    "price_of_item": round(cart_item_obj.total, 2)
                     })
             return JsonResponse(json_data)
     return redirect("cart:home")
@@ -155,7 +153,7 @@ def checkout_home(request, *args, **kwargs):
         if request.user.is_authenticated:
             address_qs = Address.objects.filter(billing_profile=billing_profile)
         order_obj = Order.objects.new_or_get(billing_profile, cart_obj)
-        request.session['order_obj']=order_obj.order_id
+        request.session['order_obj'] = order_obj.order_id
         if shipping_address_id:
             order_obj.shipping_address = Address.objects.get(id=shipping_address_id)
             del request.session["shipping_address_id"]
@@ -175,7 +173,7 @@ def checkout_home(request, *args, **kwargs):
                 request.session['cart_item_count'] = 0
                 del request.session['cart_id']
                 if not billing_profile.user:
-                    billing_profile.set_cards_inactive() # is this the right spot for this?
+                    billing_profile.set_cards_inactive()  # is this the right spot for this?
                 return redirect("cart:success")
             else:
                 return redirect("cart:checkout")
@@ -192,7 +190,7 @@ def checkout_home(request, *args, **kwargs):
         "publish_key": STRIPE_PUB_KEY,
         "shipping_address_required": shipping_address_required
     }
-    return render(request, "carts/checkout.html",context)
+    return render(request, "carts/checkout.html", context)
 
 
 def checkout_done_view(request):

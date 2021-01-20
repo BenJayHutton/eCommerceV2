@@ -1,15 +1,14 @@
-from django.http import HttpResponse, JsonResponse, HttpRequest
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.generic import TemplateView
 
 from carts.models import Cart, CartItem
-from orders.models import Order
 from products.models import Product, Tag
 from .forms import ContactForm
 
 
 class DefaultHomePage(TemplateView):
-    display_name="home"
+    display_name = "home"
     model = Product
     tags_obj = Tag
 

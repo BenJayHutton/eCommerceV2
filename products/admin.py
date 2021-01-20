@@ -4,13 +4,14 @@ from .models import Product, ItemImage, Tag, ProductFile
 
 
 class ProductFileInline(admin.TabularInline):
-    model= ProductFile
+    model = ProductFile
     extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'slug']
     inlines = [ProductFileInline]
+
     class Meta:
         model = Product
 

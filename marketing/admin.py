@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import MarketingPreference
 
+
 class MarketingPreferenceAdmin(admin.ModelAdmin):
     list_display = [
         '__str__', 'subscribed', 'updated'
@@ -12,6 +13,7 @@ class MarketingPreferenceAdmin(admin.ModelAdmin):
         'timestamp',
         'updated',
     ]
+
     class meta:
         model = MarketingPreference
         fields = [
@@ -22,5 +24,6 @@ class MarketingPreferenceAdmin(admin.ModelAdmin):
             'timestamp',
             'updated',
         ]
+
 
 admin.site.register(MarketingPreference, MarketingPreferenceAdmin)
