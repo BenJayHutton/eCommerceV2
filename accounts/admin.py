@@ -7,6 +7,7 @@ from.forms import UserAdminCreationForm, UserAdminChangeForm
 from .models import User, GuestEmail, EmailActivation
 User = get_user_model()
 
+
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserAdminChangeForm
