@@ -8,7 +8,7 @@ class BlogListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BlogListView, self).get_context_data(*args, **kwargs)
-        context["title"]= "This is a blog"
+        context["title"] = "This is a blog"
         return context
 
     def get_queryset(self, *args, **kwargs):
