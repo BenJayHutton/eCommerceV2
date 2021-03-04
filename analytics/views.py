@@ -1,12 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, ListView, DetailView
 from django.shortcuts import render
 from django.utils import timezone
 
 import datetime
 
 from orders.models import Order
+
+from .models import ObjectViewed
+
+
+class ObjectViewList(ListView):
+    model = ObjectViewed
 
 
 class OrderView(LoginRequiredMixin, TemplateView):
@@ -68,7 +74,7 @@ class SalesAjaxView(View):
 class SalesView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/sales.html'
 
-    def dispatch(self,*args, **kwargs):
+    def dispatch(self, *args, **kwargs):
         user = self.request.user
         if not user.is_staff:
             return render(self.request, "400.html", {})
