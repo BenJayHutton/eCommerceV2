@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'payment',
     'products',
     'search',
+    'tags',
 ]
 
 AUTH_USER_MODEL = 'accounts.User' #changes built-in user to ours
