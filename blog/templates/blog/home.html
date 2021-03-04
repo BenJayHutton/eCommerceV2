@@ -1,17 +1,22 @@
-{% extends "base.html" %}
-{% block content %}
-
-<h1>This is a Blog</h1>
-<hr>
-
-{% for blog in blog_list %}
-<div class='col-sm-6 col-md-4 col-lg-4 my-3'>
-  Title: {{blog.title}} <br>
-  Author: {{blog.user.full_name}} <br>
-  <hr>
-  <div>
-    {{blog.blog_post|safe}}
+{% extends "base.html" %}{% block content %}
+<div class="row">
+  {% if blog_obj %}
+    <div class='col-sm col-md col-lg my-3'>
+      <h3>Its a blog</h3>
+    {% for blog_obj in blog_obj %}
+    {{blog_obj.title}} <a href="{{ blog_obj.get_absolute_url }}">View</a><br>
+    <br>
+    {% endfor %}
+    </div>
+  {% else %}
+  <div class='col-sm col-md col-lg my-3'>
+    No blog posts at the moment...
   </div>
-</div>
-{% endfor %}
+  {% endif %}
+    {% if user.is_authenticated %}
+    <div class="col-12">
+        <a href="{% url 'blog:create' %}"><button class="btn-success">Create blog</button></a>
+    </div>
+    {% endif %}
+  </div>
 {% endblock %}
