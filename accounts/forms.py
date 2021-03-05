@@ -22,6 +22,7 @@ class ReactivateEmailForm(forms.Form):
             raise forms.ValidationError(mark_safe(msg))
         return email
 
+
 class UserAdminCreationForm(forms.ModelForm):
     """
     A form for creating new users. Includes all the required
@@ -48,13 +49,13 @@ class UserAdminCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class UserDetailChangeForm(forms.ModelForm):
     full_name = forms.CharField(label='Name', required=False, widget=forms.TextInput(attrs={"class":"form-control"}))
     
     class Meta:
         model = User
         fields = ['full_name']
-
 
 
 class UserAdminChangeForm(forms.ModelForm):
@@ -75,7 +76,6 @@ class UserAdminChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-
 class GuestForm(forms.ModelForm):
     #email       = forms.EmailField()
     class Meta:
@@ -83,6 +83,7 @@ class GuestForm(forms.ModelForm):
         fields = [
             'email',
         ]
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(GuestForm, self).__init__(*args, **kwargs)
@@ -94,7 +95,6 @@ class GuestForm(forms.ModelForm):
             request = self.request
             request.session['guest_email_id'] = obj.id
         return obj
-
 
 
 class LoginForm(forms.Form):
