@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^blog/', include(("blog.urls", "blog"), namespace='blog')),
     url(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     url(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
+    url(r'^ebay/', include(("ebay.urls", "ebay"), namespace='ebay')),
     url(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
     url(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
     url(r'^contact/$', contact_page, name='contact'),

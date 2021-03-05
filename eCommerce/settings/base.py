@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'billing',
     'blog',
     'carts',
+    'ebay',
     'marketing',
     'orders',
     'payment',
