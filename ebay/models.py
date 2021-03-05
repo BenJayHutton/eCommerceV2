@@ -17,9 +17,10 @@ class EbayAccountManager(models.Manager):
 
 class EbayAccount(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    api_key = models.CharField(max_length=255)
+    production_api_key = models.CharField(max_length=255, blank=True)
+    developer_api_key = models.CharField(max_length=255, blank=True)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user
+        return self.user.full_name
