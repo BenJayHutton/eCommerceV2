@@ -23,19 +23,19 @@
           "Type":"Reference"
         }
       ],
-      "ItemSpecifics":
-      {
+      "ItemSpecifics":{
         "NameValueList":[
-          {
-            "Name":"Brand",
-            "Value":["Lego"]},
+          {"Name":"Brand","Value":["Lego"]},
           {"Name":"Material","Value":["Plastic"]},
           {"Name":"Product Line (LEGO Theme)","Value":["Harry Potter"]},
           {"Name":"Year","Value":["2020"]},
           {"Name":"LEGO Set Name","Value":["Harry Potter"]},
           {"Name":"Piece Count","Value":["320"]},
           {"Name":"LEGO Character","Value":["Draco Malfoy"]},
-          {"Name":"MPN","Value":["30628"]}]},"Title":"LEGO Harry Potter The Monster Book of Monsters 320 Pc (30628)"},
+          {"Name":"MPN","Value":["30628"]}
+        ]
+      },
+    "Title":"LEGO Harry Potter The Monster Book of Monsters 320 Pc (30628)"},
     {
       "DetailsURL":"http://www.ebay.com/p/26040068227#ProductDetails",
       "DisplayStockPhotos":true,
