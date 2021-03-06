@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% if result %}
 <h3>Ebay</h3>
 <p>
-{% include 'ebay/snippets/findByProductJson.html' with result=result %}
+    {% include 'ebay/snippets/findByProductJson.html' with result=result %}
 </p>
+{% else %}
+No results
+{% endif %}
+
 {% endblock %}
