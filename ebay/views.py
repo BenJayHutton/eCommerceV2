@@ -8,6 +8,7 @@ from django.views.generic import (
     TemplateView,
 )
 
+from .utils import EbaySearch
 from .models import EbayAccount
 
 
@@ -15,8 +16,15 @@ class EbaySearchListing(TemplateView):
 
     def get(self, request):
         ebay_account = EbayAccount.objects.all().filter(user=request.user).first()
-        print(ebay_account)
+        api_key = None
+        search = "Harry potter"
+        if ebay_account:
+            api_key = ebay_account.production_api_key
+
+        if api_key is not None:
+            result = EbaySearch.find_items_by_product(api_key=api_key, search=search)
+
         context = {
-            'ebay_account':ebay_account,
+            'result': result,
         }
         return render(request, "ebay/index.html", context)

@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>Ebay</h3>
-{{ ebay_account.developer_api_key }}
+<p>
+{% for Product in result.Product %}
+    <p>
+    {{Product.Title}}<br>
+    {{Product.ItemSpecifics}}<br>
+    {% for ProductID  in Product.ProductID%}
+        {{ ProductID.Type }}: {{ ProductID.Value }} <br>
+    {% endfor %}
+    </p>
+    <hr>
+{% endfor %}
+
+{% for Product in result.Product %}
+</p>
+
+<p>
+    {{ Product }}
+</p>
+{% endfor %}
+
 {% endblock %}
