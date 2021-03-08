@@ -9,7 +9,7 @@ from django.views.generic import (
     TemplateView,
 )
 
-from .utils import EbaySearch
+from .utils import EbaySearch, EbayFindingApi
 from .forms import EbaySearchForm
 from .models import EbayAccount
 
@@ -30,15 +30,31 @@ class EbaySearchListing(TemplateView):
         ebay_production_key = EbayAccount.objects.all().filter(user=user).first().production_api_key
         if form.is_valid():
             result = EbaySearch.find_items_by_product(self, search=form.cleaned_data['search'], api_key=ebay_production_key)
-
+        if result['Ack'] == "Success":
+            for product in result['Product']:
+                for ProductID in product['ProductID']:
+                    if ProductID['Type'] =='Reference':
+                        print(EbayFindingApi.find_items_by_product(self, api_key=ebay_production_key, product_id=ProductID['Value']))
+                        # print(ProductID['Value'])
         context = {
             'result': result,
             'form': self.form_class,
         }
         return render(request, "ebay/index.html", context)
 
-    def ebaysearch(self):
-        pass
+
+class EbayFindingApi(TemplateView):
+    #template_name = 'ebay_finding_api.html'
+
+    def get(self, request, *args, **kwargs):
+        search = kwargs.get('search')
+        context = {
+            "search": search,
+        }
+        print("search", search)
+        print("args", args)
+        print("kwargs", kwargs)
+        return render(request, "ebay/ebay_finding_api.html", context)
         # api_key = None
         # result = None
         # request = self.request

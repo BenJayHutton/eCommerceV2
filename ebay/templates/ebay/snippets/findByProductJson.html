@@ -3,7 +3,6 @@
     {% for NameValueList in Product.ItemSpecifics.NameValueList %}
     {{NameValueList.Name}}: {{NameValueList.Value}}<br>
     {% endfor %}
-
     {% for ProductID  in Product.ProductID%}
         {{ ProductID.Type }}: {{ ProductID.Value }} <br>
     {% endfor %}
