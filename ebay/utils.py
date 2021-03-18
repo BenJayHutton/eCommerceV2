@@ -1,15 +1,16 @@
-from django.views import View
+from django.views.generic import TemplateView
 import urllib.parse
 import requests
 
 
-class EbaySearch(View):
+class EbaySearch(TemplateView):
     base_url = "https://open.api.ebay.com"
 
     def ebay_basic_search(self, search, api_key):
-        api_key = api_key
-        return_text = search
-        return return_text+" - "+api_key
+        # api_key = api_key
+        # return_text = search
+        # return return_text+" - "+api_key
+        return self.base_url
 
     def find_items_by_product(self, **kwargs):
         api_key = kwargs.get("api_key", None)
@@ -26,7 +27,8 @@ class EbaySearch(View):
         return url
 
 
-class EbayFindingApi(View):
+class EbayFindingApi(TemplateView):
+    base_url_ = "test.com"
 
     def find_items_by_product(self, **kwargs):
         api_key = kwargs.get("api_key", None)

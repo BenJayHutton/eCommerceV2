@@ -9,18 +9,41 @@ from django.views.generic import (
     TemplateView,
 )
 
-from .utils import EbaySearch, EbayFindingApi
+import urllib.parse
+import requests
 from .forms import EbaySearchForm
 from .models import EbayAccount
 
 
+class EbayMerchendiseApi(TemplateView):
+
+    def getMostWatchedItems(self):
+        return "getMostWatchedItems"
+
+
+class EbayShoppingApi(TemplateView):
+    template_name = 'ebay_finding_api.html'
+    base_url = "https://open.api.ebay.com/shopping?"
+
+    def find_products(self, *args, **kwargs):
+        api_key = kwargs.get("api_key", None)
+        search = urllib.parse.quote(kwargs.get("search", None))
+        url = self.base_url+"callname=FindProducts&responseencoding=JSON&appid=" + api_key + "&siteid=0&version=967&QueryKeywords=" + search + "&AvailableItemsOnly=true&MaxEntries=2"
+        response = requests.get(url)
+
+        return response.json()
+
+
 class EbaySearchListing(TemplateView):
     form_class = EbaySearchForm
+    EbayShoppingApi = EbayShoppingApi()
+    EbayMerchendiseApi = EbayMerchendiseApi()
 
     def get(self, request):
 
         context = {
             'form': self.form_class,
+            'EbayMerchendiseApi': self.EbayMerchendiseApi,
         }
         return render(request, "ebay/index.html", context)
 
@@ -29,49 +52,10 @@ class EbaySearchListing(TemplateView):
         user = request.user
         ebay_production_key = EbayAccount.objects.all().filter(user=user).first().production_api_key
         if form.is_valid():
-            result = EbaySearch.find_items_by_product(self, search=form.cleaned_data['search'], api_key=ebay_production_key)
-        if result['Ack'] == "Success":
-            for product in result['Product']:
-                for ProductID in product['ProductID']:
-                    if ProductID['Type'] =='Reference':
-                        print(EbayFindingApi.find_items_by_product(self, api_key=ebay_production_key, product_id=ProductID['Value']))
-                        # print(ProductID['Value'])
+            result = self.EbayShoppingApi.find_products(search=form.cleaned_data['search'], api_key=ebay_production_key)
+
         context = {
             'result': result,
             'form': self.form_class,
         }
         return render(request, "ebay/index.html", context)
-
-
-class EbayFindingApi(TemplateView):
-    #template_name = 'ebay_finding_api.html'
-
-    def get(self, request, *args, **kwargs):
-        search = kwargs.get('search')
-        context = {
-            "search": search,
-        }
-        print("search", search)
-        print("args", args)
-        print("kwargs", kwargs)
-        return render(request, "ebay/ebay_finding_api.html", context)
-        # api_key = None
-        # result = None
-        # request = self.request
-        # search_ = "Harry Potter"
-        # json_response = kwargs.get("json_response", None)
-        # json_return = []
-        # for product in json_response['Product']:
-        #     for productID in product['ProductID']:
-        #         json_return.append(productID)
-        # ebay_account = EbayAccount.objects.all().filter(user=request.user).first()
-        # if ebay_account:
-        #     api_key = ebay_account.production_api_key
-        #
-        # if api_key is not None:
-        #     result = EbaySearch.find_items_by_product(self, api_key=api_key, search=search_)
-        #
-        # context = {
-        #     'result': result,
-        # }
-        #return render(request, "ebay/index.html", context)

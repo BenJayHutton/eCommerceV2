@@ -13,5 +13,13 @@
         {% include 'ebay/snippets/findByProductJson.html' with result=result %}
     </div>
     {% endif %}
+
+    {% if find_products %}
+    <div class="col-8">
+        {% include 'ebay/snippets/find_products.html' with result=find_products %}
     </div>
+    {% endif %}
+    </div>
+
+{{ EbayMerchendise.getMostWatchedItems }}
 {% endblock %}
