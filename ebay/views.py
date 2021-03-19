@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import (
@@ -9,8 +10,8 @@ from django.views.generic import (
     TemplateView,
 )
 
-import urllib.parse
 import requests
+import urllib
 from .forms import EbaySearchForm
 from .models import EbayAccount
 
@@ -22,16 +23,108 @@ class EbayMerchendiseApi(TemplateView):
 
 
 class EbayShoppingApi(TemplateView):
-    template_name = 'ebay_finding_api.html'
-    base_url = "https://open.api.ebay.com/shopping?"
+    template_name = "ebay_finding_api.html"
+    responseencoding = "JSON"
+    base_url = "https://open.api.ebay.com/shopping?" \
+               "callname={callname}&" \
+               "responseencoding={responseencoding}&" \
+               "appid={api_key}&" \
+               "siteid=0&" \
+               "version=967&" \
+               "QueryKeywords={search}&" \
+               "AvailableItemsOnly=true&" \
+               "MaxEntries=2"
 
     def find_products(self, *args, **kwargs):
         api_key = kwargs.get("api_key", None)
         search = urllib.parse.quote(kwargs.get("search", None))
-        url = self.base_url+"callname=FindProducts&responseencoding=JSON&appid=" + api_key + "&siteid=0&version=967&QueryKeywords=" + search + "&AvailableItemsOnly=true&MaxEntries=2"
-        response = requests.get(url)
+        call_name = "FindProducts"
+        url = self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=search)
 
+        response = requests.get(url)
         return response.json()
+
+    def get_category_info(self, **kwargs):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetCategoryInfo"
+        return self.base_url.format(
+                    base_url=self.base_url,
+                    callname=call_name,
+                    api_key=api_key,
+                    responseencoding=self.responseencoding,
+                    search=url_search)
+
+    def get_ebay_time(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GeteBayTime"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
+
+    def get_item_status(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetItemStatus"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
+
+    def get_multiple_items(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetMultipleItems"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
+
+    def get_shipping_costs(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetShippingCosts"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
+
+    def get_single_item(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetSingleItem"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
+
+    def get_user_profile(self):
+        api_key = kwargs.get("api_key", None)
+        url_search = urllib.parse.quote(kwargs.get("search", " "))
+        call_name = "GetUserProfile"
+        return self.base_url.format(
+            base_url=self.base_url,
+            callname=call_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=url_search)
 
 
 class EbaySearchListing(TemplateView):
@@ -44,6 +137,7 @@ class EbaySearchListing(TemplateView):
         context = {
             'form': self.form_class,
             'EbayMerchendiseApi': self.EbayMerchendiseApi,
+            'EbayShoppingApi': self.EbayShoppingApi,
         }
         return render(request, "ebay/index.html", context)
 
