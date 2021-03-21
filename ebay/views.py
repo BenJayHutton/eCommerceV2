@@ -12,6 +12,7 @@ from django.views.generic import (
 
 import requests
 import urllib
+import json
 from .forms import EbaySearchForm
 from .models import EbayAccount
 
@@ -31,6 +32,7 @@ class EbayShoppingApi(TemplateView):
                "appid={api_key}&" \
                "siteid=0&" \
                "version=967"
+    headers = {}
 
     def find_products(self, **kwargs):
         api_key = kwargs.get("api_key", None)
