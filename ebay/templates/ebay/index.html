@@ -16,9 +16,14 @@
 
     {% if find_products %}
     <div class="col-8">
-        {% include 'ebay/snippets/find_products.html' with result=find_products %}
+        {% include 'ebay/snippets/findByProductjson.html' with result=find_products %}
+    </div>
+    {% endif %}
+
+    {% if find_item_advanced %}
+    <div class="col-8">
+        {% include 'ebay/snippets/findItemAdvanced.html' with result=find_item_advanced %}
     </div>
     {% endif %}
     </div>
-{{ result }}
 {% endblock %}

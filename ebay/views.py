@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -9,12 +10,37 @@ from django.views.generic import (
     DetailView,
     TemplateView,
 )
+from ebaysdk.finding import Connection as finding
 
 import requests
 import urllib
 import json
 from .forms import EbaySearchForm
 from .models import EbayAccount
+
+
+class FindingApi(TemplateView):
+    template_name = "ebay_finding_api.html"
+    responseencoding = "JSON"
+    base_url = 'https://svcs.ebay.com/services/search/FindingService/v1?' \
+    'OPERATION-NAME={operation_name}&' \
+    'SERVICE-VERSION=1.0.0&' \
+    'SECURITY-APPNAME={api_key}&' \
+    'RESPONSE-DATA-FORMAT=JSON&' \
+    'REST-PAYLOAD=true&' \
+    'paginationInput.entriesPerPage=2'
+
+    def find_item_advanced(self, **kwargs):
+        api_key = kwargs.get("api_key", None)
+        search = urllib.parse.quote(kwargs.get("search", None))
+        operation_name = "findItemsAdvanced"
+        url = self.base_url + "&keywords={search}"
+        response = requests.get(url.format(
+            operation_name=operation_name,
+            api_key=api_key,
+            responseencoding=self.responseencoding,
+            search=search))
+        return response.json()
 
 
 class EbayMerchendiseApi(TemplateView):
@@ -32,7 +58,6 @@ class EbayShoppingApi(TemplateView):
                "appid={api_key}&" \
                "siteid=0&" \
                "version=967"
-    headers = {}
 
     def find_products(self, **kwargs):
         api_key = kwargs.get("api_key", None)
@@ -133,12 +158,12 @@ class EbaySearchListing(TemplateView):
     form_class = EbaySearchForm
     EbayShoppingApi = EbayShoppingApi()
     EbayMerchendiseApi = EbayMerchendiseApi()
+    FindingApi = FindingApi()
 
     def get(self, request):
         user = request.user
         ebay_production_key = EbayAccount.objects.all().filter(user=user).first().production_api_key
         get_multiple_items = self.EbayShoppingApi.get_multiple_items(api_key=ebay_production_key)
-
         context = {
             'form': self.form_class,
             'EbayMerchendiseApi': self.EbayMerchendiseApi,
@@ -151,13 +176,13 @@ class EbaySearchListing(TemplateView):
         form = self.form_class(request.POST)
         user = request.user
         ebay_production_key = EbayAccount.objects.all().filter(user=user).first().production_api_key
+        result = None
 
         if form.is_valid():
-            print(response)
             form_select_api = form.cleaned_data['api_choice']
             form_search_api = form.cleaned_data['search']
             if form_select_api == "FindProducts":
-                result = self.EbayShoppingApi.find_products(search=form_search_api, api_key=ebay_production_key)
+                find_item_advanced = self.FindingApi.find_item_advanced(search=form_search_api, api_key=ebay_production_key)
             elif form_select_api == "GetCategoryInfo":
                 result = self.EbayShoppingApi.get_category_info(search=form_search_api, api_key=ebay_production_key)
             elif form_select_api == "GeteBayTime":
@@ -174,8 +199,8 @@ class EbaySearchListing(TemplateView):
                 result = self.EbayShoppingApi.get_user_profile(search=form_search_api, api_key=ebay_production_key)
             else:
                 result = None
-
         context = {
+            'find_item_advanced': find_item_advanced,
             'result': result,
             'form': self.form_class,
         }
