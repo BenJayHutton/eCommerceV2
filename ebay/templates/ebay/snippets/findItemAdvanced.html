@@ -2,9 +2,22 @@
 {% for searchResult in findItemsAdvancedResponse.searchResult %}
 {% for item in searchResult.item %}
 <p>
+    {% for galleryURL in item.galleryURL %}
+
+    <img src="{{galleryURL}}">
+
+    {% endfor %}
     {% for title in item.title %}
     Title: {{ title }}<br>
     {% endfor %}
+    {% for sellingStatus in item.sellingStatus %}
+        {% for sellingState in sellingStatus.sellingState %}
+            Selling state: {{sellingState}}<br>
+        {% endfor %}
+        {% for currentPrice in sellingStatus.currentPrice%}
+            Current price{{ currentPrice }} <br>
+        {% endfor %}
+    {% endfor %}<br>
     {% for globalId in item.globalId %}
     Global Id: {{ globalId }}<br>
     {% endfor %}
@@ -19,6 +32,9 @@
         {% for FixedPrice in listingInfo.FixedPrice %} Fixed price? {{ FixedPrice }}{% endfor %}
     {% endfor %}<br>
     Shipping info: {{ item.shippingInfo }}<br>
+    {% for viewItemURL in item.viewItemURL %}
+        <a target="_blank" href="{{viewItemURL}}">View on Ebay</a>
+    {% endfor %}
 </p>
 {% endfor %}
 {% endfor %}
