@@ -20,6 +20,8 @@ from django.urls import path
 from .views import about_page, contact_page, DefaultHomePage
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from orders.views import LibraryView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -43,4 +45,4 @@ urlpatterns = [
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
     url(r'^payment/', include(("payment.urls", "payment"), namespace='payment')),
     url(r'^search/', include(("search.urls", "search"), namespace='search')),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
