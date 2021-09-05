@@ -14,11 +14,12 @@
         <div class="carousel-item active">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
+                    
                 </div>
                 <div class="col-3">
+                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
                     {% if featured_item.quantity > 10 %} 10 + available {% else %} {{featured_item.quantity}} available {% endif %}
-            {% include 'products/snippets/update-cart.html' with product_obj=featured_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
+                    {% include 'products/snippets/update-cart.html' with product_obj=featured_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
                 </div>
                 <div class="col-6">
                     {{featured_item.description | linebreaks}}
@@ -30,9 +31,10 @@
         <div class="carousel-item">
             <div class="row">
                 <div class="col-3">
-                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
+                    
                 </div>
                 <div class="col-3">
+                    <img src="{{featured_item.image.url}}" height="auto" width="100" alt="{{ featured_item.title}} logo" style="float:left; margin-right: 20px;">
                     {% if featured_item.quantity > 10 %} 10 + available {% else %} {{featured_item.quantity}} available {% endif %}
             {% include 'products/snippets/update-cart.html' with product_obj=featured_item cart_item_obj=cart_item_obj cart_obj=cart_obj %}
                 </div>
