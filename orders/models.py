@@ -154,9 +154,9 @@ class Order(models.Model):
     billing_address     = models.ForeignKey(Address, related_name='billing_address', null=True, blank=True, on_delete=models.SET_NULL)
     cart                = models.ForeignKey(Cart, default=None, null=True, blank=True, on_delete=models.SET_NULL)    
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
-    shipping_total      = models.DecimalField(default=5.99, max_digits=10, decimal_places=2)
-    tax                 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    total               = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    shipping_total      = models.FloatField(default=5.99)
+    tax                 = models.FloatField(default=0.00)
+    total               = models.FloatField(default=0.00)
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
     timestamp           = models.DateTimeField(auto_now_add=True)
@@ -184,7 +184,7 @@ class Order(models.Model):
         cart_total = self.cart.subtotal
         shipping_total = self.shipping_total
         try:
-            new_total = Decimal(cart_total) + Decimal(shipping_total)
+            new_total = cart_total + shipping_total
             self.tax = vat_total
             self.total = new_total
             self.save()

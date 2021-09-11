@@ -47,9 +47,9 @@ class CartItemManager(models.Manager):
 class CartItem(models.Model):
     product         = models.ForeignKey(Product, default=None, null=True, blank=True, on_delete=models.SET_NULL)
     quantity        = models.IntegerField(default=None, null=True)
-    price_of_item   = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    price_of_item   = models.FloatField(default=0.00)
     session_id      = models.CharField(max_length=120, default=0, null=True, blank=True)
-    total           = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    total           = models.FloatField(default=0.00)
 
     objects = CartItemManager()
 
@@ -82,12 +82,12 @@ class CartManager(models.Manager):
 
     def calculate_cart_total(self, request, *args, **kwargs):
         cart_obj = kwargs.get("cart_obj", None)
-        total = Decimal()
-        vat_total = Decimal()
-        sub_total = Decimal()
+        total = 0
+        vat_total = 0
+        sub_total = 0
         for x in cart_obj.cart_items.all():
             total += x.total
-        vat_total = total * Decimal(0.2)
+        vat_total = total * 0.2
         sub_total = total + vat_total
         return total, vat_total, sub_total
 
@@ -95,9 +95,9 @@ class CartManager(models.Manager):
 class Cart(models.Model):
     user        = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     cart_items  = models.ManyToManyField(CartItem, default=None, blank=True)
-    total       = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    vat_total   = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    subtotal    = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    total       = models.FloatField(default=0.00)
+    vat_total   = models.FloatField(default=0.00)
+    subtotal    = models.FloatField(default=0.00)
     updated     = models.DateTimeField(auto_now=True)
     timestamp   = models.DateTimeField(auto_now_add=True)
 
@@ -134,13 +134,13 @@ pre_save.connect(cart_item_pre_save_reciever, sender=CartItem)
 
 def cart_post_save_reciever(sender, instance, *args, **kwargs):
     cart_items = instance.cart_items.all()
-    vat_total = Decimal(0.0)
-    sub_total = Decimal(0.0)
+    vat_total = 0
+    sub_total = 0
     cart_item_total = cart_items.update_total()['total__sum']
     if cart_item_total is None:
-        cart_item_total = Decimal(0)
-    vat_total = Decimal(cart_item_total) * Decimal(0.2)
-    sub_total = Decimal(cart_item_total + vat_total)
+        cart_item_total = 0
+    vat_total = cart_item_total * 0.2
+    sub_total = cart_item_total + vat_total
     instance.total = cart_item_total
     instance.vat_total = vat_total
     instance.subtotal = sub_total
@@ -151,14 +151,14 @@ post_save.connect(cart_post_save_reciever, sender=Cart)
     
 def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
-        vat_total = Decimal(0.0)
-        sub_total = Decimal(0.0)
+        vat_total = 0
+        sub_total = 0
         cart_items = instance.cart_items.all()
         cart_item_total = cart_items.update_total()['total__sum']
         if cart_item_total is None:
-            cart_item_total = Decimal(0)
-        vat_total = Decimal(cart_item_total) * Decimal(0.2)
-        sub_total = Decimal(cart_item_total + vat_total)
+            cart_item_total = 0
+        vat_total = cart_item_total * 0.2
+        sub_total = cart_item_total + vat_total
         instance.total = cart_item_total
         instance.vat_total = vat_total
         instance.subtotal = sub_total

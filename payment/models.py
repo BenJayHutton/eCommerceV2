@@ -13,7 +13,7 @@ class Payment(models.Model):
     paypalPayerID = models.CharField(max_length=128)
     is_paid = models.BooleanField(default=False)
     summery = models.TextField()
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.FloatField(default=0.00)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
