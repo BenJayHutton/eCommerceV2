@@ -11,7 +11,7 @@
     <div class="carousel-inner">
         {% for featured_item in products_featured_obj.all %}
         {% if forloop.first %}
-        <div class="carousel-item active">
+        <div class="item active">
             <div class="row">
                 <div class="col-3">
                     
@@ -28,7 +28,7 @@
             </div>
         </div>
         {% else %}
-        <div class="carousel-item">
+        <div class="item">
             <div class="row">
                 <div class="col-3">
                     
@@ -51,11 +51,9 @@
     <!-- Left and right controls -->
     <a class="carousel-control-prev" href="#demo" data-slide="prev">
         <i style="font-size: 40px; color: black;" class="fa fa-angle-double-left" aria-hidden="true"></i>
-
     </a>
     <a class="carousel-control-next" href="#demo" data-slide="next">
         <i style="font-size: 40px; color: black;" class="fa fa-angle-double-right" aria-hidden="true"></i>
-
     </a>
 </div>
 {% endblock %}
