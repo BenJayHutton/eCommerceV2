@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager
 )
+from django.core import mail
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.db import models
@@ -173,7 +174,7 @@ class EmailActivation(models.Model):
                 base_url = getattr(settings, 'BASE_URL', None)
                 key_path = reverse("account:email-activate", kwargs={'key': self.key})
                 path = "{base}{path}".format(base=base_url, path=key_path)
-                context = {
+                context = { 
                     'path': path,
                     'email': self.email,
                 }
@@ -182,15 +183,13 @@ class EmailActivation(models.Model):
                 subject = '1-Click Email Activation'
                 from_email = settings.DEFAULT_FROM_EMAIL
                 recipient_list = [self.email]
-                sent_mail = send_mail(
+                mail.send_mail(
                     subject,
                     txt_,
                     from_email,
                     recipient_list,
-                    html_message=html_,
                     fail_silently=False,
                 )
-                return sent_mail
         return False
 
 
