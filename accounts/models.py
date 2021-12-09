@@ -21,6 +21,15 @@ DEFAULT_ACTIVATION_DAYS = getattr(settings, "DEFAULT_ACTIVATION_DAYS", 7)
 verify_txt = get_template("registration/emails/verify.txt")
 verify_html = get_template("registration/emails/verify.html")
 
+GROUP_LEVEL = (
+    (0, 'Guest'),
+    (1, 'User'),
+    (2, 'Moderator'),
+    (3, 'Sales'),
+    (4, 'Staff'),
+    (5, 'Admin'),
+)
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name=None, password=None, is_active=True, is_staff=False, is_admin=False):
@@ -65,6 +74,7 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=255, blank=True, null=True)
     guest = models.BooleanField(default=True)
     is_active = models.BooleanField(default=False)
+    group = models.IntegerField(default=0, choices=GROUP_LEVEL) # user group, 0 - ∞, Guest = 0
     staff = models.BooleanField(default=False)  # Staff user, not super user
     admin = models.BooleanField(default=False)  # Superuser
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -84,6 +94,9 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.email
+
+    def get_group_level(self):
+        return self.group
 
     def has_perm(self, perm, obj=None):
         return True

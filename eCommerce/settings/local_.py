@@ -46,5 +46,6 @@ CSRF_COOKIE_SECURE              = False
 SECURE_HSTS_SECONDS             = None
 SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
 SECURE_FRAME_DENY               = False
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 from eCommerce.aws.conf import *

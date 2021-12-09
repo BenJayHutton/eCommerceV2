@@ -1,5 +1,4 @@
 import datetime
-from decimal import Decimal
 from django.template.loader import get_template
 from django.db import models
 from django.db.models import Count, Sum, Avg

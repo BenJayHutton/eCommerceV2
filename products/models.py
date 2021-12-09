@@ -1,5 +1,4 @@
 from django.conf import settings
-import decimal
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save
@@ -138,7 +137,7 @@ class Product(models.Model):
 
 
 def product_pre_save_reciever(sender, instance, *args, **kwargs):
-    instance.vat = instance.price * decimal.Decimal(0.2)
+    instance.vat = instance.price * 0.2
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
