@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% if order.error %}
+ error
+{% else %}
 <div class="row my-5">
     <div class="col-12 text-center">
         <h1>Sales</h1>
@@ -53,4 +56,5 @@
         <canvas class="bjh-render-chart" id="fourWeekSales" data-type="4weeks"></canvas>
     </div>
   </div>
+  {% endif %}
 {% endblock %}

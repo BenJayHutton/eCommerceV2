@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views.generic import TemplateView, View, ListView, DetailView
 from django.shortcuts import render
 from django.utils import timezone
@@ -35,7 +35,7 @@ class OrderView(LoginRequiredMixin, TemplateView):
 class SalesAjaxView(View):
     def get(self, request, *args, **kwargs):
         data = {}
-        if request.user.is_staff:
+        if request.user.group >=4:
             qs = Order.objects.all().by_weeks_range(weeks_ago=5, number_of_weeks=5)
             if request.GET.get('type') == 'week':
                 days = 7
@@ -76,8 +76,8 @@ class SalesView(LoginRequiredMixin, TemplateView):
 
     def dispatch(self, *args, **kwargs):
         user = self.request.user
-        if not user.is_staff:
-            return render(self.request, "400.html", {})
+        if not user.is_staff or user.group <=4:
+            return render(self.request, "400.html", {}) 
         return super(SalesView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):

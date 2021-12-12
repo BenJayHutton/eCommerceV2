@@ -8,6 +8,8 @@ from eCommerce.aws.download.utils import AWSDownload
 from eCommerce.aws.utils import ProtectedS3Storage
 from eCommerce.utils import unique_slug_generator, get_filename
 
+from accounts.models import User
+
 
 class TagQuerySet(models.query.QuerySet):
     def public(self):
@@ -99,6 +101,7 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
+    user            = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     title           = models.CharField(max_length=120)
     slug            = models.SlugField(blank=True, unique=True)
     description     = models.TextField()
@@ -122,6 +125,10 @@ class Product(models.Model):
 
     def get_by_id(self, id):
         qs = Product.objects.get(pk=id)
+        return qs
+    
+    def get_by_user(self, user):
+        qs = Product.objects.get(user=user)
         return qs
 
     def __str__(self):
