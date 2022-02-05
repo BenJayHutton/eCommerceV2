@@ -44,4 +44,5 @@ urlpatterns = [
     url(r'^products/', include(("products.urls", "products"), namespace='products')),
     url(r'^payment/', include(("payment.urls", "payment"), namespace='payment')),
     url(r'^search/', include(("search.urls", "search"), namespace='search')),
+    url(r'^shop/admin', include(("shopadmin.urls", "shop_admin"), namespace='shop_admin')),
 ]

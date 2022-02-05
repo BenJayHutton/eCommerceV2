@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'payment',
     'products',
     'search',
+    'shopadmin',
     'tags',
 ]
 SITE_ID = 1
