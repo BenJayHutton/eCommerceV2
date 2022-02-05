@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 AUTH_USER_MODEL = 'accounts.User' #changes built-in user to ours
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 MIDDLEWARE = [
