@@ -2,6 +2,7 @@
 *.sublime-project
 fasttracktojquery/
 db.sqlite3
+require.txt
 
 # Virtualenv related
 bin/
