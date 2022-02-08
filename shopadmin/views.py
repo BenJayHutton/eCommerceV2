@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import View
 
 from accounts.models import *
 from addresses.models import *
@@ -10,7 +10,7 @@ from orders.models import *
 from payment.models import *
 from products.models import *
 
-class ShopAdminHome(LoginRequiredMixin, TemplateView):
+class ShopAdminHome(LoginRequiredMixin, View):
     
     def get(self, request):
         context = {}
