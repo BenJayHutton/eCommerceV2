@@ -1,4 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Shop Admin</h1>
+
+<h3>Orders to be shipped</h3>
+{% for orders_to_ship in orders_to_ship %}
+<p>
+    Name: {{orders_to_ship.billing_profile.user.full_name}} <br>
+    Email: {{orders_to_ship.billing_profile}}<br>
+    Order Id: {{orders_to_ship.order_id}}<br>
+    Payment status: {{orders_to_ship.status}}<br>
+    Address: {{orders_to_ship.shipping_address.address_line_1}}<br>
+    {{orders_to_ship.shipping_address.address_line_2}}<br>
+    {{orders_to_ship.shipping_address.city}}<br>
+    {{orders_to_ship.shipping_address.state}}<br>
+    {{orders_to_ship.shipping_address.postal_code}}<br>
+    {{orders_to_ship.shipping_address.country}}<br>
+</p>
+    
+{% endfor %}
 {% endblock %}

@@ -13,5 +13,8 @@ from products.models import *
 class ShopAdminHome(LoginRequiredMixin, View):
     
     def get(self, request):
-        context = {}
+        orders_to_ship = Order.objects.to_ship
+        context = {
+            'orders_to_ship': orders_to_ship,
+            }
         return render(request, "shopadmin/home.html", context)

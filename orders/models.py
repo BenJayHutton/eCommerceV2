@@ -85,6 +85,9 @@ class OrderManagerQuerySet(models.query.QuerySet):
     def not_created(self):
         return self.exclude(status='created')
 
+    def paid_order(self):
+        return self.filter(status='paid')
+
 
 class OrderManager(models.Manager):
     def get_queryset(self):
@@ -145,6 +148,9 @@ class OrderManager(models.Manager):
         except Exception as e:
             print(e)
         return True
+    
+    def to_ship(self):
+        return self.get_queryset().paid_order()
 
 
 class Order(models.Model):
