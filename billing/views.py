@@ -35,7 +35,7 @@ def pay_method_view(request):
 
 
 def pay_method_createview(request):
-    if request.method == "POST" and request.is_ajax():
+    if request.method == "POST" and request.accepts('application/json'):
         billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
         if not billing_profile:
             return HttpResponse({"message":"Cannot find this user"}, status=401)
