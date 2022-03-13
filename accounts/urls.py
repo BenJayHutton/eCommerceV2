@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from products.views import UserProductHistoryView
 
@@ -13,13 +13,13 @@ from .views import (
     )
 
 urlpatterns = [
-    url(r'^$', Accounts.as_view(), name='home'),
-    url(r'^details/$', UserDetailUpdateView.as_view(), name='user-update'),
-    url(r'^history/products/$', UserProductHistoryView.as_view(), name='user-product-history'),
-    url(r'^email/confirm/(?P<key>[0-9A-Za-z]+)/$', AccountEmailActivateView.as_view(), name='email-activate'),
-    url(r'^email/resend-activation/$', AccountEmailActivateView.as_view(), name='resend-activation'),
-    url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^register/$', RegisterView.as_view(), name='register'),
-    url(r'^register/guest/$', GuestRegisterView.as_view(), name='guest_register'),    
-    url(r'^logout/$', logout_view, name='logout'),
+    re_path(r'^$', Accounts.as_view(), name='home'),
+    re_path(r'^details/$', UserDetailUpdateView.as_view(), name='user-update'),
+    re_path(r'^history/products/$', UserProductHistoryView.as_view(), name='user-product-history'),
+    re_path(r'^email/confirm/(?P<key>[0-9A-Za-z]+)/$', AccountEmailActivateView.as_view(), name='email-activate'),
+    re_path(r'^email/resend-activation/$', AccountEmailActivateView.as_view(), name='resend-activation'),
+    re_path(r'^login/$', LoginView.as_view(), name='login'),
+    re_path(r'^register/$', RegisterView.as_view(), name='register'),
+    re_path(r'^register/guest/$', GuestRegisterView.as_view(), name='guest_register'),    
+    re_path(r'^logout/$', logout_view, name='logout'),
 ]
