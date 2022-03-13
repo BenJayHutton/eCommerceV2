@@ -88,6 +88,9 @@ class OrderManagerQuerySet(models.query.QuerySet):
     def paid_order(self):
         return self.filter(status='paid')
 
+    def refunded_orders(self):
+        return self.filter(status='refunded')
+
 
 class OrderManager(models.Manager):
     def get_queryset(self):
@@ -151,6 +154,9 @@ class OrderManager(models.Manager):
     
     def to_ship(self):
         return self.get_queryset().paid_order()
+    
+    def refunded_orders(self):
+        return self.get_queryset().refunded_orders()
 
 
 class Order(models.Model):
