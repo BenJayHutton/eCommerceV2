@@ -72,6 +72,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     guest = models.BooleanField(default=True)
+    group = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     group = models.IntegerField(default=0, choices=GROUP_LEVEL) # user group, 0 - ∞, Guest = 0
     staff = models.BooleanField(default=False)  # Staff user, not super user
@@ -84,7 +85,11 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
+<<<<<<< HEAD
         return self.full_name + " : " + self.email
+=======
+        return self.full_name
+>>>>>>> dev-branch
 
     def get_full_name(self):
         if self.full_name:
@@ -141,7 +146,7 @@ class EmailActivationManager(models.Manager):
 
 
 class EmailActivation(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     email = models.EmailField()
     key = models.CharField(max_length=120, blank=True, null=True)
     activated = models.BooleanField(default=False)

@@ -1,0 +1,11 @@
+{% for Product in result.Product %}
+    Title: {{Product.Title}}<br>
+    {% for NameValueList in Product.ItemSpecifics.NameValueList %}
+    {{NameValueList.Name}}: {{NameValueList.Value}}<br>
+    {% endfor %}
+    {% for ProductID  in Product.ProductID%}
+        {{ ProductID.Type }}: {{ ProductID.Value }} <br>
+    {% endfor %}
+    <a href="{{ Product.DetailsURL }}">{{Product.Title}}</a>
+    <hr>
+{% endfor %}

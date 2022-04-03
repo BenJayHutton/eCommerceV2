@@ -1,9 +1,9 @@
-from django.conf.urls import url
+from django.urls import re_path
 from .views import OrderListView, OrderDetailView, VerifyOwnership, OrderConfirmation
 
 urlpatterns = [
-    url(r'^$', OrderListView.as_view(), name='list'),
-    url(r'^endpoint/verify/ownership/$', VerifyOwnership.as_view(), name='verify-ownership'),
-    url(r'^(?P<order_id>[0-9A-Za-z]+)$', OrderDetailView.as_view(), name='detail'),
-    url(r'^confirmation/$', OrderConfirmation.as_view(), name='confirmation'),
+    re_path(r'^$', OrderListView.as_view(), name='list'),
+    re_path(r'^endpoint/verify/ownership/$', VerifyOwnership.as_view(), name='verify-ownership'),
+    re_path(r'^(?P<order_id>[0-9A-Za-z]+)$', OrderDetailView.as_view(), name='detail'),
+    re_path(r'^confirmation/$', OrderConfirmation.as_view(), name='confirmation'),
 ]

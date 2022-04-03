@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from.forms import UserAdminCreationForm, UserAdminChangeForm
 from .models import User, GuestEmail, EmailActivation
-User = get_user_model()
+# User = get_user_model()
 
 
 class UserAdmin(BaseUserAdmin):

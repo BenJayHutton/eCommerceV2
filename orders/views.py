@@ -51,7 +51,7 @@ class LibraryView(LoginRequiredMixin, ListView):
 class VerifyOwnership(View):
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.request.accepts('application/json'):
             data = request.GET
             product_id = data.get('product_id')
             if product_id is not None:
@@ -69,8 +69,6 @@ class OrderConfirmation(View):
         order_qs = Order.objects.filter(order_id=order_id)
         for order in order_qs:
             email = order.billing_profile.email
-            print(order.get_absolute_url)
-            print("/orders/" + order_id)
         if order_id is not None:
             Order.objects.email_order(order_id)
             messages.success(request, "An email has been sent to: "+email)

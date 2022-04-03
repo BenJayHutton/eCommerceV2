@@ -5,10 +5,9 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from .models import EmailActivation, GuestEmail
+from .models import EmailActivation, GuestEmail, User
 from .signals import user_logged_in
-User = get_user_model()
-
+# # User = get_user_model()
 
 class ReactivateEmailForm(forms.Form):
     email = forms.EmailField()
@@ -21,6 +20,7 @@ class ReactivateEmailForm(forms.Form):
             msg = """This email does not exist would you like to <a href="{link}">register?</a>""".format(link=register_link)
             raise forms.ValidationError(mark_safe(msg))
         return email
+
 
 class UserAdminCreationForm(forms.ModelForm):
     """
@@ -48,13 +48,13 @@ class UserAdminCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class UserDetailChangeForm(forms.ModelForm):
     full_name = forms.CharField(label='Name', required=False, widget=forms.TextInput(attrs={"class":"form-control"}))
     
     class Meta:
         model = User
         fields = ['full_name']
-
 
 
 class UserAdminChangeForm(forms.ModelForm):
@@ -75,7 +75,6 @@ class UserAdminChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-
 class GuestForm(forms.ModelForm):
     #email       = forms.EmailField()
     class Meta:
@@ -83,6 +82,7 @@ class GuestForm(forms.ModelForm):
         fields = [
             'email',
         ]
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(GuestForm, self).__init__(*args, **kwargs)
@@ -94,7 +94,6 @@ class GuestForm(forms.ModelForm):
             request = self.request
             request.session['guest_email_id'] = obj.id
         return obj
-
 
 
 class LoginForm(forms.Form):
@@ -151,7 +150,7 @@ class RegisterForm(forms.ModelForm):
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
+    
     class Meta:
         model = User
         fields = ('full_name','email',)

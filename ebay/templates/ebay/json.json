@@ -1,0 +1,58 @@
+{
+  "Timestamp":"2021-03-05T22:30:34.897Z",
+  "Ack":"Success",
+  "Build":"E1157_CORE_APILW2_19110892_R1",
+  "Version":"1157",
+  "ApproximatePages":2774,
+  "MoreResults":true,
+  "PageNumber":1,
+  "Product":[{
+      "DetailsURL":"http://www.ebay.com/p/17042174647#ProductDetails",
+      "DisplayStockPhotos":false,
+      "ProductID":[
+        {
+          "Value":"0673419333344",
+          "Type":"EAN"
+        },
+        {
+          "Value":"0673419333344",
+          "Type":"UPC"
+        },
+        {
+          "Value":"17042174647",
+          "Type":"Reference"
+        }
+      ],
+      "ItemSpecifics":{
+        "NameValueList":[
+          {"Name":"Brand","Value":["Lego"]},
+          {"Name":"Material","Value":["Plastic"]},
+          {"Name":"Product Line (LEGO Theme)","Value":["Harry Potter"]},
+          {"Name":"Year","Value":["2020"]},
+          {"Name":"LEGO Set Name","Value":["Harry Potter"]},
+          {"Name":"Piece Count","Value":["320"]},
+          {"Name":"LEGO Character","Value":["Draco Malfoy"]},
+          {"Name":"MPN","Value":["30628"]}
+        ]
+      },
+    "Title":"LEGO Harry Potter The Monster Book of Monsters 320 Pc (30628)"},
+    {
+      "DetailsURL":"http://www.ebay.com/p/26040068227#ProductDetails",
+      "DisplayStockPhotos":true,
+      "ProductID":[{"Value":"26040068227","Type":"Reference"}],
+      "ItemSpecifics":
+      {"NameValueList":[
+        {"Name":"Brand","Value":["Lego"]},
+        {"Name":"Material","Value":["Plastic"]},
+        {"Name":"Year","Value":["2020"]},
+        {"Name":"Product Line","Value":["Harry Potter","Disney","Collectible Minifigure Series"]},
+        {"Name":"Piece Count","Value":["8"]},
+        {"Name":"Character","Value":["Albus Dumbledore","Lily","Ginny Weasley","James","Ron Weasley","Hermione Granger","Professor Sprout","Luna Lovegood"]},
+        {"Name":"Features","Value":["Limited Edition"]},
+        {"Name":"MPN","Value":["71028"]}
+      ]},
+      "StockPhotoURL":"https://i.ebayimg.com/images/g/meIAAOSwNIZfPkiG/s-l640.jpg",
+      "Title":"Lego Harry Potter Series 2 Minifigures (71028)"
+    }],
+  "TotalProducts":5548
+}

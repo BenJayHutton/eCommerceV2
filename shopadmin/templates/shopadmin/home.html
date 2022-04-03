@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Shop Admin</h1>
+
+<h3>Orders to be shipped</h3>
+
+<div class="orders_to_ship">
+    {% for orders_to_ship in orders_to_ship %}
+    <p>
+        Name: {{orders_to_ship.billing_profile.user.full_name}} <br>
+        Email: {{orders_to_ship.billing_profile}}<br>
+        Order Id: <a href="{{orders_to_ship.get_absolute_url}}">{{orders_to_ship.order_id}}</a><br>
+        Payment status: {{orders_to_ship.status}}<br>
+        Address: <br>
+        &#8195;{{orders_to_ship.shipping_address.address_line_1}}<br>
+        &#8195;{{orders_to_ship.shipping_address.address_line_2}}<br>
+        &#8195;{{orders_to_ship.shipping_address.city}}<br>
+        &#8195;{{orders_to_ship.shipping_address.state}}<br>
+        &#8195;{{orders_to_ship.shipping_address.postal_code}}<br>
+        &#8195;{{orders_to_ship.shipping_address.country}}<br>
+    </p>
+    {% endfor %}
+</div>
+
+<h3>Refunded orders</h3>
+
+<div class="refunded_orders">
+    {% for refunded_orders in refunded_orders %}
+    <p>
+        Name: {{refunded_orders.billing_profile.user.full_name}} <br>
+        Email: {{refunded_orders.billing_profile}}<br>
+        Order Id: <a href="{{refunded_orders.get_absolute_url}}">{{refunded_orders.order_id}}</a><br>
+        Payment status: {{refunded_orders.status}}<br>
+        {{refunded_orders.get_absolute_url}}
+    </p>
+    {% endfor %}
+</div>
+    
+
+{% endblock %}
+{% url 'products:list' %}

@@ -49,16 +49,19 @@ INSTALLED_APPS = [
     'billing',
     'blog',
     'carts',
+    'ebay',
     'marketing',
     'orders',
     'payment',
     'products',
     'search',
+    'shopadmin',
     'tags',
 ]
 SITE_ID = 1
 
 AUTH_USER_MODEL = 'accounts.User' #changes built-in user to ours
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 MIDDLEWARE = [

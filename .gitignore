@@ -2,6 +2,10 @@
 *.sublime-project
 fasttracktojquery/
 db.sqlite3
+<<<<<<< HEAD
+=======
+*.ipynb
+>>>>>>> dev-branch
 require.txt
 
 # Virtualenv related
@@ -115,3 +119,5 @@ ENV/
 # mypy
 .mypy_cache/
 products/fixtures/
+
+*.json

@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from .views import PaymentHome, Paypal
 
 urlpatterns = [
-    url(r'^$', PaymentHome.as_view(), name='home'),
-    url(r'^paypal/$', Paypal.as_view(), name='paypal'),
+    re_path(r'^$', PaymentHome.as_view(), name='home'),
+    re_path(r'^paypal/$', Paypal.as_view(), name='paypal'),
 ]

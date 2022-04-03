@@ -64,7 +64,7 @@ def contact_page(request):
         "form": contact_form,
         }
     if contact_form.is_valid():
-        if request.is_ajax():
+        if request.request.accepts('application/json'):
             return JsonResponse({"message": "Thank you for your submission"})
     return render(request, "contact/view.html", context)
 

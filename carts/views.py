@@ -101,7 +101,7 @@ def cart_update(request, *args, **kwargs):
             item_added = True
         request.session['cart_item_count'] = cart_obj.cart_items.count()
 
-        if request.is_ajax():
+        if request.accepts('application/json'):
             json_data = {
                 "added": item_added,
                 "removed": item_removed,
