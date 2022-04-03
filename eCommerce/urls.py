@@ -15,11 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include
 from django.contrib import admin
-<<<<<<< HEAD
 from django.urls import re_path
-=======
-from django.urls import path, re_path
->>>>>>> dev-branch
 
 from .views import about_page, contact_page, DefaultHomePage
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
@@ -31,11 +27,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     re_path(r'^$', DefaultHomePage.as_view(display_name="home"), name='home'),
     re_path(r'^about/$', about_page, name='about'),
-<<<<<<< HEAD
     re_path('admin/', admin.site.urls),
-=======
-    path('admin/', admin.site.urls),
->>>>>>> dev-branch
     re_path(r'^account/', include(("accounts.urls", "accounts"), namespace='account')),
     re_path(r'^accounts/', include(("accounts.urls", "accounts"), namespace='accounts')),
     re_path(r'^accounts/', include("accounts.password.urls")),
@@ -44,10 +36,7 @@ urlpatterns = [
     re_path(r'^blog/', include(("blog.urls", "blog"), namespace='blog')),
     re_path(r'^cart/', include(("carts.urls", "carts"), namespace='cart')),
     re_path(r'^carts/', include(("carts.urls", "carts"), namespace='carts')),
-<<<<<<< HEAD
-=======
     re_path(r'^ebay/', include(("ebay.urls", "ebay"), namespace='ebay')),
->>>>>>> dev-branch
     re_path(r'^checkout/address/create/$', checkout_address_create_view, name='checkout_address_create'),
     re_path(r'^checkout/address/reuse/$', checkout_address_reuse_view, name='checkout_address_reuse'),
     re_path(r'^contact/$', contact_page, name='contact'),
@@ -57,9 +46,5 @@ urlpatterns = [
     re_path(r'^products/', include(("products.urls", "products"), namespace='products')),
     re_path(r'^payment/', include(("payment.urls", "payment"), namespace='payment')),
     re_path(r'^search/', include(("search.urls", "search"), namespace='search')),
-<<<<<<< HEAD
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-=======
     re_path(r'^shop/admin', include(("shopadmin.urls", "shop_admin"), namespace='shopadmin')),
-]
->>>>>>> dev-branch
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -85,11 +85,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-<<<<<<< HEAD
-        return self.full_name + " : " + self.email
-=======
         return self.full_name
->>>>>>> dev-branch
 
     def get_full_name(self):
         if self.full_name:
