@@ -1,12 +1,12 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 from orders.models import Order
-
-User = settings.AUTH_USER_MODEL
+from accounts.models import User
+# User = get_user_model()
 
 
 class Payment(models.Model):
-    user = models.ForeignKey(User,default=None, blank=True, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     paymentMethod = models.CharField(max_length=128)
     paypalOrderID = models.CharField(max_length=128)

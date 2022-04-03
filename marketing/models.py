@@ -1,12 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 
 from .utils import Mailchimp
-
-
+from accounts.models import User
+# User = get_user_model()
 class MarketingPreference(models.Model):
-    user                    = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    user                    = models.OneToOneField(User, null=True, on_delete=models.SET_NULL)
     subscribed              = models.BooleanField(default=True)
     mailchimp_subscribed    = models.BooleanField(default=True)
     mailchimp_msg           = models.TextField(null=True, blank=True)

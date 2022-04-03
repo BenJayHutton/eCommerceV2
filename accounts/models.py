@@ -63,6 +63,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     guest = models.BooleanField(default=True)
+    group = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)  # Staff user, not super user
     admin = models.BooleanField(default=False)  # Superuser
@@ -128,7 +129,7 @@ class EmailActivationManager(models.Manager):
 
 
 class EmailActivation(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     email = models.EmailField()
     key = models.CharField(max_length=120, blank=True, null=True)
     activated = models.BooleanField(default=False)

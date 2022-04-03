@@ -5,10 +5,9 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from .models import EmailActivation, GuestEmail
+from .models import EmailActivation, GuestEmail, User
 from .signals import user_logged_in
-User = get_user_model()
-
+# # User = get_user_model()
 
 class ReactivateEmailForm(forms.Form):
     email = forms.EmailField()
@@ -151,7 +150,7 @@ class RegisterForm(forms.ModelForm):
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-
+    
     class Meta:
         model = User
         fields = ('full_name','email',)

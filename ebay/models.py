@@ -3,8 +3,8 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.shortcuts import reverse
-
-User = get_user_model()
+from accounts.models import User
+# User = get_user_model()
 
 
 class EbayAccountManagerQuerySet(models.query.QuerySet):

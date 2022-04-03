@@ -1,12 +1,12 @@
+from django.contrib.auth import get_user_model
 from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from products.models import Product
-
-User = settings.AUTH_USER_MODEL
-
+from accounts.models import User
+# User = get_user_model()
 
 class CartItemManagerQuerySet(models.query.QuerySet):
     def update_total(self):

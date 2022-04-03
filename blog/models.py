@@ -6,7 +6,8 @@ from django.shortcuts import reverse
 
 from eCommerce.utils import unique_slug_generator
 from tags.models import Tag
-User = get_user_model()
+from accounts.models import User
+# User = get_user_model()
 
 
 class BlogManagerQuerySet(models.query.QuerySet):
