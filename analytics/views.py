@@ -76,7 +76,7 @@ class SalesView(LoginRequiredMixin, TemplateView):
 
     def dispatch(self, *args, **kwargs):
         user = self.request.user
-        if not user.is_staff or user.group <=4:
+        if not user.is_staff or int(user.group) <= 4:
             return render(self.request, "400.html", {}) 
         return super(SalesView, self).dispatch(*args, **kwargs)
 
