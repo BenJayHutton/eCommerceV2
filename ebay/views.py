@@ -162,8 +162,16 @@ class EbaySearchListing(TemplateView):
 
     def get(self, request):
         user = request.user
-        ebay_production_key = EbayAccount.objects.all().filter(user=user).first().production_api_key
-        get_multiple_items = self.EbayShoppingApi.get_multiple_items(api_key=ebay_production_key)
+        ebay_user = EbayAccount.objects.all().filter(user=user).first()
+        ebay_production_key = None
+        get_multiple_items = None
+        print("ebay_user", ebay_user)
+        if ebay_user is not None:
+            ebay_production_key = ebay_user.production_api_key
+            get_multiple_items = self.EbayShoppingApi.get_multiple_items(api_key=ebay_production_key)
+        print("ebay_production_key", ebay_production_key)
+        print("get_multiple_items", get_multiple_items)
+        
         context = {
             'form': self.form_class,
             'EbayMerchendiseApi': self.EbayMerchendiseApi,
