@@ -1,6 +1,7 @@
 from django.views.generic import ListView
 from products.models import Product
 from carts.models import Cart
+from orders.models import Order
 
 
 class SearchProductView(ListView):
