@@ -46,6 +46,8 @@ class Paypal(View):
                 return JsonResponse({"cartSuccess": False})
         return JsonResponse({"cartSuccess": False})
 
+class Stripe(View):
+    pass
 
 class PaymentHome(TemplateView):
     template_name = 'payment/home.html'
