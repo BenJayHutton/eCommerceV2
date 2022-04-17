@@ -5,7 +5,7 @@ from django.db.models.signals import post_save, pre_save
 
 from .utils import Mailchimp
 from accounts.models import User
-# User = get_user_model()
+
 class MarketingPreference(models.Model):
     user                    = models.OneToOneField(User, null=True, on_delete=models.SET_NULL)
     subscribed              = models.BooleanField(default=True)

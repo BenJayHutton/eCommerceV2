@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -7,7 +6,6 @@ from django.shortcuts import reverse
 from eCommerce.utils import unique_slug_generator
 from tags.models import Tag
 from accounts.models import User
-# User = get_user_model()
 
 
 class BlogManagerQuerySet(models.query.QuerySet):

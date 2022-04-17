@@ -1,16 +1,13 @@
-from django.conf import settings
 from django.db import models
-
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from django.db.models.signals import post_save
 
 from accounts.signals import user_logged_in
+from accounts.models import User
 from .signals import object_viewed_signal
 from .utils import get_client_ip
-
-User = settings.AUTH_USER_MODEL
 
 
 class ObjectViewedQuerySet(models.query.QuerySet):

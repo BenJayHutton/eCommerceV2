@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from products.models import Product
 from accounts.models import User
-# User = get_user_model()
+
 
 class CartItemManagerQuerySet(models.query.QuerySet):
     def update_total(self):
@@ -103,6 +103,9 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    def no_of_items_in_cart(self):
+        return self.cart_items.all().count()
 
     @property
     def is_digital(self):

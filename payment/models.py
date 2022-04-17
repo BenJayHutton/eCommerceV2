@@ -14,22 +14,22 @@ PAYMENT_METHOD = (
 
 
 class PaypalPaymentMethod(models.Model):
-    paypalOrderID = models.CharField(max_length=128)
-    paypalPayerID = models.CharField(max_length=128)
+    paypalOrderID   = models.CharField(max_length=128)
+    paypalPayerID   = models.CharField(max_length=128)
 
     def __str__(self):
         return "Paypal payment id: " + self.paypalOrderID
 
 class StripePaymentMethod(models.Model):
-    stripe_id               = models.CharField(max_length=120)
-    brand                   = models.CharField(max_length=120, null=True, blank=True)
-    country                 = models.CharField(max_length=20, null=True, blank=True)
-    exp_month               = models.IntegerField(null=True, blank=True)
-    exp_year                = models.IntegerField(null=True, blank=True)
-    last4                   = models.CharField(max_length=4, null=True, blank=True)
-    default                 = models.BooleanField(default=True)
-    active                  = models.BooleanField(default=True)
-    timestamp               = models.DateTimeField(auto_now_add=True)
+    stripe_id   = models.CharField(max_length=120)
+    brand       = models.CharField(max_length=120, null=True, blank=True)
+    country     = models.CharField(max_length=20, null=True, blank=True)
+    exp_month   = models.IntegerField(null=True, blank=True)
+    exp_year    = models.IntegerField(null=True, blank=True)
+    last4       = models.CharField(max_length=4, null=True, blank=True)
+    default     = models.BooleanField(default=True)
+    active      = models.BooleanField(default=True)
+    timestamp   = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "Stripe payment id: " + self.stripe_id
