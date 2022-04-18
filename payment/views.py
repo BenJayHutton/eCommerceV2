@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from orders.models import Order
-from .models import Payment
+from .models import Payment, PaypalPaymentMethod
 import json
 import stripe
 
@@ -17,7 +17,7 @@ class Paypal(View):
         if request.user.is_authenticated:
             user = request.user
 
-        paymentMethod = body["paymentMethod"]
+        paymentMethod = 'Paypal' #body["paymentMethod"]
         orderPk = body["orderPk"]
         orderId = body["orderId"]
         total = body["total"]
@@ -35,16 +35,22 @@ class Paypal(View):
                 order_obj.mark_paid()
                 request.session['cart_item_count'] = 0
                 del request.session['cart_id']
+                new_paypal_obj, created = PaypalPaymentMethod.objects.get_or_create(
+                    paypalOrderID=paypalOrderID,
+                    paypalPayerID=paypalPayerID,
+                )
+                print(created)
                 new_payment_obj = Payment.objects.get_or_create(
                     user=user,
                     order=order_obj,
+                    paypal_forign_key=new_paypal_obj,
                     paymentMethod=paymentMethod,
-                    paypalOrderID=paypalOrderID,
-                    paypalPayerID=paypalPayerID,
                     is_paid=True,
                     summery=body,
                     total=subTotal
                 )
+
+                print(new_paypal_obj.paypalOrderID)
                 return JsonResponse({"cartSuccess": True})
             else:
                 return JsonResponse({"cartSuccess": False})

@@ -37,8 +37,8 @@ class StripePaymentMethod(models.Model):
 class Payment(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
-    paypal_payment_method = models.ForeignKey(PaypalPaymentMethod, blank=True, null=True, on_delete=models.SET_NULL)
-    stripe_payment_method = models.ForeignKey(StripePaymentMethod, blank=True, null=True, on_delete=models.SET_NULL)
+    paypal_forign_key = models.ForeignKey(PaypalPaymentMethod, blank=True, null=True, on_delete=models.SET_NULL)
+    stripe_forign_key = models.ForeignKey(StripePaymentMethod, blank=True, null=True, on_delete=models.SET_NULL)
     paymentMethod = models.CharField(max_length=12, choices=PAYMENT_METHOD, default="None")
     is_paid = models.BooleanField(default=False)
     summery = models.TextField()
@@ -47,4 +47,4 @@ class Payment(models.Model):
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return  self.user + ": " + "Paid by: " + self.order.paymentMethod + " order: " + self.order.order_id
+        return  self.user.email + ": " + "Paid by: " + self.paymentMethod + " order: " + self.order.order_id
