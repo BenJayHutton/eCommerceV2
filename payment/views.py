@@ -1,10 +1,14 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from orders.models import Order
 from .models import Payment
 import json
+import stripe
 
+STRIPE_PUB_KEY = getattr(settings, "STRIPE_PUB_KEY", None)
+stripe.api_key = getattr(settings, "STRIPE_SECRET_API_KEY", None)
 
 class Paypal(View):
     def post(self, request, *args, **kwargs):        
@@ -47,7 +51,25 @@ class Paypal(View):
         return JsonResponse({"cartSuccess": False})
 
 class Stripe(View):
-    pass
+    def post(self, request, *args, **kwargs):
+        print("kwargs: ", kwargs)
+        print("args: ", args)
+        order_id = None
+        is_paid = False
+        if request.user.is_authenticated:
+            user = request.user
+        order_obj = Order.objects.get(pk=order_id)
+        is_prepared = order_obj.check_done()
+        if is_prepared:
+            if is_paid:
+                order_obj.mark_paid()
+                request.session['cart_item_count'] = 0
+                del request.session['cart_id']
+                return JsonResponse({"cartSuccess": True})
+            else:
+                return JsonResponse({"cartSuccess": False})
+        return JsonResponse({"cartSuccess": False})
+
 
 class PaymentHome(TemplateView):
     template_name = 'payment/home.html'
